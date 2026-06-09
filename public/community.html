@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Community | Compact & Flat Replies</title>
+    <script>
+        try {
+            var originalFetch = window.fetch;
+            Object.defineProperty(window, 'fetch', {
+                configurable: true,
+                enumerable: true,
+                get: function() { return originalFetch; },
+                set: function(val) {  }
+            });
+        } catch(e) {}
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; overflow-x: hidden; background: #f5f5f5; font-family: 'Roboto', sans-serif; }
+        .community-page { width: 100%; max-width: 48rem; overflow-x: hidden; background: #f5f5f5; padding: 0 4px; margin: 0 auto; }
+        .community-top { display: flex; justify-content: space-between; align-items: center; padding: 8px 6px 6px 6px; gap: 8px; }
+        .community-title { font-size: 24px; font-weight: 900; color: #111827; }
+        .community-ask-btn { border: none; padding: 8px 12px; border-radius: 12px; background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .community-search-wrap { position: relative; }
+        .community-search { width: 100%; margin-bottom: 6px; padding: 11px; border: none; outline: none; border-radius: 14px; background: white; font-size: 13px; border: 1px solid rgba(0, 0, 0, 0.06); }
+        .search-suggestions { position: absolute; top: 48px; left: 0; right: 0; background: white; border-radius: 14px; overflow: hidden; z-index: 999; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); display: none; }
+        .search-item { padding: 10px 12px; font-size: 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); cursor: pointer; }
+        .community-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+        .community-chips::-webkit-scrollbar { display: none; }
+        .community-chip { padding: 6px 12px; border-radius: 999px; background: white; font-size: 12px; font-weight: 700; white-space: nowrap; border: 1px solid rgba(0, 0, 0, 0.06); cursor: pointer; flex: none; }
+        .community-chip.active { background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; }
+        .community-feed { display: flex; flex-direction: column; gap: 2px; width: 100%; padding-bottom: calc(120px + env(safe-area-inset-bottom)); }
+        .community-card { width: 100%; background: white; padding: 10px 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); border-radius: 14px; margin-bottom: 4px; }
+        .community-header { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+        .community-name { font-size: 12px; font-weight: 700; color: #111827; }
+        .community-dot { width: 4px; height: 4px; border-radius: 50%; background: #d1d5db; }
+        .community-time { font-size: 11px; color: #9ca3af; }
+        .community-category { font-size: 11px; font-weight: 700; color: #b8860b; }
+        .community-question { font-size: 14px; line-height: 1.45; color: #111827; margin-bottom: 2px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .community-question.expanded { -webkit-line-clamp: unset; overflow: visible; }
+        .read-more-btn { font-size: 11px; font-weight: 700; color: #b8860b; cursor: pointer; display: inline-block; margin-bottom: 2px; }
+        .community-actions { display: flex; gap: 16px; margin-top: 2px; margin-bottom: 6px; flex-wrap: wrap; }
+        .community-action { display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #6b7280; cursor: pointer; }
+        .helpful-count { background: #f0f0f0; padding: 2px 5px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #4b5563; }
+        .reply-form { display: none; margin-top: 6px; }
+        .reply-form.active { display: block; }
+        .reply-input, .reply-text { width: 100%; padding: 8px 10px; border: none; outline: none; border-radius: 10px; background: #f5f5f5; font-size: 12px; margin-bottom: 5px; border: 1px solid rgba(0, 0, 0, 0.06); font-family: 'Roboto', sans-serif; }
+        .reply-text { height: 60px; resize: none; }
+        .reply-submit { border: none; padding: 8px 12px; border-radius: 10px; background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .comment-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; max-height: 420px; overflow-y: auto; overflow-x: hidden; padding: 4px 2px 4px 2px; scroll-behavior: smooth; background: #fafafa; border-radius: 14px; }
+        .comment-list::-webkit-scrollbar { width: 5px; }
+        .comment-list::-webkit-scrollbar-track { background: #efefef; border-radius: 8px; }
+        .comment-list::-webkit-scrollbar-thumb { background: #c0c0c0; border-radius: 8px; }
+        .comment-item { width: 100%; background: white; border-radius: 12px; padding: 8px 10px; border: 1px solid rgba(0, 0, 0, 0.03); margin: 0; }
+        .comment-name { font-size: 11px; font-weight: 800; color: #1f2937; margin-bottom: 3px; }
+        .comment-text { font-size: 12px; color: #2c3e50; margin-bottom: 5px; word-break: break-word; }
+        .comment-actions { display: flex; gap: 12px; align-items: center; margin-top: 2px; }
+        .comment-reply-btn { font-size: 10px; font-weight: 600; color: #b8860b; cursor: pointer; background: none; border: none; }
+        .comment-helpful { font-size: 10px; font-weight: 500; color: #6b7280; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
+        .helpful-badge { background: #f3f4f6; padding: 2px 5px; border-radius: 20px; font-size: 9px; font-weight: 600; }
+        .nested-replies, .nested-replies.deep, .comment-list .nested-replies, div.nested-replies { display: flex !important; flex-direction: column !important; gap: 8px !important; margin-top: 8px !important; margin-left: 0 !important; margin-right: 0 !important; padding-left: 0 !important; padding-right: 0 !important; border-left: none !important; border-right: none !important; background: transparent !important; }
+        .nested-replies .comment-item, .nested-replies.deep .comment-item { margin-left: 0 !important; margin-right: 0 !important; }
+        .reply-scroll-controls { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
+        .reply-scroll-btn { border: 1px solid rgba(0, 0, 0, 0.08); background: #f0f0f0; color: #4b5563; border-radius: 999px; padding: 4px 10px; font-size: 10px; font-weight: 600; cursor: pointer; }
+        .community-modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); display: none; align-items: center; justify-content: center; padding: 10px; z-index: 9999; }
+        .community-modal-box { width: 100%; max-width: 500px; background: white; padding: 18px; border-radius: 24px; }
+        .community-modal-title { font-size: 18px; font-weight: 800; margin-bottom: 14px; }
+        .community-field { margin-bottom: 12px; }
+        .community-field input, .community-field select { width: 100%; padding: 10px; border: none; outline: none; border-radius: 14px; background: #f5f5f5; border: 1px solid rgba(0, 0, 0, 0.06); font-family: 'Roboto', sans-serif; font-size: 12px; }
+        .community-submit { width: 100%; border: none; padding: 10px; border-radius: 14px; background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; font-size: 13px; font-weight: 700; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="community-page">
+    <div class="community-top">
+        <div class="community-title">Community</div>
+        <button class="community-ask-btn" onclick="openModal()">Ask Question</button>
+    </div>
+
+    <div class="community-search-wrap">
+        <input type="text" class="community-search" id="communitySearch" placeholder="Search discussions...">
+        <div class="search-suggestions" id="searchSuggestions"></div>
+    </div>
+
+    <div class="community-chips">
+        <div class="community-chip active" data-category="All">All</div>
+        <div class="community-chip" data-category="Interviews">Interviews</div>
+        <div class="community-chip" data-category="Companies">Companies</div>
+        <div class="community-chip" data-category="Career">Career</div>
+        <div class="community-chip" data-category="Startups">Startups</div>
+        <div class="community-chip" data-category="Finance">Finance</div>
+        <div class="community-chip" data-category="AI">AI</div>
+        <div class="community-chip" data-category="Coding">Coding</div>
+        <div class="community-chip" data-category="Remote Work">Remote Work</div>
+        <div class="community-chip" data-category="Jobs">Jobs</div>
+        <div class="community-chip" data-category="Resume">Resume</div>
+    </div>
+
+    <div class="community-feed" id="communityFeed"></div>
+</div>
+
+<div class="community-modal" id="communityModal">
+    <div class="community-modal-box">
+        <div class="community-modal-title">Ask Question</div>
+        <div class="community-field" id="questionNameField">
+            <input type="text" id="questionName" placeholder="Your Name">
+        </div>
+        <div class="community-field">
+            <input type="text" id="questionText" placeholder="Ask your question...">
+        </div>
+        <div class="community-field">
+            <select id="questionCategory">
+                <option>Interviews</option><option>Companies</option><option>Career</option>
+                <option>Startups</option><option>Finance</option><option>AI</option>
+                <option>Coding</option><option>Remote Work</option><option>Jobs</option><option>Resume</option>
+            </select>
+        </div>
+        <button class="community-submit" onclick="postQuestion()">Post Question</button>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDZt0dJQCu0tW9OR9kyyliRPbP47R_z2kw",
+        authDomain: "jobs-1015c.firebaseapp.com",
+        projectId: "jobs-1015c"
+    };
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+    const COMMUNITY_USER_NAME_KEY = "community_saved_user_name";
+    let discussions = [];
+    let openReplyForms = {};
+    let openReplies = {};
+    let selectedCategory = "All";
+
+    function getSavedCommunityName() { return localStorage.getItem(COMMUNITY_USER_NAME_KEY) || ""; }
+    function saveCommunityName(name) { if(name.trim() !== "") localStorage.setItem(COMMUNITY_USER_NAME_KEY, name.trim()); }
+    function escapeHtml(str) {
+        if(!str) return "";
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function fillQuestionName() {
+        const saved = getSavedCommunityName();
+        const nameInput = document.getElementById("questionName");
+        const nameField = document.getElementById("questionNameField");
+        if(saved !== "") {
+            nameInput.value = saved;
+            nameField.style.display = "none";
+        } else {
+            nameField.style.display = "block";
+        }
+    }
+
+    function savedNameInputHtml() {
+        const saved = getSavedCommunityName();
+        if(saved !== "") {
+            return `<input type="hidden" class="reply-input-hidden" value="${escapeHtml(saved)}">`;
+        }
+        return `<input type="text" class="reply-input" placeholder="Your Name">`;
+    }
+
+    function formatTime(timestamp) {
+        const now = Date.now();
+        const seconds = Math.floor((now - timestamp) / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        if(seconds < 60) return "Just now";
+        if(minutes < 60) return `${minutes}m ago`;
+        if(hours < 24) return `${hours}h ago`;
+        if(days === 1) return "Yesterday";
+        return `${days}d ago`;
+    }
+
+    function countAllReplies(comments) {
+        let count = 0;
+        comments.forEach(c => {
+            count++;
+            if(c.replies && c.replies.length) count += countAllReplies(c.replies);
+        });
+        return count;
+    }
+
+    function loadFirebasePosts() {
+        db.collection("community_posts").orderBy("createdAt","desc").onSnapshot((snapshot) => {
+            discussions = [];
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                discussions.push({
+                    id: doc.id,
+                    name: data.name,
+                    createdAt: data.createdAt,
+                    category: data.category,
+                    question: data.question,
+                    comments: data.comments || [],
+                    helpfulCount: data.helpfulCount || 0
+                });
+            });
+            renderDiscussions();
+        });
+    }
+
+    function renderSuggestions() {
+        const input = document.getElementById("communitySearch").value.toLowerCase();
+        const box = document.getElementById("searchSuggestions");
+        if(input === "") { box.style.display = "none"; return; }
+        const matched = discussions.filter(d => d.question.toLowerCase().includes(input));
+        if(matched.length === 0) { box.style.display = "none"; return; }
+        box.innerHTML = "";
+        matched.slice(0,5).forEach(item => {
+            box.innerHTML += `<div class="search-item">${escapeHtml(item.question)}</div>`;
+        });
+        box.style.display = "block";
+    }
+
+    function scrollReplies(containerId, direction) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const scrollAmount = Math.max(160, Math.floor(container.clientHeight * 0.75));
+        container.scrollBy({ top: direction * scrollAmount, behavior: "smooth" });
+    }
+
+    function getReplyNameFromForm(formElement) {
+        let hiddenInput = formElement.querySelector(".reply-input-hidden");
+        if(hiddenInput) return hiddenInput.value.trim();
+        let nameInput = formElement.querySelector(".reply-input");
+        if(nameInput) return nameInput.value.trim();
+        return "";
+    }
+
+    function renderComments(comments, discussionId) {
+        if(!comments.length) return "";
+        let html = "";
+        comments.forEach(c => {
+            const helpful = c.helpfulCount || 0;
+            html += `
+                <div class="comment-item">
+                    <div class="comment-name">${escapeHtml(c.name)}</div>
+                    <div class="comment-text">${escapeHtml(c.text)}</div>
+                    <div class="comment-actions">
+                        <button class="comment-reply-btn" onclick="toggleReplyForm('comment-${c.id}')">↩ Reply</button>
+                        <span class="comment-helpful" onclick="markCommentHelpful('${discussionId}', '${c.id}')">
+                            👍 Helpful <span class="helpful-badge">${helpful}</span>
+                        </span>
+                    </div>
+                    <div class="reply-form ${openReplyForms[`comment-${c.id}`] ? 'active' : ''}" id="comment-${c.id}">
+                        ${savedNameInputHtml()}
+                        <textarea class="reply-text" placeholder="Write a reply..."></textarea>
+                        <button class="reply-submit" onclick="addNestedReply('${discussionId}','${c.id}',this)">Post Reply</button>
+                    </div>
+            `;
+            if(c.replies && c.replies.length) {
+                html += `<div class="nested-replies">${renderComments(c.replies, discussionId)}</div>`;
+            }
+            html += `</div>`;
+        });
+        return html;
+    }
+
+    function renderDiscussions() {
+        const feed = document.getElementById("communityFeed");
+        feed.innerHTML = "";
+        const search = document.getElementById("communitySearch").value.toLowerCase();
+        let filtered = discussions.filter(d => {
+            const categoryMatch = selectedCategory === "All" || d.category === selectedCategory;
+            const searchMatch = d.question.toLowerCase().includes(search);
+            return categoryMatch && searchMatch;
+        });
+
+        filtered.forEach(d => {
+            const totalReplies = countAllReplies(d.comments);
+            const repliesContainerId = `repliesBox-${d.id}`;
+            const isRepliesOpen = openReplies[repliesContainerId] || false;
+            const showScrollBtns = isRepliesOpen && totalReplies > 0;
+            const postHelpful = d.helpfulCount || 0;
+
+            feed.innerHTML += `
+                <div class="community-card">
+                    <div class="community-header">
+                        <div class="community-name">${escapeHtml(d.name)}</div>
+                        <div class="community-dot"></div>
+                        <div class="community-time">${formatTime(d.createdAt)}</div>
+                        <div class="community-dot"></div>
+                        <div class="community-category">${escapeHtml(d.category)}</div>
+                    </div>
+                    <div class="community-question" id="question-${d.id}">${escapeHtml(d.question)}</div>
+                    <div class="read-more-btn" onclick="toggleReadMore('${d.id}',this)">Read More</div>
+                    <div class="community-actions">
+                        <div class="community-action" onclick="markPostHelpful('${d.id}')">
+                            👍 Helpful <span class="helpful-count" id="helpful-${d.id}">${postHelpful}</span>
+                        </div>
+                        <div class="community-action" onclick="toggleReplyForm('main-${d.id}')">💬 Reply</div>
+                        <div class="community-action" onclick="toggleReplies('${repliesContainerId}')">${isRepliesOpen ? 'Hide' : totalReplies} Replies</div>
+                    </div>
+                    <div class="reply-form ${openReplyForms[`main-${d.id}`] ? 'active' : ''}" id="main-${d.id}">
+                        ${savedNameInputHtml()}
+                        <textarea class="reply-text" placeholder="Write your reply..."></textarea>
+                        <button class="reply-submit" onclick="addMainReply('${d.id}',this)">Post Reply</button>
+                    </div>
+                    <div class="comment-list" id="${repliesContainerId}" style="display: ${isRepliesOpen ? 'flex' : 'none'};">
+                        ${renderComments(d.comments, d.id)}
+                    </div>
+                    ${showScrollBtns ? `
+                        <div class="reply-scroll-controls">
+                            <button class="reply-scroll-btn" onclick="scrollReplies('${repliesContainerId}', -1)">▲ Up</button>
+                            <button class="reply-scroll-btn" onclick="scrollReplies('${repliesContainerId}', 1)">▼ Down</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        });
+    }
+
+    function toggleReadMore(id, btn) {
+        const el = document.getElementById(`question-${id}`);
+        if(!el) return;
+        el.classList.toggle("expanded");
+        btn.innerText = el.classList.contains("expanded") ? "Less" : "Read More";
+    }
+
+    function toggleReplyForm(id) {
+        openReplyForms[id] = !openReplyForms[id];
+        renderDiscussions();
+    }
+
+    function toggleReplies(containerId) {
+        openReplies[containerId] = !openReplies[containerId];
+        renderDiscussions();
+        if(openReplies[containerId]) {
+            setTimeout(() => {
+                const container = document.getElementById(containerId);
+                if(container) container.scrollTop = 0;
+            }, 50);
+        }
+    }
+
+    async function markPostHelpful(postId) {
+        const postRef = db.collection("community_posts").doc(postId);
+        const post = discussions.find(p => p.id === postId);
+        if(post) {
+            const newCount = (post.helpfulCount || 0) + 1;
+            post.helpfulCount = newCount;
+            await postRef.update({ helpfulCount: newCount }).catch(e => console.warn(e));
+            const helpfulSpan = document.getElementById(`helpful-${postId}`);
+            if(helpfulSpan) helpfulSpan.innerText = newCount;
+        }
+    }
+
+    async function markCommentHelpful(discussionId, commentId) {
+        const discussion = discussions.find(d => d.id == discussionId);
+        if(!discussion) return;
+        const updateCommentHelpful = (commentsArr) => {
+            for(let i = 0; i < commentsArr.length; i++) {
+                if(commentsArr[i].id == commentId) {
+                    commentsArr[i].helpfulCount = (commentsArr[i].helpfulCount || 0) + 1;
+                    return true;
+                }
+                if(commentsArr[i].replies && commentsArr[i].replies.length) {
+                    if(updateCommentHelpful(commentsArr[i].replies)) return true;
+                }
+            }
+            return false;
+        };
+        updateCommentHelpful(discussion.comments);
+        await db.collection("community_posts").doc(discussionId).update({ comments: discussion.comments }).catch(e => console.warn(e));
+        renderDiscussions();
+    }
+
+    function addMainReply(discussionId, button) {
+        const form = button.parentElement;
+        let name = getReplyNameFromForm(form);
+        const textarea = form.querySelector(".reply-text");
+        const text = textarea ? textarea.value.trim() : "";
+        if(name === "" || text === "") return;
+        saveCommunityName(name);
+        const discussion = discussions.find(d => d.id == discussionId);
+        if(!discussion) return;
+        discussion.comments.push({
+            id: Date.now(),
+            name: name,
+            text: text,
+            replies: [],
+            helpfulCount: 0
+        });
+        openReplyForms[`main-${discussionId}`] = false;
+        const repliesBoxId = `repliesBox-${discussionId}`;
+        openReplies[repliesBoxId] = true;
+        db.collection("community_posts").doc(discussionId).update({ comments: discussion.comments }).catch(e => console.warn(e));
+    }
+
+    function addNestedReply(discussionId, commentId, button) {
+        const form = button.parentElement;
+        let name = getReplyNameFromForm(form);
+        const textarea = form.querySelector(".reply-text");
+        const text = textarea ? textarea.value.trim() : "";
+        if(name === "" || text === "") return;
+        saveCommunityName(name);
+        const discussion = discussions.find(d => d.id == discussionId);
+        if(!discussion) return;
+        function insertReply(commentsArr, targetId, newReply) {
+            for(let i = 0; i < commentsArr.length; i++) {
+                if(commentsArr[i].id == targetId) {
+                    if(!commentsArr[i].replies) commentsArr[i].replies = [];
+                    commentsArr[i].replies.push(newReply);
+                    return true;
+                }
+                if(commentsArr[i].replies && commentsArr[i].replies.length) {
+                    if(insertReply(commentsArr[i].replies, targetId, newReply)) return true;
+                }
+            }
+            return false;
+        }
+        const newReplyObj = { id: Date.now(), name: name, text: text, replies: [], helpfulCount: 0 };
+        insertReply(discussion.comments, commentId, newReplyObj);
+        openReplyForms[`comment-${commentId}`] = false;
+        const repliesBoxId = `repliesBox-${discussionId}`;
+        openReplies[repliesBoxId] = true;
+        db.collection("community_posts").doc(discussionId).update({ comments: discussion.comments }).catch(e => console.warn(e));
+    }
+
+    function openModal() { fillQuestionName(); document.getElementById("communityModal").style.display = "flex"; }
+    window.onclick = function(e) { if(e.target == document.getElementById("communityModal")) document.getElementById("communityModal").style.display = "none"; }
+
+    function postQuestion() {
+        let name = document.getElementById("questionName").value.trim();
+        const question = document.getElementById("questionText").value.trim();
+        const category = document.getElementById("questionCategory").value;
+        if(name === "" || question === "") return;
+        saveCommunityName(name);
+        db.collection("community_posts").add({
+            name: name,
+            createdAt: Date.now(),
+            category: category,
+            question: question,
+            comments: [],
+            helpfulCount: 0
+        });
+        document.getElementById("questionText").value = "";
+        document.getElementById("communityModal").style.display = "none";
+        if(getSavedCommunityName() !== "") {
+            document.getElementById("questionName").value = getSavedCommunityName();
+        }
+    }
+
+    const chips = document.querySelectorAll(".community-chip");
+    chips.forEach(chip => {
+        chip.addEventListener("click", function() {
+            chips.forEach(c => c.classList.remove("active"));
+            this.classList.add("active");
+            selectedCategory = this.dataset.category;
+            renderDiscussions();
+        });
+    });
+
+    document.getElementById("communitySearch").addEventListener("input", function() {
+        renderSuggestions();
+        renderDiscussions();
+    });
+
+    fillQuestionName();
+    loadFirebasePosts();
+</script>
+</body>
+</html>

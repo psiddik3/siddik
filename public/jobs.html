@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>Jobs — View Job & Apply</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+  try {
+    var originalFetch = window.fetch;
+    Object.defineProperty(window, 'fetch', {
+      configurable: true,
+      enumerable: true,
+      get: function() { return originalFetch; },
+      set: function(val) {  }
+    });
+  } catch(e) {}
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDZt0dJQCu0tW9OR9kyyliRPbP47R_z2kw",
+    authDomain: "jobs-1015c.firebaseapp.com",
+    projectId: "jobs-1015c"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const _db = firebase.firestore();
+  const JOBS_COLLECTION = 'founder_job_portal_jobs_v1';
+
+  window._loadApprovedJobs = async function(){
+    const snap = await _db.collection(JOBS_COLLECTION)
+      .where('status', '==', 'approved')
+      .get();
+
+    return snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => {
+        const ad = a.approvedAt && a.approvedAt.toDate ? a.approvedAt.toDate() : new Date(0);
+        const bd = b.approvedAt && b.approvedAt.toDate ? b.approvedAt.toDate() : new Date(0);
+        return bd - ad;
+      });
+  };
+
+  window._submitJob = async function(data){
+    await _db.collection(JOBS_COLLECTION).add({
+      ...data,
+      status: 'pending',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  };
+</script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:#fff;}
+body{
+  background:#06080f;
+  background-image:
+    radial-gradient(ellipse 120% 55% at 10% 0%,  rgba(27,79,255,0.52) 0%,transparent 50%),
+    radial-gradient(ellipse 100% 45% at 90% 10%, rgba(0,180,255,0.38) 0%,transparent 50%),
+    radial-gradient(ellipse 100% 55% at 50% 100%,rgba(59,130,246,0.32) 0%,transparent 55%);
+  overflow-x:hidden;
+}
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;animation:orbf 14s ease-in-out infinite alternate;}
+.orb1{width:400px;height:400px;background:rgba(27,79,255,0.22);top:-100px;left:-100px;filter:blur(70px);}
+.orb2{width:340px;height:340px;background:rgba(0,180,255,0.18);top:40px;right:-80px;filter:blur(65px);animation-delay:-5s;}
+.orb3{width:300px;height:300px;background:rgba(59,130,246,0.16);bottom:0;left:35%;filter:blur(60px);animation-delay:-9s;}
+@keyframes orbf{0%{transform:translate(0,0) scale(1);}100%{transform:translate(22px,30px) scale(1.07);}}
+@media(max-width:480px){.orb{display:none;}}
+.wrap{position:relative;z-index:1;width:100%;padding:10px 6px 48px;}
+@media(min-width:561px){.wrap{padding:12px 14px 52px;}}
+.top-nav{display:flex;align-items:center;justify-content:space-between;padding:10px 4px 6px;margin-bottom:4px;}
+.nav-logo{font-size:15px;font-weight:700;color:#fff;display:flex;align-items:center;gap:7px;}
+.nav-logo-dot{width:8px;height:8px;border-radius:50%;background:#1b4fff;display:inline-block;}
+.post-job-btn{background:#1b4fff;color:#fff;border:none;border-radius:9px;padding:8px 18px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;transition:background .18s,transform .1s;display:flex;align-items:center;gap:6px;}
+.post-job-btn:hover{background:#1440e0;}
+.post-job-btn:active{transform:scale(0.97);}
+.post-job-btn svg{width:13px;height:13px;}
+.hero{text-align:center;padding:28px 16px 22px;margin-bottom:10px;}
+.hero-eyebrow{display:inline-block;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.18);border-radius:100px;color:rgba(255,255,255,0.60);font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 12px;margin-bottom:10px;}
+.hero h1{font-size:clamp(22px,4vw,44px);font-weight:700;line-height:1.1;margin-bottom:6px;}
+.hero h1 span{color:#60a5fa;}
+.hero p{color:rgba(255,255,255,0.45);font-size:13px;margin-bottom:22px;}
+.search-glass{background:rgba(255,255,255,0.10);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.20);border-radius:14px;padding:7px;max-width:800px;margin:0 auto;display:flex;gap:6px;flex-wrap:wrap;}
+.s-field{flex:1;min-width:155px;display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.95);border-radius:9px;padding:9px 12px;}
+.s-field svg{width:14px;height:14px;color:#1b4fff;flex-shrink:0;}
+.s-field input,.s-field select{border:none;outline:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:#0f172a;background:transparent;width:100%;font-weight:500;}
+.s-field input::placeholder{color:#94a3b8;}
+.search-btn{background:#1b4fff;color:#fff;border:none;border-radius:9px;padding:9px 22px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .18s,transform .1s;}
+.search-btn:hover{background:#1440e0;}
+.search-btn:active{transform:scale(0.97);}
+.stats-row{display:flex;justify-content:center;gap:30px;margin-top:18px;flex-wrap:wrap;}
+.stat{text-align:center;}
+.stat-num{font-size:20px;font-weight:700;color:#fff;}
+.stat-lbl{font-size:10px;color:rgba(255,255,255,0.36);text-transform:uppercase;letter-spacing:.06em;}
+.filter-bar{width:100%;padding:0 0 10px;}
+.filter-inner{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:12px;padding:9px 13px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.filter-label{font-size:10px;font-weight:600;color:rgba(255,255,255,0.36);text-transform:uppercase;letter-spacing:.07em;}
+.f-chip{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.14);border-radius:100px;padding:4px 11px;font-size:11.5px;font-weight:500;cursor:pointer;transition:background .13s,color .13s;font-family:'Plus Jakarta Sans',sans-serif;}
+.f-chip:hover{background:rgba(255,255,255,0.14);color:#fff;}
+.f-chip.active{background:#1b4fff;color:#fff;border-color:#1b4fff;}
+.result-meta{margin-left:auto;font-size:11px;color:rgba(255,255,255,0.36);white-space:nowrap;font-weight:500;}
+#resultCount{color:#60a5fa;font-weight:700;}
+.lbl{font-size:10px;font-weight:600;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+.lbl::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);}
+.job-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;}
+.job-card{display:flex;flex-direction:column;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.13);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:14px;padding:13px 13px 11px;color:#fff;transition:transform .18s,border-color .18s,background .18s;animation:fadeUp .35s ease both;position:relative;overflow:hidden;cursor:pointer;}
+.job-card::after{content:'';position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.45),transparent);}
+.job-card:hover{transform:translateY(-2px);background:rgba(255,255,255,0.10);border-color:rgba(96,165,250,0.45);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.new-tag{position:absolute;top:10px;right:10px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:rgba(48,209,88,0.15);color:#34d399;border:1px solid rgba(52,211,153,0.30);border-radius:5px;padding:2px 6px;line-height:1.5;}
+.job-title{font-size:14px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:9px;padding-right:42px;}
+.detail-list{display:flex;flex-direction:column;gap:3px;margin-bottom:9px;}
+.detail-row{display:flex;align-items:baseline;gap:6px;font-size:12px;line-height:1.45;}
+.detail-label{color:rgba(255,255,255,0.35);font-weight:500;min-width:76px;flex-shrink:0;font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;}
+.detail-value{color:rgba(255,255,255,0.82);font-weight:500;}
+.detail-value.salary-val{color:#60a5fa;font-weight:700;}
+.card-footer{margin-top:auto;border-top:1px solid rgba(255,255,255,0.08);padding-top:9px;display:flex;justify-content:flex-end;}
+.apply-link-trigger{font-size:11.5px;font-weight:700;color:#60a5fa;display:flex;align-items:center;gap:3px;background:transparent;border:none;font-family:inherit;cursor:pointer;padding:4px 8px 4px 4px;border-radius:20px;transition:background 0.1s;}
+.apply-link-trigger:hover{background:rgba(96,165,250,0.1);}
+.apply-link-trigger svg{width:12px;height:12px;flex-shrink:0;}
+.loading-state,.empty-state{text-align:center;padding:50px 20px;color:rgba(255,255,255,0.35);font-size:13px;font-weight:500;grid-column:1/-1;}
+.spinner{width:30px;height:30px;border:2.5px solid rgba(255,255,255,0.10);border-top-color:#1b4fff;border-radius:50%;animation:spin .72s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fi{animation:fu .46s ease both;}
+.modal-overlay{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.80);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.open{display:flex;}
+.modal{background:#0a0f1e;border:1px solid rgba(255,255,255,0.14);border-radius:22px;width:100%;max-width:720px;max-height:92vh;overflow-y:auto;padding:22px 24px;animation:fadeUp .28s ease;position:relative;scrollbar-width:thin;}
+.modal::-webkit-scrollbar{width:5px;}
+.modal::-webkit-scrollbar-track{background:rgba(255,255,255,0.05);border-radius:10px;}
+.modal::-webkit-scrollbar-thumb{background:rgba(96,165,250,0.4);border-radius:10px;}
+.modal::before{content:'';position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.50),transparent);}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px;}
+.modal-head h2{font-size:19px;font-weight:800;letter-spacing:-0.2px;}
+.modal-close{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.70);border-radius:9px;padding:6px 14px;cursor:pointer;font-size:12px;font-weight:600;transition:all .15s;}
+.modal-close:hover{background:#1b4fff;color:#fff;border-color:#1b4fff;}
+.v-section{font-size:10px;font-weight:700;color:rgba(255,255,255,0.34);text-transform:uppercase;letter-spacing:.09em;border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:6px;margin:16px 0 10px;}
+.v-section:first-of-type{margin-top:0;}
+.v-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 16px;}
+.v-grid-item{display:flex;flex-direction:column;gap:2px;}
+.v-grid-label{font-size:9px;font-weight:700;color:rgba(255,255,255,0.38);text-transform:uppercase;letter-spacing:.06em;}
+.v-grid-value{font-size:13px;font-weight:500;color:#e2e8f0;word-break:break-word;}
+.full-width{grid-column:1/-1;}
+.jd-text{background:rgba(255,255,255,0.04);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.55;color:#cbd5e1;white-space:pre-wrap;margin-top:6px;}
+.apply-btn-modal{background:#1b4fff;color:#fff;border:none;border-radius:40px;padding:12px 24px;font-weight:700;font-size:14px;width:100%;margin-top:18px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:all 0.2s;font-family:inherit;}
+.apply-btn-modal:hover{background:#0f3ad9;transform:scale(1.01);}
+.apply-btn-modal:active{transform:scale(0.98);}
+.missing-link-msg{background:rgba(255,100,100,0.12);color:#f9a8a8;border-radius:12px;padding:10px;text-align:center;font-size:12px;margin-top:12px;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(14,22,48,0.97);border:1px solid rgba(96,165,250,0.28);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;color:#fff;display:flex;align-items:center;gap:9px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:9999;max-width:90vw;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.error{border-color:rgba(248,113,113,0.5);}
+@media(max-width:580px){
+  .v-grid{grid-template-columns:1fr;}
+  .modal{padding:16px;}
+  .job-grid{grid-template-columns:1fr;}
+  .filter-inner{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div class="wrap">
+  <div class="top-nav fi d1">
+    <div class="nav-logo">
+      <span class="nav-logo-dot"></span>
+      India's Job Board
+    </div>
+    <button class="post-job-btn" onclick="openPostModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>Post a Job</span>
+    </button>
+  </div>
+
+  <div class="hero fi d1">
+    <div class="hero-eyebrow">India's Job Board</div>
+    <h1>Find Your <span>Dream Job</span> Today</h1>
+    <p>Thousands of fresh opportunities. Always free.</p>
+
+    <div class="search-glass">
+      <div class="s-field">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="searchKeyword" placeholder="Job title, skills, company...">
+      </div>
+      <div class="s-field">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <input type="text" id="searchLocation" placeholder="City or remote...">
+      </div>
+      <div class="s-field">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <select id="searchExp">
+          <option value="">Experience level</option>
+          <option value="fresher">Fresher / 0-1 yr</option>
+          <option value="1-3">1-3 years</option>
+          <option value="3-5">3-5 years</option>
+          <option value="5-8">5-8 years</option>
+          <option value="8+">8+ years</option>
+        </select>
+      </div>
+      <button class="search-btn" onclick="runSearch()">Search Jobs</button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num" id="heroCount">-</div><div class="stat-lbl">Live Jobs</div></div>
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-lbl">Companies</div></div>
+      <div class="stat"><div class="stat-num">Free</div><div class="stat-lbl">Always</div></div>
+    </div>
+  </div>
+
+  <div class="filter-bar fi d2">
+    <div class="filter-inner">
+      <span class="filter-label">Filter</span>
+      <div class="f-chip active" data-filter="">All Jobs</div>
+      <div class="f-chip" data-filter="remote">Remote</div>
+      <div class="f-chip" data-filter="full time">Full Time</div>
+      <div class="f-chip" data-filter="part time">Part Time</div>
+      <div class="f-chip" data-filter="internship">Internship</div>
+      <div class="f-chip" data-filter="fresher">Fresher</div>
+      <div class="result-meta"><span id="resultCount">0</span> jobs found</div>
+    </div>
+  </div>
+
+  <div class="lbl fi d3">Latest Jobs</div>
+  <div class="job-grid fi d3" id="job-list">
+    <div class="loading-state"><div class="spinner"></div>Loading jobs...</div>
+  </div>
+</div>
+
+<!-- Post Job Modal -->
+<div class="modal-overlay" id="postModalOverlay">
+  <div class="modal" id="postModal">
+    <div id="modalForm">
+      <div class="modal-head"><div><h2>Post a Job</h2><p>After review (within 24h) it goes live.</p></div><button class="modal-close" onclick="closePostModal()">Close</button></div>
+      <div class="v-section">Company</div>
+      <div class="v-grid"><div class="mfield"><label>Company *</label><input type="text" id="f_company" placeholder="TechCorp"></div><div class="mfield"><label>Industry *</label><select id="f_industry"><option>IT / Software</option><option>Banking</option><option>Healthcare</option><option>Other</option></select></div><div class="mfield"><label>Recruiter Email *</label><input type="email" id="f_email"></div><div class="mfield"><label>Website</label><input type="url" id="f_website"></div></div>
+      <div class="v-section">Job Details</div>
+      <div class="v-grid"><div class="mfield full"><label>Job Title *</label><input type="text" id="f_title"></div><div class="mfield"><label>Job Type *</label><select id="f_jobType"><option>Full Time</option><option>Part Time</option><option>Remote</option><option>Hybrid</option><option>Internship</option></select></div><div class="mfield"><label>Work Mode</label><select id="f_workMode"><option>On-site</option><option>Remote</option><option>Hybrid</option></select></div><div class="mfield"><label>Location *</label><input type="text" id="f_location"></div><div class="mfield"><label>Role</label><input type="text" id="f_role"></div></div>
+      <div class="v-section">Experience & Compensation</div>
+      <div class="v-grid"><div class="mfield"><label>Experience *</label><select id="f_experience"><option>Fresher / 0-1 yr</option><option>1-3 years</option><option>3-5 years</option><option>5-8 years</option><option>8+ years</option></select></div><div class="mfield"><label>Openings</label><input type="number" id="f_openings" placeholder="1"></div><div class="mfield full"><label>Salary Range</label><div class="salary-pair" style="display:flex;gap:8px;"><input type="number" id="f_salMin" placeholder="Min LPA"><span>to</span><input type="number" id="f_salMax" placeholder="Max LPA"></div></div><div class="mfield"><label>Salary Display</label><select id="f_salVis"><option value="show">Show range</option><option value="negotiable">Negotiable</option><option value="hidden">Not disclosed</option></select></div><div class="mfield"><label>Last Date</label><input type="text" id="f_lastDate" placeholder="31 July 2026"></div></div>
+      <div class="v-section">Skills & Description</div>
+      <div class="mfield"><label>Skills *</label><input type="text" id="f_skills" placeholder="React, Node, SQL"></div>
+      <div class="mfield"><label>Qualifications</label><input type="text" id="f_qual"></div>
+      <div class="mfield"><label>Job Description *</label><textarea id="f_desc" rows="3" maxlength="2000"></textarea><div class="char-count" id="f_descCount">0/2000</div></div>
+      <div class="mfield"><label>Perks</label><textarea id="f_perks" rows="2"></textarea></div>
+      <div class="mfield"><label>Apply Link (URL/Email)</label><input type="text" id="f_applyLink" placeholder="https://... or mailto:..."></div>
+      <div class="modal-footer"><button class="m-submit-btn" id="mSubmitBtn" onclick="handleModalSubmit()"><div class="m-submit-spin" id="mSpin"></div><span id="mLabel">Submit for Review</span></button><p class="modal-note">Pending approval before going live</p></div>
+    </div>
+    <div class="modal-success" id="modalSuccess"><div class="success-icon">✓</div><h3>Job Submitted!</h3><p>Your job is now pending review by founder.</p><button class="another-btn" onclick="resetModal()">Submit Another</button></div>
+  </div>
+</div>
+
+<!-- View Job Modal (JD + Apply Button) -->
+<div class="modal-overlay" id="viewModalOverlay">
+  <div class="modal" id="viewModal" style="max-width: 760px;">
+    <div class="modal-head">
+      <h2 id="viewJobTitle">Job Details</h2>
+      <button class="modal-close" onclick="closeViewModal()">Close</button>
+    </div>
+    <div id="viewJobContent">
+      <!-- dynamic content -->
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="toastIcon">✓</span><span id="toastMsg"></span></div>
+
+<script>
+let allJobs = [];      // full job objects array
+let activeChip = '';
+
+function showToast(msg, type='success'){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('toastIcon').textContent = type==='success'?'✓':'⚠️';
+  t.className = `toast ${type} show`;
+  setTimeout(()=>t.classList.remove('show'), 3500);
+}
+
+// LOAD jobs with full data
+async function loadJobs(){
+  try{
+    const jobs = await window._loadApprovedJobs();
+    allJobs = jobs.map(job => ({
+      id: job.id,
+      title: job.title || 'Untitled Role',
+      company: job.company || 'Company',
+      location: job.location || 'Not specified',
+      salary: job.salary || 'Not disclosed',
+      exp: job.experience || '',
+      type: job.jobType || '',
+      role: job.role || '',
+      applyLink: job.applyLink || '',
+      skills: job.skills || '',
+      description: job.description || '',
+      perks: job.perks || '',
+      qualification: job.qualification || '',
+      lastDate: job.lastDate || '',
+      openings: job.openings || '',
+      workMode: job.workMode || '',
+      industry: job.industry || '',
+      raw: Object.values(job).join(' ').toLowerCase(),
+    }));
+    document.getElementById('heroCount').textContent = allJobs.length;
+    renderJobs(allJobs);
+  }catch(e){
+    console.error(e);
+    document.getElementById('job-list').innerHTML = `<div class="empty-state">⚠️ Failed to load jobs. Check Firestore rules.</div>`;
+  }
+}
+
+function formatField(value, fallback='—'){
+  if(!value || value.trim() === '') return fallback;
+  return value;
+}
+
+function openViewModal(job){
+  const modal = document.getElementById('viewModalOverlay');
+  const container = document.getElementById('viewJobContent');
+  document.getElementById('viewJobTitle').innerHTML = `${escapeHtml(job.title)} <span style="font-size:12px; font-weight:normal; color:#60a5fa;">${escapeHtml(job.company)}</span>`;
+  
+  const applyLinkValid = job.applyLink && job.applyLink.trim() !== '' && (job.applyLink.startsWith('http') || job.applyLink.startsWith('mailto:'));
+  const applyUrl = job.applyLink && (job.applyLink.startsWith('http') || job.applyLink.startsWith('mailto:')) ? job.applyLink : (job.applyLink && !job.applyLink.startsWith('http') ? `https://${job.applyLink}` : '#');
+  
+  container.innerHTML = `
+    <div class="v-section">Job Overview</div>
+    <div class="v-grid">
+      <div class="v-grid-item"><span class="v-grid-label">Location</span><span class="v-grid-value">${escapeHtml(job.location)}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Job Type</span><span class="v-grid-value">${escapeHtml(job.type)}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Work Mode</span><span class="v-grid-value">${escapeHtml(job.workMode || 'Not specified')}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Experience</span><span class="v-grid-value">${escapeHtml(job.exp)}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Salary</span><span class="v-grid-value salary-val" style="color:#60a5fa;">${escapeHtml(job.salary)}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Openings</span><span class="v-grid-value">${escapeHtml(job.openings || '1')}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Last Date</span><span class="v-grid-value">${escapeHtml(job.lastDate || 'Rolling')}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Role / Dept</span><span class="v-grid-value">${escapeHtml(job.role || '—')}</span></div>
+    </div>
+    
+    <div class="v-section">Required Skills</div>
+    <div class="jd-text" style="margin-bottom:8px;">${escapeHtml(job.skills || 'Not specified')}</div>
+    
+    <div class="v-section">Job Description</div>
+    <div class="jd-text">${escapeHtml(job.description || 'No description provided.').replace(/\n/g, '<br>')}</div>
+    
+    ${job.qualification ? `<div class="v-section">Qualifications</div><div class="jd-text">${escapeHtml(job.qualification)}</div>` : ''}
+    ${job.perks ? `<div class="v-section">Perks & Benefits</div><div class="jd-text">${escapeHtml(job.perks)}</div>` : ''}
+    
+    <div class="v-section">How to Apply</div>
+    ${applyLinkValid ? 
+      `<button class="apply-btn-modal" id="modalApplyBtn">✨ Apply Now <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>` : 
+      `<div class="missing-link-msg">⚠️ No direct apply link provided by employer. You can still email your resume mentioning job title.</div>
+       <button class="apply-btn-modal" id="modalApplyBtn" style="background:#334155;">📧 Request Info / Contact</button>`
+    }
+  `;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  
+  // attach apply event after rendering
+  const applyBtn = document.getElementById('modalApplyBtn');
+  if(applyBtn){
+    applyBtn.onclick = () => {
+      if(applyLinkValid && job.applyLink && job.applyLink.trim()){
+        window.open(job.applyLink, '_blank', 'noopener');
+        showToast('Redirecting to application page...', 'success');
+      } else {
+        // no link: suggest copy recruiter email? Actually we don't have recruiter email in view, but can fallback.
+        showToast('No application link provided. Please contact the company directly via the job portal.', 'error');
+      }
+    };
+  }
+}
+
+function closeViewModal(){
+  document.getElementById('viewModalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function escapeHtml(str){
+  if(!str) return '';
+  return str.replace(/[&<>]/g, function(m){
+    if(m === '&') return '&amp;';
+    if(m === '<') return '&lt;';
+    if(m === '>') return '&gt;';
+    return m;
+  }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c){
+    return c;
+  });
+}
+
+function renderJobs(jobs){
+  document.getElementById('resultCount').textContent = jobs.length;
+  if(!jobs.length){
+    document.getElementById('job-list').innerHTML = `<div class="empty-state">✨ No matching jobs. Adjust filters.</div>`;
+    return;
+  }
+  const container = document.getElementById('job-list');
+  container.innerHTML = jobs.map((j, idx) => `
+    <div class="job-card" data-job-id="${j.id}" style="animation-delay:${Math.min(idx,14)*25}ms">
+      ${idx<5 ? '<span class="new-tag">New</span>' : ''}
+      <div class="job-title">${escapeHtml(j.title)}</div>
+      <div class="detail-list">
+        <div class="detail-row"><span class="detail-label">Company</span><span class="detail-value">${escapeHtml(j.company)}</span></div>
+        <div class="detail-row"><span class="detail-label">Location</span><span class="detail-value">${escapeHtml(j.location)}</span></div>
+        <div class="detail-row"><span class="detail-label">Experience</span><span class="detail-value">${escapeHtml(j.exp)}</span></div>
+        <div class="detail-row"><span class="detail-label">Salary</span><span class="detail-value salary-val">${escapeHtml(j.salary)}</span></div>
+        <div class="detail-row"><span class="detail-label">Job Type</span><span class="detail-value">${escapeHtml(j.type)}</span></div>
+      </div>
+      <div class="card-footer">
+        <button class="apply-link-trigger" data-job-id="${j.id}">
+          View Job & Apply
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  `).join('');
+  
+  // attach event listeners to "View Job & Apply" buttons
+  document.querySelectorAll('.apply-link-trigger').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const jobId = btn.getAttribute('data-job-id');
+      const job = allJobs.find(j => j.id === jobId);
+      if(job) openViewModal(job);
+      else showToast('Job details missing', 'error');
+    });
+  });
+  // Optional: click on card background also opens same modal
+  document.querySelectorAll('.job-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if(e.target.classList.contains('apply-link-trigger') || e.target.closest('.apply-link-trigger')) return;
+      const jobId = card.getAttribute('data-job-id');
+      const job = allJobs.find(j => j.id === jobId);
+      if(job) openViewModal(job);
+    });
+  });
+}
+
+function runSearch(){
+  const kw = document.getElementById('searchKeyword').value.toLowerCase().trim();
+  const loc = document.getElementById('searchLocation').value.toLowerCase().trim();
+  const exp = document.getElementById('searchExp').value.toLowerCase();
+  renderJobs(allJobs.filter(j => {
+    const matchKw = !kw || j.title.toLowerCase().includes(kw) || j.company.toLowerCase().includes(kw) || j.raw.includes(kw);
+    const matchLoc = !loc || j.location.toLowerCase().includes(loc) || j.raw.includes(loc);
+    const matchExp = !exp || j.exp.toLowerCase().includes(exp) || j.raw.includes(exp);
+    const matchChip = !activeChip || j.raw.includes(activeChip) || j.type.toLowerCase().includes(activeChip);
+    return matchKw && matchLoc && matchExp && matchChip;
+  }));
+}
+
+function setChip(el, val){
+  document.querySelectorAll('.f-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  activeChip = val;
+  runSearch();
+}
+
+document.querySelectorAll('.f-chip').forEach(chip => {
+  chip.addEventListener('click', () => setChip(chip, chip.getAttribute('data-filter') || ''));
+});
+document.getElementById('searchKeyword').addEventListener('input', runSearch);
+document.getElementById('searchLocation').addEventListener('input', runSearch);
+document.getElementById('searchExp').addEventListener('change', runSearch);
+
+function openPostModal(){ document.getElementById('postModalOverlay').classList.add('open'); document.body.style.overflow='hidden'; }
+function closePostModal(){ document.getElementById('postModalOverlay').classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('postModalOverlay').addEventListener('click',e=>{ if(e.target===document.getElementById('postModalOverlay')) closePostModal(); });
+document.getElementById('viewModalOverlay').addEventListener('click',e=>{ if(e.target===document.getElementById('viewModalOverlay')) closeViewModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closePostModal(); closeViewModal(); } });
+
+// post job form logic (preserved)
+const descEl = document.getElementById('f_desc');
+if(descEl){
+  descEl.addEventListener('input',()=>{ document.getElementById('f_descCount').textContent = `${descEl.value.length}/2000`; });
+}
+function validateModal(){ 
+  const reqFields = ['f_company','f_email','f_title','f_jobType','f_location','f_experience','f_skills','f_desc'];
+  for(let id of reqFields){
+    const val = document.getElementById(id).value.trim();
+    if(!val){ showToast(`${id.replace('f_','')} is required`,'error'); return false; }
+  }
+  const email = document.getElementById('f_email').value;
+  if(!/^\S+@\S+\.\S+$/.test(email)){ showToast('Valid email needed','error'); return false; }
+  return true;
+}
+function buildSalary(){ 
+  const min=document.getElementById('f_salMin').value, max=document.getElementById('f_salMax').value, vis=document.getElementById('f_salVis').value;
+  if(vis==='hidden') return 'Not disclosed';
+  if(!min && !max) return 'Not disclosed';
+  if(vis==='negotiable') return `₹ ${min||max} LPA (Negotiable)`;
+  if(min && max) return `₹ ${min}-${max} LPA`;
+  return `₹ ${min||max} LPA`;
+}
+async function handleModalSubmit(){
+  if(!validateModal()) return;
+  const btn = document.getElementById('mSubmitBtn'), spin = document.getElementById('mSpin'), label = document.getElementById('mLabel');
+  btn.disabled=true; spin.style.display='block'; label.textContent='Submitting...';
+  const data = {
+    company:document.getElementById('f_company').value.trim(), industry:document.getElementById('f_industry').value,
+    email:document.getElementById('f_email').value.trim(), website:document.getElementById('f_website').value.trim(),
+    title:document.getElementById('f_title').value.trim(), jobType:document.getElementById('f_jobType').value,
+    workMode:document.getElementById('f_workMode').value, location:document.getElementById('f_location').value.trim(),
+    role:document.getElementById('f_role').value.trim(), experience:document.getElementById('f_experience').value,
+    openings:document.getElementById('f_openings').value||'1', salary:buildSalary(), lastDate:document.getElementById('f_lastDate').value.trim(),
+    skills:document.getElementById('f_skills').value.trim(), qualification:document.getElementById('f_qual').value.trim(),
+    description:document.getElementById('f_desc').value.trim(), perks:document.getElementById('f_perks').value.trim(),
+    applyLink:document.getElementById('f_applyLink').value.trim(),
+  };
+  try{ await window._submitJob(data); document.getElementById('modalForm').style.display='none'; document.getElementById('modalSuccess').classList.add('show'); }
+  catch(err){ showToast('Submission failed','error'); btn.disabled=false; spin.style.display='none'; label.textContent='Submit for Review'; }
+}
+function resetModal(){
+  document.querySelectorAll('#modalForm input, #modalForm select, #modalForm textarea').forEach(el=>el.value='');
+  document.getElementById('f_descCount').textContent='0/2000';
+  document.getElementById('modalForm').style.display=''; document.getElementById('modalSuccess').classList.remove('show');
+  document.getElementById('mSubmitBtn').disabled=false; document.getElementById('mSpin').style.display='none';
+  document.getElementById('mLabel').textContent='Submit for Review';
+}
+
+window.addEventListener('DOMContentLoaded', loadJobs);
+</script>
+</body>
+</html>

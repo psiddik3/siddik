@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <title>SpreadOne · Connect & share</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <script>
+    try {
+      var originalFetch = window.fetch;
+      Object.defineProperty(window, 'fetch', {
+        configurable: true,
+        enumerable: true,
+        get: function() { return originalFetch; },
+        set: function(val) {  }
+      });
+    } catch(e) {}
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f4f6fa; padding-bottom: max(85px, calc(85px + env(safe-area-inset-bottom))); -webkit-tap-highlight-color: transparent; }
+    .post-card { transition: box-shadow 0.2s ease; margin-bottom: 0.5rem; background: white; border-radius: 1rem; border: 1px solid #eef2ff; overflow: hidden; }
+    .post-inner { padding: 0.6rem 0.5rem; }
+    .post-author-row { padding: 0 0.25rem; }
+    .post-content-text { font-size: 0.9rem; line-height: 1.45; word-break: break-word; margin-top: 0.25rem; padding: 0 0.25rem; color: #1e293b; }
+    .post-content-text .full-content { display: none; }
+    .post-content-text.expanded .full-content { display: inline; }
+    .post-content-text.expanded .truncated-content { display: none; }
+    .read-more-btn { color: #6B7280; font-weight: 500; cursor: pointer; margin-left: 0.25rem; font-size: 0.75rem; display: inline-block; background: none; border: none; }
+    .read-more-btn:hover { color: #4B5563; text-decoration: underline; }
+    .post-image { width: 100%; display: block; margin-top: 0.5rem; border-radius: 0.5rem; overflow: hidden; }
+    .post-image img { width: 100%; height: auto; display: block; }
+    .action-btn { transition: all 0.15s ease; background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.5rem; border-radius: 2rem; font-weight: 500; }
+    .action-btn i { font-size: 1.1rem; }
+    .action-btn span { font-size: 0.85rem; }
+    .action-buttons { margin-left: 0.5rem; margin-top: 0.5rem; padding-top: 0.25rem; border-top: 1px solid #eef2ff; display: flex; flex-wrap: wrap; gap: 1rem; }
+    
+    .bottom-nav-fixed { 
+      position: fixed; 
+      bottom: 0; 
+      left: 0; 
+      right: 0; 
+      display: flex; 
+      justify-content: center; 
+      z-index: 1000; 
+      background: transparent; 
+      pointer-events: none; 
+      padding-bottom: max(0.5rem, env(safe-area-inset-bottom)); 
+    }
+    .bottom-nav { 
+      background: rgba(255, 255, 255, 0.72); 
+      backdrop-filter: blur(20px); 
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 2rem; 
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04); 
+      display: flex; 
+      flex-wrap: nowrap; 
+      justify-content: space-evenly; 
+      gap: 0.2rem; 
+      padding: 0.5rem 0.5rem; 
+      pointer-events: auto; 
+      width: 100%; 
+      max-width: 48rem; 
+      margin-bottom: 0.5rem; 
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .bottom-nav::-webkit-scrollbar { display: none; }
+    .nav-item { 
+      flex: 1 1 auto;
+      text-align: center;
+      font-size: 0.9rem; 
+      font-weight: 600; 
+      padding: 0.4rem 0.6rem; 
+      border-radius: 2rem; 
+      transition: all 0.2s; 
+      color: #4b5563; 
+      white-space: nowrap; 
+      cursor: pointer; 
+      background: none; 
+      border: none; 
+    }
+    .nav-item.active { background: #0f2c1f; color: white; }
+    
+    @media (max-width: 500px) { 
+      .nav-item { font-size: 0.7rem; padding: 0.35rem 0.2rem; letter-spacing: -0.2px; } 
+      .bottom-nav { gap: 0.1rem; padding: 0.3rem 0.2rem; max-width: 96%; } 
+    }
+    .comment-list { max-height: 200px; overflow-y: auto; background: #f9fafb; border-radius: 0.75rem; }
+    .hashtag { cursor: pointer; color: #059669; font-weight: 500; }
+    .hashtag:hover { text-decoration: underline; }
+    .alert-item { background: white; border-radius: 1rem; padding: 0.75rem; margin-bottom: 0.6rem; border: 1px solid #eef2ff; transition: all 0.1s; cursor: pointer; }
+    .alert-item:active { transform: scale(0.98); }
+    .header-container { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.75rem; padding: 0 0.25rem; }
+    .logo-spreadone { font-size: 1.85rem; font-weight: 800; background: linear-gradient(135deg, #0f2c1f, #2b6e3c); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -0.5px; margin-left: 0.5rem; white-space: nowrap; }
+    .search-wrapper { flex: 1; max-width: none; min-width: 0; }
+    #searchInput { width: 100%; background: white; border: 1px solid #e2e8f0; border-radius: 9999px; padding: 0.55rem 0.75rem 0.55rem 2rem; font-size: 0.9rem; transition: all 0.2s; }
+    #searchInput:focus { outline: none; border-color: #10b981; box-shadow: 0 0 0 2px rgba(16,185,129,0.2); }
+    .hidden-creator { display: none !important; }
+    .avatar { display: flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 9999px; font-weight: bold; font-size: 0.875rem; color: white; text-shadow: 0 1px 1px rgba(0,0,0,0.1); flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.2); transition: transform 0.1s ease; }
+    .creator-row { display: flex; flex-direction: column; gap: 0.5rem; }
+    .name-row { margin-bottom: 0.25rem; }
+    .action-row { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-top: 0.25rem; }
+    button { cursor: pointer; }
+    .post-card { contain: layout style; }
+    .appreciate-btn, .share-btn, .comment-trigger-btn { touch-action: manipulation; }
+    
+    .iframe-container {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 50;
+      background: #f4f6fa;
+      -webkit-overflow-scrolling: touch;
+      overflow: hidden;
+    }
+    .iframe-container.active { display: block; }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    #feedContainer { display: block; padding-bottom: max(80px, calc(80px + env(safe-area-inset-bottom))); position: relative; z-index: 10; }
+  </style>
+</head>
+<body>
+
+<div class="max-w-3xl mx-auto px-1.5 sm:px-2 py-4 md:py-6">
+  <div class="header-container">
+    <h1 class="logo-spreadone">SpreadOne</h1>
+    <div class="search-wrapper">
+      <div class="relative">
+        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+        <input type="text" id="searchInput" placeholder="Search communities, jobs...">
+      </div>
+    </div>
+  </div>
+
+  <div id="postCreationCard" class="bg-white rounded-2xl shadow-sm border border-slate-100 p-3 mb-4">
+    <div class="flex flex-col gap-2 creator-row">
+      <div class="flex items-center gap-2 bg-slate-50 rounded-xl p-1.5 border border-slate-100 name-row">
+        <i class="fas fa-user-circle text-emerald-500 text-base"></i>
+        <input type="text" id="postAuthorName" placeholder="Your name" class="flex-1 bg-transparent text-sm focus:outline-none" readonly>
+      </div>
+      <textarea id="postContent" rows="1" placeholder="What's on your mind?" class="w-full border border-slate-200 rounded-xl p-2 text-sm focus:ring-1 focus:ring-emerald-300 outline-none resize-none"></textarea>
+      <div class="flex flex-wrap items-center justify-between gap-2 action-row">
+        <div class="flex items-center gap-2">
+          <label class="cursor-pointer bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1 border border-slate-200">
+            <i class="fas fa-image text-emerald-500 text-xs"></i> Add photo
+            <input type="file" id="postImageInput" accept="image/*" class="hidden">
+          </label>
+          <div id="imagePreviewContainer" class="hidden relative">
+            <img id="imagePreview" class="h-8 w-auto rounded-md border">
+            <button type="button" id="removeImageBtn" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 text-[10px] leading-none flex items-center justify-center">×</button>
+          </div>
+        </div>
+        <button id="publishPostBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm transition flex items-center gap-1">
+          <i class="fas fa-pen-fancy text-xs"></i> Post
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="feedContainer" class="space-y-0"></div>
+  
+  <div id="iframe-community" class="iframe-container">
+    <iframe src="/community.html" title="Community"></iframe>
+  </div>
+  <div id="iframe-jobs" class="iframe-container">
+    <iframe src="/jobs.html" title="Jobs"></iframe>
+  </div>
+  <div id="iframe-startups" class="iframe-container">
+    <iframe src="/startup.html" title="Startups"></iframe>
+  </div>
+
+  <div class="bottom-nav-fixed">
+    <div class="bottom-nav">
+      <button class="nav-item active" data-nav="home">Home</button>
+      <button class="nav-item" data-nav="community">Community</button>
+      <button class="nav-item" data-nav="jobs">Jobs</button>
+      <button class="nav-item" data-nav="startups">Startups</button>
+      <button class="nav-item" data-nav="alerts">Alerts</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  let posts = [];
+  let currentNav = 'home';
+  let currentSearchQuery = '';
+
+  const STORAGE_DEVICE_ID = 'spreadone_device_id';
+  const STORAGE_AUTHOR_NAME = 'spreadone_author_name';
+  const STORAGE_COMMENTER_NAME = 'spreadone_commenter_name';
+  const POSTS_COLLECTION = 'home_posts';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDZt0dJQCu0tW9OR9kyyliRPbP47R_z2kw",
+    authDomain: "jobs-1015c.firebaseapp.com",
+    projectId: "jobs-1015c"
+  };
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const avatarColors = [
+    '#EF4444', '#F97316', '#F59E0B', '#10B981', '#14B8A6', '#3B82F6', '#6366F1', '#8B5CF6', '#EC4899', '#F43F5E',
+    '#E11D48', '#D97706', '#65A30D', '#0EA5E9', '#7C3AED', '#DB2777', '#4F46E5', '#0284C7', '#059669', '#DC2626'
+  ];
+  function getAvatarColor(name) {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = ((hash << 5) - hash) + name.charCodeAt(i);
+      hash |= 0;
+    }
+    return avatarColors[Math.abs(hash) % avatarColors.length];
+  }
+
+  function uid() { return Date.now() + '-' + Math.random().toString(36).substr(2, 8); }
+  
+  const defaultPosts = [
+    { id: 'p1', authorName: 'Sarah Jenkins', authorTitle: 'PM at BuildIt', content: 'Just launched new feature! ✨ #product #launch', imageUrl: null, timestamp: new Date(Date.now() - 2*3600000).toISOString(), appreciations: 24, appreciatedBy: [], comments: [{ name: 'Alex', text: 'Awesome!', timestamp: Date.now() - 3600000 }] },
+    { id: 'p2', authorName: 'Miguel Chen', authorTitle: 'DevRel', content: 'Hiring remote engineers! #hiring #techjobs', imageUrl: null, timestamp: new Date(Date.now() - 5*3600000).toISOString(), appreciations: 9, appreciatedBy: [], comments: [] },
+    { id: 'p3', authorName: 'Leila Rivers', authorTitle: 'Founder', content: 'Launched beta! First 100 users get badge. #startup', imageUrl: null, timestamp: new Date(Date.now() - 24*3600000).toISOString(), appreciations: 41, appreciatedBy: [], comments: [] },
+    { id: 'p4', authorName: 'Arjun Kapoor', authorTitle: 'Advisor', content: 'Long post: Over the past decade, I’ve seen hundreds of startups fail because they didn’t focus on user retention. Here’s a simple framework: (1) Measure daily active users, (2) run weekly feedback loops, (3) iterate fast. #startupadvice', imageUrl: null, timestamp: new Date(Date.now() - 6*3600000).toISOString(), appreciations: 52, appreciatedBy: [], comments: [] }
+  ];
+
+  function loadPosts() {
+    db.collection(POSTS_COLLECTION).orderBy('timestamp', 'desc').get().then(snapshot => {
+      posts = [];
+      snapshot.forEach(doc => {
+        let p = doc.data();
+        p.id = doc.id;
+        if (!p.appreciatedBy) p.appreciatedBy = [];
+        if (!p.comments) p.comments = [];
+        posts.push(p);
+      });
+      
+      if (posts.length === 0) {
+        let seeds = JSON.parse(JSON.stringify(defaultPosts));
+        seeds.forEach(p => {
+          let docId = p.id;
+          delete p.id;
+          db.collection(POSTS_COLLECTION).doc(docId).set(p);
+        });
+        posts = JSON.parse(JSON.stringify(defaultPosts));
+      }
+      if (currentNav === 'home' || currentNav === 'alerts') renderFeed();
+    });
+  }
+
+  function getDeviceId() {
+    let id = localStorage.getItem(STORAGE_DEVICE_ID);
+    if (!id) { id = 'device_' + uid(); localStorage.setItem(STORAGE_DEVICE_ID, id); }
+    return id;
+  }
+  const DEVICE_ID = getDeviceId();
+
+  function getStoredAuthorName() { return localStorage.getItem(STORAGE_AUTHOR_NAME) || ''; }
+  function setStoredAuthorName(name) { 
+    if (name.trim() && !getStoredAuthorName()) localStorage.setItem(STORAGE_AUTHOR_NAME, name.trim()); 
+  }
+  function getStoredCommenterName() { return localStorage.getItem(STORAGE_COMMENTER_NAME) || ''; }
+  function setStoredCommenterName(name) { if(name.trim() && !getStoredCommenterName()) localStorage.setItem(STORAGE_COMMENTER_NAME, name.trim()); }
+
+  function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+  function linkHashtags(text) { return text.replace(/#(\w+)/g, '<span class="hashtag">#$1</span>'); }
+
+  function getTimeAgo(date) {
+    const sec = Math.floor((new Date() - date)/1000);
+    if(sec<60) return 'just now';
+    const min = Math.floor(sec/60); if(min<60) return `${min}m ago`;
+    const hr = Math.floor(min/60); if(hr<24) return `${hr}h ago`;
+    return `${Math.floor(hr/24)}d ago`;
+  }
+
+  function formatContent(content, postId) {
+    const escaped = linkHashtags(escapeHtml(content));
+    const needs = content.length > 180 || content.split('\n').length > 3;
+    if (!needs) return `<div class="post-content-text" data-post-id="${postId}">${escaped}</div>`;
+    const truncated = escaped.slice(0, 150) + (escaped.length>150 ? '...' : '');
+    return `<div class="post-content-text collapsed" data-post-id="${postId}">
+      <span class="truncated-content">${truncated}</span>
+      <span class="full-content" style="display:none;">${escaped}</span>
+      <button class="read-more-btn">Read more</button>
+    </div>`;
+  }
+
+  function generatePostHTML(post) {
+    const timeAgo = getTimeAgo(new Date(post.timestamp));
+    const commentCount = post.comments?.length || 0;
+    const hasAppreciated = post.appreciatedBy?.includes(DEVICE_ID);
+    const heartClass = hasAppreciated ? 'fas fa-heart text-rose-500' : 'far fa-heart';
+    const avatarBg = getAvatarColor(post.authorName);
+    
+    let commentsHtml = '';
+    if (post.comments && post.comments.length) {
+      const recent = post.comments.slice(-3);
+      commentsHtml = `<div class="comment-list mt-2 pt-1 text-sm space-y-1 border-t border-slate-100">
+        ${recent.map(c => `<div class="flex gap-2"><span class="font-semibold text-emerald-700 text-xs">${escapeHtml(c.name)}</span><span class="text-xs">${escapeHtml(c.text)}</span></div>`).join('')}
+        ${post.comments.length > 3 ? `<div class="text-xs text-emerald-500 cursor-pointer view-all-comments" data-post-id="${post.id}">View all →</div>` : ''}
+      </div>`;
+    } else {
+      commentsHtml = `<div class="text-xs text-slate-400 mt-1 italic">No comments yet.</div>`;
+    }
+
+    return `<div class="post-card" data-post-id="${post.id}">
+      <div class="post-inner">
+        <div class="flex gap-2 items-start post-author-row">
+          <div class="avatar" style="background-color: ${avatarBg}; background-image: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.05) 100%);">${post.authorName.charAt(0).toUpperCase()}</div>
+          <div class="flex-1">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-2">
+              <div><span class="font-bold text-sm">${escapeHtml(post.authorName)}</span> <span class="text-xs text-slate-500">${escapeHtml(post.authorTitle || '')}</span></div>
+              <span class="text-xs text-slate-400">${timeAgo}</span>
+            </div>
+          </div>
+        </div>
+        ${formatContent(post.content, post.id)}
+        ${post.imageUrl ? `<div class="post-image mt-1"><img src="${post.imageUrl}" loading="lazy"></div>` : ''}
+        <div class="action-buttons">
+          <button class="action-btn appreciate-btn" data-post-id="${post.id}">
+            <i class="${heartClass}"></i> <span>Appreciate</span>
+            <span class="appreciate-count text-xs bg-slate-100 px-1.5 rounded-full ml-0.5">${post.appreciations}</span>
+          </button>
+          <button class="action-btn comment-trigger-btn" data-post-id="${post.id}">
+            <i class="far fa-comment-dots"></i> <span>Comment</span>
+            <span class="comment-badge text-xs bg-slate-100 px-1.5 rounded-full ml-0.5">${commentCount}</span>
+          </button>
+          <button class="action-btn share-btn" data-post-id="${post.id}">
+            <i class="far fa-share-from-square"></i> <span>Share</span>
+          </button>
+        </div>
+        <div class="comments-section hidden mt-2" id="comments-${post.id}">
+          <div class="bg-slate-50 p-2 rounded-xl">
+            <div class="comment-items-container">${commentsHtml}</div>
+            <div class="mt-2 flex gap-2">
+              <input type="text" id="commentText-${post.id}" placeholder="Write a comment..." class="flex-1 text-sm border rounded-full px-3 py-1">
+              <button class="submit-comment-btn bg-emerald-100 text-emerald-700 text-xs px-3 rounded-full" data-post-id="${post.id}">Post</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function renderAlerts() {
+    const sorted = [...posts].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+    return sorted.map(p => `<div class="alert-item" data-alert-id="${p.id}"><div><span class="font-semibold">${escapeHtml(p.authorName)}</span> <span class="text-xs text-slate-400">${getTimeAgo(new Date(p.timestamp))}</span><p class="text-sm mt-1">${escapeHtml(p.content.substring(0,80))}${p.content.length>80?'…':''}</p></div></div>`).join('');
+  }
+
+  function showHomeOrAlerts(hash) {
+    const feedContainer = document.getElementById('feedContainer');
+    const postCreator = document.getElementById('postCreationCard');
+    
+    feedContainer.style.display = 'block';
+    
+    if (hash === 'home') {
+      postCreator.classList.remove('hidden-creator');
+    } else {
+      postCreator.classList.add('hidden-creator');
+    }
+    
+    if (hash === 'alerts') {
+      feedContainer.innerHTML = `<div><h3 class="text-sm font-semibold mb-2">🔔 Recent activity</h3>${renderAlerts()}</div>`;
+      document.querySelectorAll('.alert-item').forEach(el => el.addEventListener('click', (e) => {
+        const id = el.getAttribute('data-alert-id');
+        if (id) scrollToPost(id);
+      }));
+      return;
+    }
+    
+    let filtered = posts;
+    if (currentSearchQuery.trim()) {
+      const q = currentSearchQuery.trim().toLowerCase();
+      filtered = filtered.filter(p => p.content.toLowerCase().includes(q) || p.authorName.toLowerCase().includes(q));
+    }
+    if (!filtered.length) {
+      feedContainer.innerHTML = `<div class="bg-white rounded-xl p-5 text-center text-slate-500">No posts. Be the first!</div>`;
+      return;
+    }
+    feedContainer.innerHTML = filtered.map(p => generatePostHTML(p)).join('');
+    attachEventListeners();
+  }
+
+  function handleRouting() {
+    const hash = window.location.hash.replace('#', '') || 'home';
+    const validNavs = ['home', 'community', 'jobs', 'startups', 'alerts'];
+    if (!validNavs.includes(hash)) return;
+
+    currentNav = hash;
+    document.querySelectorAll('.nav-item').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-nav') === hash);
+    });
+
+    const feedContainer = document.getElementById('feedContainer');
+    const iframeCommunity = document.getElementById('iframe-community');
+    const iframeJobs = document.getElementById('iframe-jobs');
+    const iframeStartups = document.getElementById('iframe-startups');
+    const postCreator = document.getElementById('postCreationCard');
+    const headerContainer = document.querySelector('.header-container');
+
+    // Hide all modules
+    feedContainer.style.display = 'none';
+    iframeCommunity.classList.remove('active');
+    iframeJobs.classList.remove('active');
+    iframeStartups.classList.remove('active');
+    postCreator.classList.add('hidden-creator');
+    if (headerContainer) headerContainer.style.display = 'none';
+
+    if (hash === 'home' || hash === 'alerts') {
+      if (headerContainer) headerContainer.style.display = 'flex';
+      showHomeOrAlerts(hash);
+    } else {
+      if (hash === 'community') iframeCommunity.classList.add('active');
+      else if (hash === 'jobs') iframeJobs.classList.add('active');
+      else if (hash === 'startups') iframeStartups.classList.add('active');
+    }
+  }
+
+  function renderFeed() {
+    handleRouting();
+  }
+
+  function attachEventListeners() {
+    document.querySelectorAll('.appreciate-btn').forEach(btn => {
+      btn.removeEventListener('click', handleAppreciateToggle);
+      btn.addEventListener('click', handleAppreciateToggle);
+    });
+    document.querySelectorAll('.share-btn').forEach(btn => {
+      btn.removeEventListener('click', handleShare);
+      btn.addEventListener('click', handleShare);
+    });
+    document.querySelectorAll('.comment-trigger-btn').forEach(btn => {
+      btn.removeEventListener('click', toggleComment);
+      btn.addEventListener('click', toggleComment);
+    });
+    document.querySelectorAll('.submit-comment-btn').forEach(btn => {
+      btn.removeEventListener('click', handleComment);
+      btn.addEventListener('click', handleComment);
+    });
+    document.querySelectorAll('.view-all-comments').forEach(el => {
+      el.removeEventListener('click', viewAllComments);
+      el.addEventListener('click', viewAllComments);
+    });
+    document.querySelectorAll('.hashtag').forEach(tag => {
+      tag.removeEventListener('click', hashtagClick);
+      tag.addEventListener('click', hashtagClick);
+    });
+    document.querySelectorAll('.read-more-btn').forEach(btn => {
+      btn.removeEventListener('click', handleReadMore);
+      btn.addEventListener('click', handleReadMore);
+    });
+  }
+
+  function toggleComment(e) {
+    const id = e.currentTarget.getAttribute('data-post-id');
+    const div = document.getElementById(`comments-${id}`);
+    if (div) div.classList.toggle('hidden');
+  }
+
+  function handleReadMore(e) {
+    e.stopPropagation();
+    const btn = e.currentTarget;
+    const container = btn.closest('.post-content-text');
+    if (!container) return;
+    const fullSpan = container.querySelector('.full-content');
+    const truncatedSpan = container.querySelector('.truncated-content');
+    const isCollapsed = container.classList.contains('collapsed');
+    if (isCollapsed) {
+      fullSpan.style.display = 'inline';
+      truncatedSpan.style.display = 'none';
+      container.classList.remove('collapsed');
+      btn.innerText = 'Read less';
+    } else {
+      fullSpan.style.display = 'none';
+      truncatedSpan.style.display = 'inline';
+      container.classList.add('collapsed');
+      btn.innerText = 'Read more';
+    }
+  }
+
+  function handleAppreciateToggle(e) {
+    e.preventDefault();
+    const btn = e.currentTarget;
+    const postId = btn.getAttribute('data-post-id');
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+    const hasAppreciated = post.appreciatedBy.includes(DEVICE_ID);
+    if (hasAppreciated) {
+      post.appreciations--;
+      post.appreciatedBy = post.appreciatedBy.filter(id => id !== DEVICE_ID);
+    } else {
+      post.appreciations++;
+      post.appreciatedBy.push(DEVICE_ID);
+    }
+    
+    db.collection(POSTS_COLLECTION).doc(postId).update({
+      appreciations: post.appreciations,
+      appreciatedBy: post.appreciatedBy
+    });
+
+    const heartIcon = btn.querySelector('i');
+    const countSpan = btn.querySelector('.appreciate-count');
+    if (heartIcon) {
+      if (hasAppreciated) {
+        heartIcon.classList.remove('fas', 'text-rose-500');
+        heartIcon.classList.add('far');
+      } else {
+        heartIcon.classList.remove('far');
+        heartIcon.classList.add('fas', 'text-rose-500');
+      }
+    }
+    if (countSpan) countSpan.innerText = post.appreciations;
+  }
+
+  function handleShare(e) {
+    const postId = e.currentTarget.getAttribute('data-post-id');
+    const post = posts.find(p => p.id === postId);
+    if (post) navigator.clipboard.writeText(`"${post.content.substring(0,100)}" — ${post.authorName} on SpreadOne`).then(()=>alert('Copied!'));
+  }
+
+  function handleComment(e) {
+    const btn = e.currentTarget;
+    const postId = btn.getAttribute('data-post-id');
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+    const textInput = document.getElementById(`commentText-${postId}`);
+    const text = textInput?.value.trim();
+    if (!text) return;
+    let commenterName = getStoredCommenterName();
+    if (!commenterName) {
+      commenterName = prompt("Please enter your name to comment:");
+      if (!commenterName) return;
+      setStoredCommenterName(commenterName);
+    }
+    post.comments.push({ name: commenterName, text, timestamp: Date.now() });
+
+    db.collection(POSTS_COLLECTION).doc(postId).update({
+      comments: post.comments
+    });
+    
+    renderFeed();
+  }
+
+  function viewAllComments(e) {
+    const postId = e.currentTarget.getAttribute('data-post-id');
+    const post = posts.find(p => p.id === postId);
+    if (post?.comments) {
+      alert(post.comments.map(c => `${c.name}: ${c.text}`).join('\n'));
+    }
+  }
+
+  function hashtagClick(e) {
+    let t = e.target.innerText;
+    if (t.startsWith('#')) t = t.slice(1);
+    document.getElementById('searchInput').value = '#' + t;
+    currentSearchQuery = '#' + t;
+    renderFeed();
+  }
+
+  function scrollToPost(postId) {
+    if (currentNav !== 'home') {
+      currentNav = 'home';
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-nav="home"]').classList.add('active');
+      renderFeed();
+      setTimeout(() => {
+        const el = document.querySelector(`.post-card[data-post-id="${postId}"]`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    } else {
+      const el = document.querySelector(`.post-card[data-post-id="${postId}"]`);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      else { currentSearchQuery = ''; document.getElementById('searchInput').value = ''; renderFeed(); setTimeout(() => { const newEl = document.querySelector(`.post-card[data-post-id="${postId}"]`); if(newEl) newEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50); }
+    }
+  }
+
+  function initPostCreator() {
+    const authorInput = document.getElementById('postAuthorName');
+    const publishBtn = document.getElementById('publishPostBtn');
+    const textarea = document.getElementById('postContent');
+    const fileInput = document.getElementById('postImageInput');
+    const previewImg = document.getElementById('imagePreview');
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    const removeBtn = document.getElementById('removeImageBtn');
+
+    const storedName = getStoredAuthorName();
+    if (storedName) {
+      authorInput.value = storedName;
+      authorInput.readOnly = true;
+    } else {
+      authorInput.readOnly = false;
+    }
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (ev) => { previewImg.src = ev.target.result; previewContainer.classList.remove('hidden'); };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    removeBtn.addEventListener('click', () => {
+      previewContainer.classList.add('hidden');
+      previewImg.src = '';
+      fileInput.value = '';
+    });
+
+    publishBtn.addEventListener('click', () => {
+      let name = authorInput.value.trim();
+      const content = textarea.value.trim();
+      if (!name) { alert("Enter your name"); authorInput.focus(); return; }
+      if (!content) { alert("Write something"); return; }
+      if (!getStoredAuthorName()) {
+        setStoredAuthorName(name);
+        authorInput.readOnly = true;
+      } else {
+        name = getStoredAuthorName();
+        authorInput.value = name;
+      }
+      let imageData = null;
+      if (previewImg.src && previewImg.src.startsWith('data:')) imageData = previewImg.src;
+      const newPost = {
+        authorName: name,
+        authorTitle: 'Community Creator',
+        content: content,
+        imageUrl: imageData,
+        timestamp: new Date().toISOString(),
+        appreciations: 0,
+        appreciatedBy: [],
+        comments: []
+      };
+      
+      db.collection(POSTS_COLLECTION).add(newPost).then(docRef => {
+        newPost.id = docRef.id;
+        posts.unshift(newPost);
+        textarea.value = '';
+        previewContainer.classList.add('hidden');
+        previewImg.src = '';
+        fileInput.value = '';
+        renderFeed();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  }
+
+  function initSearch() {
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      currentSearchQuery = e.target.value;
+      if (currentNav === 'home') renderFeed();
+    });
+  }
+
+  function initBottomNav() {
+    window.addEventListener('hashchange', handleRouting);
+    
+    document.querySelectorAll('.nav-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const nav = btn.getAttribute('data-nav');
+        if (nav !== 'home' && nav !== 'alerts') {
+          currentSearchQuery = '';
+          document.getElementById('searchInput').value = '';
+        }
+        window.location.hash = nav;
+      });
+    });
+    
+    // Explicit call to handle initial load
+    handleRouting();
+  }
+
+  loadPosts();
+  initPostCreator();
+  initSearch();
+  initBottomNav();
+})();
+</script>
+</body>
+</html>

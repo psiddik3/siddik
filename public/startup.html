@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Startup Community</title>
+  <style>
+    #startup-community-feed {
+      --page: #f4f5f2;
+      --surface: #ffffff;
+      --ink: #17211b;
+      --muted: #68736c;
+      --line: #dfe3df;
+      --green: #167349;
+      --green-dark: #0f4f34;
+      --green-soft: #e3f2e8;
+      --shadow: 0 12px 34px rgba(20, 37, 27, .07);
+      display: block;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(145deg, #f8fafc 0%, #f0f2f5 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    #startup-community-feed * { box-sizing: border-box; }
+    #startup-community-feed {
+      scroll-behavior: smooth;
+    }
+    #startup-community-feed body {
+      margin: 0;
+      background: transparent;
+      color: var(--ink);
+      line-height: 1.55;
+    }
+  
+    #startup-community-feed button, #startup-community-feed input, #startup-community-feed textarea, #startup-community-feed select { font: inherit; }
+    #startup-community-feed button { color: inherit; }
+    #startup-community-feed button, #startup-community-feed a { -webkit-tap-highlight-color: transparent; }
+    #startup-community-feed button:focus-visible, #startup-community-feed input:focus-visible, #startup-community-feed textarea:focus-visible, #startup-community-feed a:focus-visible {
+      outline: 3px solid rgba(22, 115, 73, .24);
+      outline-offset: 3px;
+    }
+  
+    #startup-community-feed .icon {
+      width: 19px;
+      height: 19px;
+      flex: 0 0 auto;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+  
+    #startup-community-feed .topbar {
+      position: sticky;
+      z-index: 40;
+      top: 0;
+      border-bottom: 1px solid rgba(223, 227, 223, .92);
+      background: rgba(255, 255, 255, .92);
+      backdrop-filter: blur(18px);
+    }
+  
+    #startup-community-feed .topbar-inner {
+      width: min(48rem, calc(100% - 32px));
+      min-height: 72px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: auto minmax(260px, 540px) auto;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+  
+    #startup-community-feed .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -.65px;
+      text-decoration: none;
+    }
+  
+    #startup-community-feed .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: var(--ink);
+      color: #fff;
+      box-shadow: 0 5px 13px rgba(23, 33, 27, .17);
+    }
+  
+    #startup-community-feed .brand-mark svg { width: 22px; height: 22px; }
+  
+    #startup-community-feed .search-wrap { position: relative; width: min(100%, 540px); }
+    #startup-community-feed .search-wrap .icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      color: #7e8881;
+      pointer-events: none;
+      transform: translateY(-50%);
+    }
+  
+    #startup-community-feed .search {
+      width: 100%;
+      height: 44px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 0 40px 0 44px;
+      background: #eff1ee;
+      color: var(--ink);
+      transition: .18s ease;
+    }
+  
+    #startup-community-feed .search:focus {
+      border-color: rgba(22, 115, 73, .35);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(22, 115, 73, .07);
+      outline: none;
+    }
+  
+    #startup-community-feed .search-key {
+      position: absolute;
+      right: 11px;
+      top: 50%;
+      min-width: 20px;
+      border: 1px solid #d7dcd8;
+      border-radius: 5px;
+      color: #89918c;
+      font-size: 10px;
+      line-height: 18px;
+      text-align: center;
+      transform: translateY(-50%);
+    }
+  
+    #startup-community-feed .top-actions { position: relative; display: flex; align-items: center; gap: 8px; }
+    #startup-community-feed .icon-btn {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      cursor: pointer;
+      transition: .16s ease;
+    }
+    #startup-community-feed .icon-btn:hover, #startup-community-feed .icon-btn.active { background: #eef1ee; }
+    #startup-community-feed .notification-dot {
+      position: absolute;
+      right: 8px;
+      top: 7px;
+      width: 8px;
+      height: 8px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      background: #d85345;
+    }
+    #startup-community-feed .notification-dot.read { display: none; }
+  
+    #startup-community-feed .notifications {
+      position: absolute;
+      right: 0;
+      top: 50px;
+      width: min(350px, calc(100vw - 28px));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 8px;
+      display: none;
+      background: #fff;
+      box-shadow: 0 18px 50px rgba(20, 37, 27, .15);
+      z-index: 100;
+    }
+    #startup-community-feed .notifications.open { display: block; animation: reveal .18s ease; }
+    #startup-community-feed .notifications-head {
+      padding: 9px 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    #startup-community-feed .notifications-head strong { font-size: 14px; }
+    #startup-community-feed .mark-read {
+      border: 0;
+      background: transparent;
+      color: var(--green);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    #startup-community-feed .notification-item {
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+    }
+    #startup-community-feed .notification-item:last-child { border-bottom: none; }
+    #startup-community-feed .notification-title { font-weight: 600; color: var(--ink); }
+    #startup-community-feed .notification-time { font-size: 10px; color: var(--muted); margin-top: 4px; }
+  
+    #startup-community-feed .page-shell {
+      width: min(48rem, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 calc(120px + env(safe-area-inset-bottom));
+    }
+  
+    #startup-community-feed .category-nav {
+      margin-bottom: 22px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+  
+    #startup-community-feed .category-btn {
+      position: relative;
+      min-width: 0;
+      min-height: 94px;
+      border: 1px solid rgba(23, 33, 27, .07);
+      border-radius: 17px;
+      padding: 13px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      background: var(--category-bg, #fff);
+      color: var(--category-ink, var(--ink));
+      cursor: pointer;
+      text-align: left;
+      transition: .18s ease;
+    }
+    #startup-community-feed .category-btn::after {
+      position: absolute;
+      width: 72px;
+      height: 72px;
+      right: -22px;
+      bottom: -30px;
+      border: 14px solid var(--category-ring, rgba(23, 33, 27, .08));
+      border-radius: 50%;
+      content: "";
+    }
+    #startup-community-feed .category-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    #startup-community-feed .category-btn.active { box-shadow: inset 0 0 0 2px var(--category-active, var(--ink)), var(--shadow); }
+    #startup-community-feed .category-label {
+      position: relative;
+      z-index: 1;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    #startup-community-feed .category-count {
+      position: relative;
+      z-index: 1;
+      color: color-mix(in srgb, currentColor 65%, transparent);
+      font-size: 10px;
+      font-weight: 650;
+    }
+  
+    #startup-community-feed .feed-tools {
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    #startup-community-feed .feed-tools h1 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: -.2px;
+    }
+    #startup-community-feed .feed-status { color: var(--muted); font-size: 11px; }
+  
+    #startup-community-feed .feed-empty {
+      display: none;
+      border: 1px dashed #c9d0cb;
+      border-radius: 20px;
+      padding: 55px 20px;
+      background: rgba(255, 255, 255, .55);
+      color: var(--muted);
+      text-align: center;
+    }
+    #startup-community-feed .feed-empty strong { display: block; margin-bottom: 4px; color: var(--ink); font-size: 18px; }
+  
+    #startup-community-feed .post-card {
+      margin-bottom: 16px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      overflow: hidden;
+      background: var(--surface);
+      box-shadow: 0 5px 24px rgba(20, 37, 27, .04);
+      animation: reveal .24s ease;
+    }
+    #startup-community-feed .post-card.hidden { display: none; }
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  
+    #startup-community-feed .post-main { padding: 21px 22px 16px; }
+    #startup-community-feed .post-head { display: flex; align-items: center; gap: 10px; }
+    #startup-community-feed .avatar {
+      width: 39px;
+      height: 39px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: var(--avatar, var(--ink));
+      color: #fff;
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .4px;
+    }
+    #startup-community-feed .post-author { min-width: 0; flex: 1; }
+    #startup-community-feed .author-line { display: flex; align-items: center; gap: 6px; }
+    #startup-community-feed .author-name { font-size: 13px; font-weight: 800; }
+    #startup-community-feed .verified {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--green);
+      color: #fff;
+    }
+    #startup-community-feed .verified .icon { width: 9px; height: 9px; stroke-width: 2.6; }
+    #startup-community-feed .post-meta { margin-top: 2px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; color: #89918c; font-size: 10px; }
+    #startup-community-feed .category-badge {
+      border-radius: 999px;
+      padding: 2px 7px;
+      background: var(--badge-bg, var(--green-soft));
+      color: var(--badge-ink, var(--green-dark));
+      font-weight: 800;
+    }
+    #startup-community-feed .more-btn {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      color: #7a847d;
+      cursor: pointer;
+    }
+    #startup-community-feed .more-btn:hover { background: #f0f2ef; }
+  
+    #startup-community-feed .post-title {
+      margin: 17px 0 8px;
+      max-width: 760px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(20px, 3.5vw, 28px);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+    #startup-community-feed .post-copy {
+      margin: 0;
+      color: #56625a;
+      font-size: 14px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+  
+    #startup-community-feed .source-row {
+      margin-top: 16px;
+      border-top: 1px solid #edf0ed;
+      padding-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: #88918b;
+      font-size: 10px;
+    }
+    #startup-community-feed .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--green);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    #startup-community-feed .source-link:hover { text-decoration: underline; }
+    #startup-community-feed .source-link .icon { width: 13px; height: 13px; }
+  
+    #startup-community-feed .post-stats {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #8b938e;
+      font-size: 10px;
+    }
+    #startup-community-feed .post-actions {
+      border-top: 1px solid #edf0ed;
+      padding: 8px 12px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+    }
+    #startup-community-feed .post-action {
+      min-height: 39px;
+      border: 0;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background: transparent;
+      color: #68736c;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 750;
+    }
+    #startup-community-feed .post-action:hover { background: #f0f3f0; color: var(--ink); }
+    #startup-community-feed .post-action.active { background: var(--green-soft); color: var(--green-dark); }
+    #startup-community-feed .post-action.active .icon { fill: currentColor; }
+    #startup-community-feed .post-action .icon { width: 17px; height: 17px; }
+  
+    #startup-community-feed .comments-section {
+      display: none;
+      background: #fafbfa;
+      border-top: 1px solid #edf0ed;
+      padding: 16px 22px;
+    }
+    #startup-community-feed .comments-section.open {
+      display: block;
+    }
+    #startup-community-feed .comment-list {
+      margin-bottom: 16px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    #startup-community-feed .comment-item {
+      padding: 10px 0;
+      border-bottom: 1px solid #edf0ed;
+    }
+    #startup-community-feed .comment-name {
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--ink);
+    }
+    #startup-community-feed .comment-text {
+      font-size: 12px;
+      color: #56625a;
+      margin-top: 4px;
+    }
+    #startup-community-feed .comment-form-inline {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    #startup-community-feed .comment-input {
+      width: 100%;
+      border: 1px solid #dce1dd;
+      border-radius: 20px;
+      padding: 10px 14px;
+      background: #ffffff;
+      font-size: 13px;
+      resize: vertical;
+    }
+    #startup-community-feed .name-input {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    #startup-community-feed .name-input input {
+      flex: 1;
+      border: 1px solid #dce1dd;
+      border-radius: 20px;
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+    #startup-community-feed .post-comment-btn {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 6px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      align-self: flex-end;
+    }
+  
+    #startup-community-feed .toast {
+      position: fixed;
+      z-index: 100;
+      left: 50%;
+      bottom: 22px;
+      min-width: 220px;
+      max-width: calc(100% - 28px);
+      border-radius: 12px;
+      padding: 11px 15px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 750;
+      text-align: center;
+      box-shadow: 0 14px 38px rgba(20,37,27,.24);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 10px);
+      transition: .2s ease;
+    }
+    #startup-community-feed .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  
+    #startup-community-feed .owner-note {
+      margin: 24px auto 0;
+      color: #929a95;
+      font-size: 10px;
+      text-align: center;
+    }
+  
+    @media (max-width: 760px) {
+      #startup-community-feed .topbar-inner {
+        width: min(100% - 24px, 600px);
+        min-height: auto;
+        padding: 10px 0 12px;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+      }
+      #startup-community-feed .search-wrap { grid-column: 1 / -1; grid-row: 2; width: 100%; }
+      #startup-community-feed .page-shell { width: min(100% - 22px, 600px); padding-top: 17px; }
+      #startup-community-feed .category-nav {
+        margin-right: -11px;
+        grid-template-columns: repeat(5, 118px);
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      #startup-community-feed .category-nav::-webkit-scrollbar { display: none; }
+      #startup-community-feed .category-btn { min-height: 84px; }
+      #startup-community-feed .post-main { padding: 17px 15px 13px; }
+      #startup-community-feed .post-title { font-size: 24px; }
+      #startup-community-feed .source-row { align-items: flex-start; flex-direction: column; gap: 4px; }
+      #startup-community-feed .comments-section { padding: 12px 15px; }
+    }
+  
+    @media (max-width: 440px) {
+      #startup-community-feed .brand { font-size: 19px; }
+      #startup-community-feed .brand-mark { width: 34px; height: 34px; }
+      #startup-community-feed .post-action span { display: none; }
+      #startup-community-feed .post-action .icon { width: 19px; height: 19px; }
+    }
+  
+    @media (prefers-reduced-motion: reduce) {
+      #startup-community-feed *, #startup-community-feed *::before, #startup-community-feed *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="startup-community-feed">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+      <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></symbol>
+      <symbol id="i-comment" viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    </svg>
+    
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="#" aria-label="Startups home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 28 28" fill="none">
+              <path d="M7 20.5V15m7 5.5V10m7 10.5V5.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+              <path d="m6 10 5-3 4 2 7-5" stroke="#a7e3ba" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          Startups
+        </a>
+        <label class="search-wrap" aria-label="Search posts">
+          <svg class="icon"><use href="#i-search"></use></svg>
+          <input class="search" id="searchInput" type="search" placeholder="Search startup news">
+          <span class="search-key">/</span>
+        </label>
+        <div class="top-actions">
+          <button class="icon-btn" id="notificationButton" type="button" aria-label="Open notifications" aria-expanded="false">
+            <svg class="icon"><use href="#i-bell"></use></svg>
+            <span class="notification-dot" id="notificationDot"></span>
+          </button>
+          <section class="notifications" id="notifications" aria-label="Notifications">
+            <div class="notifications-head">
+              <strong>New today</strong>
+              <button class="mark-read" id="markRead" type="button">Mark all read</button>
+            </div>
+            <div id="notificationsList">Loading...</div>
+          </section>
+        </div>
+      </div>
+    </header>
+    
+    <main class="page-shell" id="publicView">
+      <nav class="category-nav" aria-label="Post categories">
+        <button class="category-btn active" type="button" data-filter="all" style="--category-bg:#17211b;--category-ink:#fff;--category-ring:rgba(170,230,187,.25);--category-active:#17211b">
+          <span class="category-label">For you</span><span class="category-count">All startup updates</span>
+        </button>
+        <button class="category-btn" type="button" data-filter="funding" style="--category-bg:#f6dfce;--category-ring:#eeb78d;--category-active:#b76631">
+          <span class="category-label">Funding</span><span class="category-count">Rounds and deals</span>
+        </button>
+        <button class="category-btn" type="button" data-filter="stories" style="--category-bg:#dfe9fb;--category-ring:#adc5ef;--category-active:#5276b8">
+          <span class="category-label">Stories</span><span class="category-count">Founder journeys</span>
+        </button>
+        <button class="category-btn" type="button" data-filter="events" style="--category-bg:#eadff0;--category-ring:#c79ed5;--category-active:#8b579c">
+          <span class="category-label">Events</span><span class="category-count">Meet and learn</span>
+        </button>
+        <button class="category-btn" type="button" data-filter="accelerators" style="--category-bg:#f2e9bd;--category-ring:#dbc55a;--category-active:#927815">
+          <span class="category-label">Accelerators</span><span class="category-count">Programs and calls</span>
+        </button>
+      </nav>
+    
+      <div class="feed-tools">
+        <h1>Latest updates</h1>
+        <span class="feed-status" id="feedStatus">Loading posts...</span>
+      </div>
+    
+      <div class="feed-empty" id="feedEmpty"><strong>No posts found</strong>Try a different search or category.</div>
+      <section id="adminPosts" aria-label="Published posts"></section>
+      <p class="owner-note">Independent startup news summaries with clear source attribution.</p>
+    </main>
+    
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+<script>
+  try {
+    var originalFetch = window.fetch;
+    Object.defineProperty(window, 'fetch', {
+      configurable: true,
+      enumerable: true,
+      get: function() { return originalFetch; },
+      set: function(val) {  }
+    });
+  } catch(e) {}
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDZt0dJQCu0tW9OR9kyyliRPbP47R_z2kw",
+    authDomain: "jobs-1015c.firebaseapp.com",
+    projectId: "jobs-1015c"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const POSTS_COLLECTION = "startup_posts";
+  const COMMENTS_COLLECTION = "startup_comments";
+  const LIKES_COLLECTION = "startup_likes"; 
+
+  let activeFilter = "all";
+  let allPosts = [];
+  let currentUserId = null;
+
+  function getUserId() {
+    let id = localStorage.getItem("startup_user_id");
+    if (!id) {
+      id = "user_" + Date.now() + "_" + Math.random().toString(36).substr(2, 8);
+      localStorage.setItem("startup_user_id", id);
+    }
+    return id;
+  }
+
+  const searchInput = document.getElementById("searchInput");
+  const feedEmpty = document.getElementById("feedEmpty");
+  const feedStatus = document.getElementById("feedStatus");
+  const adminPosts = document.getElementById("adminPosts");
+  const toast = document.getElementById("toast");
+
+  function escapeHtml(value = "") {
+    return value.replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[character]));
+  }
+
+  function safeSourceUrl(value = "") {
+    try {
+      const url = new URL(value);
+      return ["http:", "https:"].includes(url.protocol) ? url.href : "#";
+    } catch {
+      return "#";
+    }
+  }
+
+  function showToast(message, isError = false) {
+    toast.textContent = message;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+  }
+
+  function formatTime(value) {
+    if (!value) return "Recently";
+    const date = value.toDate ? value.toDate() : new Date(value);
+    if (isNaN(date.getTime())) return "Recently";
+    return date.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+  }
+
+  async function getLikeCount(postId) {
+    const doc = await db.collection(LIKES_COLLECTION).doc(postId).get();
+    return doc.exists ? (doc.data().count || 0) : 0;
+  }
+
+  async function hasUserLiked(postId, userId) {
+    const likeRef = db.collection(LIKES_COLLECTION).doc(postId).collection("users").doc(userId);
+    const doc = await likeRef.get();
+    return doc.exists;
+  }
+
+  async function toggleLike(postId, userId) {
+    const postLikeRef = db.collection(LIKES_COLLECTION).doc(postId);
+    const userLikeRef = postLikeRef.collection("users").doc(userId);
+    const userDoc = await userLikeRef.get();
+    if (userDoc.exists) {
+      await userLikeRef.delete();
+      await postLikeRef.update({ count: firebase.firestore.FieldValue.increment(-1) });
+      return false;
+    } else {
+      await userLikeRef.set({ userId, createdAt: new Date().toISOString() });
+      await postLikeRef.set({ count: firebase.firestore.FieldValue.increment(1) }, { merge: true });
+      return true;
+    }
+  }
+
+  async function loadLikeStates() {
+    const userId = getUserId();
+    const postCards = document.querySelectorAll(".post-card");
+    for (const card of postCards) {
+      const id = card.dataset.id;
+      const liked = await hasUserLiked(id, userId);
+      const count = await getLikeCount(id);
+      const likeSpan = card.querySelector(`.like-count-${id}`);
+      const likeBtn = card.querySelector(`.like-btn-${id}`);
+      if (likeSpan) likeSpan.textContent = count;
+      if (likeBtn && liked) likeBtn.classList.add("active");
+    }
+  }
+
+  function postMarkup(post, id) {
+    const category = post.category || "general";
+    const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1);
+    const badgeBg = category === 'funding' ? '#f6dfce' : (category === 'stories' ? '#dfe9fb' : (category === 'events' ? '#eadff0' : (category === 'accelerators' ? '#f2e9bd' : '#e3f2e8')));
+    const badgeColor = category === 'funding' ? '#9a4d23' : (category === 'stories' ? '#4668a5' : (category === 'events' ? '#78508a' : (category === 'accelerators' ? '#806812' : '#0f4f34')));
+    return `<article class="post-card" data-id="${escapeHtml(id)}" data-category="${escapeHtml(category)}" data-search="${escapeHtml(`${post.title} ${post.article} ${post.sourceName}`.toLowerCase())}">
+      <div class="post-main">
+        <header class="post-head"><span class="avatar" style="--avatar:#167349">SP</span><div class="post-author"><div class="author-line"><span class="author-name">Spread</span><span class="verified"><svg class="icon"><use href="#i-check"></use></svg></span></div><div class="post-meta"><span>${formatTime(post.createdAt)}</span><span>•</span><span class="category-badge" style="background:${badgeBg};color:${badgeColor}">${escapeHtml(categoryLabel)}</span></div></div><button class="more-btn" type="button" aria-label="More post options" data-toast="More options will be available soon."><svg class="icon"><use href="#i-more"></use></svg></button></header>
+        <h2 class="post-title">${escapeHtml(post.title)}</h2>
+        <p class="post-copy">${escapeHtml(post.article)}</p>
+        <div class="source-row"><span>Brief summary by Spread. Read the original reporting for full context.</span><a class="source-link" href="${escapeHtml(safeSourceUrl(post.sourceUrl))}" target="_blank" rel="noopener noreferrer">Source: ${escapeHtml(post.sourceName)} <svg class="icon"><use href="#i-link"></use></svg></a></div>
+        <div class="post-stats"><span><strong class="like-count-${id}">0</strong> appreciations</span><span><strong class="comment-count-${id}">0</strong> comments</span></div>
+      </div>
+      <footer class="post-actions"><button class="post-action like-btn-${id} like-btn" data-id="${id}" type="button"><svg class="icon"><use href="#i-heart"></use></svg><span>Appreciate</span></button><button class="post-action toggle-comments-btn" data-id="${id}" type="button"><svg class="icon"><use href="#i-comment"></use></svg><span>Comment</span></button><button class="post-action share-btn" data-id="${id}" type="button"><svg class="icon"><use href="#i-share"></use></svg><span>Share</span></button></footer>
+      <div class="comments-section" id="comments-${id}"></div>
+    </article>`;
+  }
+
+  async function getComments(postId) {
+    const doc = await db.collection(COMMENTS_COLLECTION).doc(postId).get();
+    return doc.exists ? doc.data().comments || [] : [];
+  }
+
+  async function addComment(postId, name, text) {
+    const ref = db.collection(COMMENTS_COLLECTION).doc(postId);
+    const doc = await ref.get();
+    const comments = doc.exists ? doc.data().comments || [] : [];
+    comments.push({ name, text, createdAt: new Date().toISOString() });
+    await ref.set({ comments });
+  }
+
+  async function loadCommentsIntoSection(postId) {
+    const section = document.getElementById(`comments-${postId}`);
+    if (!section) return;
+    const comments = await getComments(postId);
+    const savedName = localStorage.getItem("startup_reader_name");
+    let nameHtml = '';
+    if (!savedName) {
+      nameHtml = `
+        <div class="name-input">
+          <input type="text" id="name-${postId}" placeholder="Your name" class="comment-input">
+          <button class="post-comment-btn" data-save-name="${postId}">Save</button>
+        </div>
+      `;
+    }
+    const commentsHtml = comments.length ? comments.map(c => `
+      <div class="comment-item">
+        <div class="comment-name">${escapeHtml(c.name)}</div>
+        <div class="comment-text">${escapeHtml(c.text)}</div>
+      </div>
+    `).join('') : '<div class="comment-item">No comments yet. Start the conversation.</div>';
+    section.innerHTML = `
+      <div class="comment-list">${commentsHtml}</div>
+      <div class="comment-form-inline">
+        ${nameHtml}
+        <textarea id="comment-text-${postId}" class="comment-input" rows="2" placeholder="Write a comment..."></textarea>
+        <button class="post-comment-btn" data-submit="${postId}">Post comment</button>
+      </div>
+    `;
+    if (!savedName) {
+      const saveBtn = section.querySelector(`[data-save-name="${postId}"]`);
+      if (saveBtn) saveBtn.onclick = () => {
+        const nameInput = document.getElementById(`name-${postId}`);
+        if (nameInput.value.trim()) {
+          localStorage.setItem("startup_reader_name", nameInput.value.trim());
+          loadCommentsIntoSection(postId);
+          showToast("Name saved");
+        } else showToast("Please enter a name");
+      };
+    }
+    const submitBtn = section.querySelector(`[data-submit="${postId}"]`);
+    if (submitBtn) submitBtn.onclick = async () => {
+      let name = localStorage.getItem("startup_reader_name");
+      if (!name) {
+        const nameInput = document.getElementById(`name-${postId}`);
+        if (nameInput && nameInput.value.trim()) {
+          name = nameInput.value.trim();
+          localStorage.setItem("startup_reader_name", name);
+        } else {
+          showToast("Please enter your name first");
+          return;
+        }
+      }
+      const textarea = document.getElementById(`comment-text-${postId}`);
+      const text = textarea.value.trim();
+      if (!text) { showToast("Write something"); return; }
+      await addComment(postId, name, text);
+      textarea.value = "";
+      await loadCommentsIntoSection(postId);
+      updateCommentCounts();
+      showToast("Comment posted");
+    };
+  }
+
+  function toggleComments(postId) {
+    const section = document.getElementById(`comments-${postId}`);
+    if (!section) return;
+    const isOpen = section.classList.contains("open");
+    if (!isOpen) {
+      section.classList.add("open");
+      loadCommentsIntoSection(postId);
+    } else {
+      section.classList.remove("open");
+    }
+  }
+
+  async function updateCommentCounts() {
+    const postCards = document.querySelectorAll(".post-card");
+    for (const card of postCards) {
+      const id = card.dataset.id;
+      const comments = await getComments(id);
+      const countSpan = card.querySelector(`.comment-count-${id}`);
+      if (countSpan) countSpan.textContent = comments.length;
+    }
+  }
+
+  async function loadPosts() {
+    feedStatus.textContent = "Loading posts...";
+    try {
+      const snapshot = await db.collection(POSTS_COLLECTION).orderBy("createdAt", "desc").get();
+      allPosts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      if (allPosts.length === 0) {
+        adminPosts.innerHTML = '<div class="feed-empty">No posts yet. Check back later.</div>';
+        feedStatus.textContent = "No posts";
+        feedEmpty.style.display = "block";
+        return;
+      }
+      let html = "";
+      allPosts.forEach(post => {
+        html += postMarkup(post, post.id);
+      });
+      adminPosts.innerHTML = html;
+      feedEmpty.style.display = "none";
+      feedStatus.textContent = allPosts.length + " posts";
+      attachInteractions();
+      await loadLikeStates();
+      await updateCommentCounts();
+      applyFilters();
+      updateNotifications();
+    } catch (err) {
+      console.error(err);
+      feedStatus.textContent = "Error loading feed";
+      showToast("Failed to load posts");
+    }
+  }
+
+  async function attachInteractions() {
+    document.querySelectorAll(".like-btn").forEach(btn => {
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = "true";
+      btn.addEventListener("click", async (e) => {
+        const postId = btn.dataset.id;
+        const userId = getUserId();
+        const liked = await toggleLike(postId, userId);
+        const newCount = await getLikeCount(postId);
+        const countSpan = document.querySelector(`.like-count-${postId}`);
+        if (countSpan) countSpan.textContent = newCount;
+        if (liked) {
+          btn.classList.add("active");
+          showToast("Appreciation added");
+        } else {
+          btn.classList.remove("active");
+          showToast("Appreciation removed");
+        }
+      });
+    });
+
+    document.querySelectorAll(".toggle-comments-btn").forEach(btn => {
+      if (btn.dataset.boundComments) return;
+      btn.dataset.boundComments = "true";
+      btn.addEventListener("click", () => toggleComments(btn.dataset.id));
+    });
+
+    document.querySelectorAll(".share-btn").forEach(btn => {
+      if (btn.dataset.boundShare) return;
+      btn.dataset.boundShare = "true";
+      btn.addEventListener("click", async () => {
+        try { await navigator.clipboard.writeText(location.href.split("#")[0] + "#" + btn.dataset.id); showToast("Post link copied."); }
+        catch { showToast("Post is ready to share."); }
+      });
+    });
+
+    document.querySelectorAll("[data-toast]").forEach(btn => {
+      if (btn.dataset.toastBound) return;
+      btn.dataset.toastBound = "true";
+      btn.addEventListener("click", () => showToast(btn.dataset.toast));
+    });
+  }
+
+  function applyFilters() {
+    const query = searchInput.value.trim().toLowerCase();
+    let visible = 0;
+    document.querySelectorAll(".post-card").forEach(card => {
+      const categories = card.dataset.category.split(" ");
+      const matchesFilter = activeFilter === "all" || categories.includes(activeFilter);
+      const matchesSearch = !query || card.dataset.search.includes(query) || card.textContent.toLowerCase().includes(query);
+      const show = matchesFilter && matchesSearch;
+      card.classList.toggle("hidden", !show);
+      if (show) visible++;
+    });
+    feedEmpty.style.display = visible ? "none" : "block";
+    feedStatus.textContent = query ? `${visible} search result${visible === 1 ? "" : "s"}` : activeFilter === "all" ? `Showing all (${visible})` : `Showing ${activeFilter} (${visible})`;
+  }
+
+  function setFilter(filter) {
+    activeFilter = filter;
+    document.querySelectorAll(".category-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.filter === filter));
+    applyFilters();
+  }
+
+  function getTodayStart() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
+  }
+
+  async function getNewPostsSince(lastSeen) {
+    const snapshot = await db.collection(POSTS_COLLECTION).where("createdAt", ">", lastSeen).orderBy("createdAt", "desc").get();
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  }
+
+  async function updateNotifications() {
+    const lastSeenStr = localStorage.getItem("startup_last_notification_seen");
+    const lastSeen = lastSeenStr ? new Date(lastSeenStr) : getTodayStart();
+    const todayStart = getTodayStart();
+    const sinceDate = lastSeen > todayStart ? lastSeen : todayStart;
+    const newPosts = await getNewPostsSince(sinceDate);
+    const dot = document.getElementById("notificationDot");
+    if (newPosts.length > 0) {
+      dot.classList.remove("read");
+    } else {
+      dot.classList.add("read");
+    }
+    const panel = document.getElementById("notificationsList");
+    if (newPosts.length === 0) {
+      panel.innerHTML = '<div class="notification-item">No new posts since your last visit.</div>';
+    } else {
+      panel.innerHTML = newPosts.map(post => `
+        <div class="notification-item">
+          <div class="notification-title">📢 ${escapeHtml(post.title)}</div>
+          <div class="notification-time">${formatTime(post.createdAt)}</div>
+        </div>
+      `).join('');
+    }
+  }
+
+  function markNotificationsRead() {
+    localStorage.setItem("startup_last_notification_seen", new Date().toISOString());
+    document.getElementById("notificationDot").classList.add("read");
+    updateNotifications(); 
+    showToast("Notifications marked as read");
+  }
+
+  document.querySelectorAll(".category-btn").forEach(btn => btn.addEventListener("click", () => setFilter(btn.dataset.filter)));
+  searchInput.addEventListener("input", applyFilters);
+  document.addEventListener("keydown", e => {
+    if (e.key === "/" && !["INPUT","TEXTAREA"].includes(document.activeElement.tagName)) { e.preventDefault(); searchInput.focus(); }
+    if (e.key === "Escape") {
+      document.querySelectorAll(".comments-section.open").forEach(s => s.classList.remove("open"));
+    }
+  });
+
+  const notifBtn = document.getElementById("notificationButton");
+  const notifPanel = document.getElementById("notifications");
+  notifBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    notifPanel.classList.toggle("open");
+    if (notifPanel.classList.contains("open")) {
+      markNotificationsRead();
+    }
+  });
+  document.getElementById("markRead").addEventListener("click", () => {
+    markNotificationsRead();
+    notifPanel.classList.remove("open");
+  });
+  document.addEventListener("click", (e) => {
+    if (!notifBtn.contains(e.target) && !notifPanel.contains(e.target)) {
+      notifPanel.classList.remove("open");
+    }
+  });
+
+  async function seedSamplePosts() {
+    const snapshot = await db.collection(POSTS_COLLECTION).limit(1).get();
+    if (snapshot.empty) {
+      const samples = [
+        { id: "sample-funding", category: "funding", title: "Startup XYZ raises ₹5 crore to make AI useful for small teams", article: "The Bengaluru startup will use its seed round to expand across India and hire new engineers. Its founder says the focus is simple: give lean teams practical tools that save hours every week, without needing a dedicated AI department.", sourceName: "XYZ Website", sourceUrl: "https://example.com", createdAt: new Date().toISOString() },
+        { id: "sample-accelerator", category: "accelerators", title: "Applications are open for the next T-Hub founder cohort", article: "Six months of focused support for teams building ambitious products from India. Selected founders get operator office hours, investor introductions, customer pilots, and a room full of peers who understand the work.", sourceName: "T-Hub", sourceUrl: "https://t-hub.co", createdAt: new Date().toISOString() }
+      ];
+      for (const s of samples) await db.collection(POSTS_COLLECTION).doc(s.id).set(s);
+    }
+  }
+
+  seedSamplePosts()
+    .catch(err => console.error("Error seeding posts:", err))
+    .finally(() => loadPosts());
+</script>
+</body>
+</html>
