@@ -10,7 +10,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { width: 100%; overflow-x: hidden; background: #f4f6fa; font-family: 'Roboto', sans-serif; }
-        .community-page { width: 100%; max-width: 48rem; overflow-x: hidden; background: #f4f6fa; padding: 0 4px; margin: 0 auto; }
+        .community-page { width: 100%; max-width: 1100px; overflow-x: hidden; background: #f4f6fa; padding: 0 6px; margin: 0 auto; }
         .community-top { display: flex; justify-content: space-between; align-items: center; padding: 8px 6px 6px 6px; gap: 8px; }
         .community-title { font-size: 24px; font-weight: 900; color: #111827; }
         .community-ask-btn { border: none; padding: 8px 12px; border-radius: 12px; background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; font-size: 12px; font-weight: 700; cursor: pointer; }
@@ -61,6 +61,40 @@
         .community-field { margin-bottom: 12px; }
         .community-field input, .community-field select { width: 100%; padding: 10px; border: none; outline: none; border-radius: 14px; background: #f5f5f5; border: 1px solid rgba(0, 0, 0, 0.06); font-family: 'Roboto', sans-serif; font-size: 12px; }
         .community-submit { width: 100%; border: none; padding: 10px; border-radius: 14px; background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; font-size: 13px; font-weight: 700; cursor: pointer; }
+        
+        /* Dark Mode Overrides - Instagram Style */
+        html.dark, html.dark body, html.dark .community-page { background: #000000; }
+        html.dark .community-title { color: #f5f5f5; }
+        html.dark .community-search, html.dark .search-suggestions { background: #121212; color: #f5f5f5; border-color: #262626; }
+        html.dark .search-item, html.dark .community-filter { border-color: #262626; }
+        html.dark .search-item { color: #f5f5f5; }
+        html.dark .search-item:hover { background: #262626; }
+        html.dark .community-chip { background: #121212; color: #f5f5f5; border-color: #262626; }
+        html.dark .community-chip.active { background: #f5f5f5; color: #000000; border-color: #f5f5f5; }
+        html.dark .community-card { background: #000000; border: 1px solid #262626; }
+        html.dark .community-name { color: #f5f5f5; }
+        html.dark .community-time { color: #a8a8a8; }
+        html.dark .community-question { color: #e5e5e5; }
+        html.dark .community-action { color: #f5f5f5; }
+        html.dark .community-action:hover { color: #ffffff; }
+        html.dark .community-modal-box { background: #000000; color: #f5f5f5; border: 1px solid #262626; }
+        html.dark .community-field input, html.dark .community-field select { background: #121212; color: #f5f5f5; border-color: #262626; }
+        html.dark .community-answer-item { border-color: #262626; background: #000000; }
+        html.dark .community-answer-author { color: #f5f5f5; }
+        html.dark .community-answer-text { color: #e5e5e5; }
+        html.dark .community-answer-input-wrap { background: #121212; }
+        html.dark .community-answer-input { background: #121212; color: #f5f5f5; }
+        
+        @media (max-width: 500px) {
+            .community-title { font-size: 20px; }
+            .community-search { font-size: 12.5px; padding: 10px; }
+            .community-chip { padding: 6px 12px; font-size: 11.5px; }
+            .community-question { font-size: 13.5px; }
+            .community-name { font-size: 11.5px; }
+            .community-action { font-size: 10.5px; }
+            .community-card { padding: 8px 10px; margin-bottom: 2px; }
+            .community-chips { gap: 6px; margin-bottom: 10px; padding: 0 2px; }
+        }
     </style>
 </head>
 <body>
@@ -113,6 +147,20 @@
 </div>
 
 <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+    
+    window.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'theme') {
+        if (event.data.theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+    });
+
     const firebaseConfig = {
         apiKey: "AIzaSyDZt0dJQCu0tW9OR9kyyliRPbP47R_z2kw",
         authDomain: "jobs-1015c.firebaseapp.com",

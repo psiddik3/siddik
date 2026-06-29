@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
   <title>SpreadOne · Connect & share</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -13,15 +14,44 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #f4f6fa; padding-bottom: max(85px, calc(85px + env(safe-area-inset-bottom))); -webkit-tap-highlight-color: transparent; }
+    
+    /* Dark Mode Global Overrides - Instagram Style */
+    html.dark body { background: #000000; }
+    html.dark .bg-white { background-color: #000000 !important; }
+    html.dark .bg-slate-50 { background-color: #121212 !important; }
+    html.dark .bg-slate-50\/50 { background-color: #121212 !important; }
+    html.dark .bg-slate-100 { background-color: #262626 !important; }
+    html.dark .border-slate-100, html.dark .border-slate-50\/50 { border-color: #262626 !important; }
+    html.dark .text-slate-700, html.dark .text-\[\#111827\], html.dark .text-black { color: #f5f5f5 !important; }
+    html.dark .text-slate-600 { color: #f5f5f5 !important; }
+    html.dark .text-slate-500 { color: #a8a8a8 !important; }
+    html.dark .text-slate-400 { color: #737373 !important; }
+    html.dark .post-content-text { color: #ffffff !important; }
+    html.dark .hover\:bg-slate-50:hover { background-color: #121212 !important; }
+    html.dark .hover\:bg-slate-100:hover { background-color: #262626 !important; }
+    html.dark .placeholder-slate-400::placeholder { color: #737373 !important; }
+    html.dark input, html.dark [contenteditable] { color: #f5f5f5 !important; }
+    html.dark .shadow-\[0_4px_24px_rgba\(0\,0\,0\,0\.03\)\] { box-shadow: none !important; }
+    html.dark .iframe-container { background: #000000; }
+    html.dark .bottom-nav { background: rgba(0, 0, 0, 0.95); border-color: #262626; border-top: 1px solid #262626; }
+    html.dark .bottom-nav .nav-item { color: #f5f5f5; }
+    html.dark .bottom-nav .nav-item.active { color: #0095f6; }
+    html.dark .alert-item { background: #000000; border-color: #262626; }
+    html.dark .alert-item:hover { border-color: #383838; }
+    html.dark .post-card, html.dark #postCreationCard, html.dark #userDropdown { border: 1px solid #262626 !important; }
+
     .post-card { transition: box-shadow 0.2s ease; overflow: hidden; contain: layout style; }
     .post-inner { padding: 0.5rem 0; }
     .post-author-row { padding: 0 0.6rem; }
-    .post-content-text { font-size: 0.95rem; line-height: 1.5; word-break: break-word; margin-top: 0.35rem; padding: 0 0.6rem; color: #1e293b; }
+    .post-content-text { font-size: 0.95rem; line-height: 1.5; word-break: break-word; margin-top: 0.35rem; color: #1e293b; }
     .post-content-text .full-content { display: none; }
     .post-content-text.expanded .full-content { display: inline; }
     .post-content-text.expanded .truncated-content { display: none; }
-    .read-more-btn { color: #6B7280; font-weight: 500; cursor: pointer; margin-left: 0.25rem; font-size: 0.8rem; display: inline-block; background: none; border: none; }
-    .read-more-btn:hover { color: #4B5563; text-decoration: underline; }
+    .post-content-text.expanded .read-more-btn { display: none; }
+    .post-content-text.expanded .read-less-btn { display: inline; }
+    .post-content-text.collapsed .read-less-btn { display: none; }
+    .read-more-btn, .read-less-btn { color: #6B7280; font-weight: 500; cursor: pointer; margin-left: 0.25rem; font-size: 0.85rem; display: inline; background: none; border: none; padding: 0; }
+    .read-more-btn:hover, .read-less-btn:hover { color: #4B5563; text-decoration: underline; }
     .post-image { width: 100%; display: block; margin-top: 0.3rem; overflow: hidden; }
     .post-image img { width: 100%; height: auto; display: block; }
     .action-btn { transition: all 0.15s ease; background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.4rem 0.6rem; border-radius: 2rem; font-weight: 500; }
@@ -35,6 +65,7 @@
       .action-btn span { font-size: 0.75rem; }
       .action-btn i { font-size: 1rem; }
       .appreciate-count, .comment-badge { font-size: 0.65rem; padding: 0.1rem 0.3rem; }
+      .post-content-text { font-size: 0.88rem; }
     }
     
     .bottom-nav-fixed { 
@@ -50,7 +81,7 @@
       padding-bottom: max(0.8rem, env(safe-area-inset-bottom)); 
     }
     .bottom-nav { 
-      background: rgba(0, 0, 0, 0.9); 
+      background: rgba(0, 0, 0, 0.7); 
       backdrop-filter: blur(40px); 
       -webkit-backdrop-filter: blur(40px);
       border-radius: 2rem; 
@@ -58,15 +89,20 @@
       box-shadow: 0 8px 32px rgba(0,0,0,0.3); 
       display: flex; 
       flex-wrap: nowrap; 
-      justify-content: space-evenly; 
-      gap: 0.2rem; 
-      padding: 0.35rem; 
+      justify-content: center; 
+      gap: 1.25rem; 
+      padding: 0.35rem 1rem; 
       pointer-events: auto; 
-      width: 94%; 
-      max-width: 48rem; 
+      width: max-content; 
+      max-width: 94%; 
       margin-bottom: 0; 
       overflow-x: auto;
       scrollbar-width: none;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    }
+    .bottom-nav.shrunk {
+      transform: scale(0.85) translateY(20px);
+      opacity: 0.5;
     }
     .bottom-nav::-webkit-scrollbar { display: none; }
     .nav-item { 
@@ -77,11 +113,11 @@
       justify-content: center;
       text-align: center;
       font-size: 0.6rem; 
-      font-weight: 500; 
+      font-weight: 600; 
       padding: 0.3rem 0.4rem; 
       border-radius: 1.5rem; 
       transition: all 0.2s; 
-      color: rgba(255,255,255,0.6); 
+      color: rgba(255,255,255,0.7); 
       white-space: nowrap; 
       cursor: pointer; 
       background: none; 
@@ -90,13 +126,13 @@
     }
     .nav-item i { font-size: 1rem; transition: transform 0.2s; }
     .nav-item:hover i { transform: scale(1.1); }
-    .nav-item.active { background: rgba(255, 255, 255, 0.12); color: white; font-weight: 600; }
+    .nav-item.active { background: rgba(255, 255, 255, 0.15); color: white; }
     .nav-item.active i { color: white; }
     
     @media (max-width: 500px) { 
       .nav-item { font-size: 0.55rem; padding: 0.25rem 0.1rem; } 
-      .nav-item i { font-size: 0.9rem; }
-      .bottom-nav { padding: 0.25rem; width: 92%; gap: 0.1rem; } 
+      .nav-item i { font-size: 0.9rem; margin-bottom: -1px; }
+      .bottom-nav { padding: 0.25rem 0.75rem; width: max-content; max-width: 96%; gap: 0.75rem; } 
     }
     .comment-list { max-height: 200px; overflow-y: auto; background: #f9fafb; border-radius: 0.75rem; }
     .hashtag { cursor: pointer; color: #059669; font-weight: 500; }
@@ -104,10 +140,10 @@
     .alert-item { background: white; border-radius: 1rem; padding: 0.75rem; margin-bottom: 0.6rem; border: 1px solid #eef2ff; transition: all 0.1s; cursor: pointer; }
     .alert-item:active { transform: scale(0.98); }
     .header-container { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.75rem; padding: 0 0.25rem; }
-    .logo-spreadone { font-size: 1.85rem; font-weight: 800; background: linear-gradient(135deg, #0f2c1f, #2b6e3c); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -0.5px; margin-left: 0.5rem; white-space: nowrap; }
+    .logo-spreadone { font-size: 1.65rem; font-weight: 800; background: linear-gradient(135deg, #0f2c1f, #2b6e3c); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -0.5px; margin-left: 0.5rem; white-space: nowrap; }
     .search-wrapper { flex: 1; max-width: none; min-width: 0; }
     .hidden-creator { display: none !important; }
-    .avatar { display: flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 9999px; font-weight: bold; font-size: 0.875rem; color: white; text-shadow: 0 1px 1px rgba(0,0,0,0.1); flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.2); transition: transform 0.1s ease; }
+    .avatar { display: flex; align-items: center; justify-content: center; width: 1.8rem; height: 1.8rem; border-radius: 9999px; font-weight: bold; font-size: 0.75rem; color: white; text-shadow: 0 1px 1px rgba(0,0,0,0.1); flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.2); transition: transform 0.1s ease; }
     .creator-row { display: flex; flex-direction: column; gap: 0.5rem; }
     .name-row { margin-bottom: 0.25rem; }
     .action-row { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-top: 0.25rem; }
@@ -132,102 +168,127 @@
       display: block;
     }
     #feedContainer { display: block; padding-bottom: max(80px, calc(80px + env(safe-area-inset-bottom))); position: relative; z-index: 10; }
+    [contenteditable]:empty::before { content: attr(data-placeholder); color: #94a3b8; pointer-events: none; display: block; }
   </style>
 </head>
-<body>
+<body class="bg-[#f4f6fa] text-slate-800 font-sans antialiased overflow-x-hidden" style="font-family: 'Inter', -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Fira Sans', Ubuntu, Oxygen, 'Oxygen Sans', Cantarell, 'Droid Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Lucida Grande', Helvetica, Arial, sans-serif; overflow-y: scroll; scrollbar-gutter: stable;">
 
-  <div class="max-w-[1100px] mx-auto px-2 sm:px-4 md:px-6 py-4 md:py-6">
-    <div class="header-container flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 px-1 md:px-0">
+  <!-- Name Modal -->
+  <div id="nameModal" class="fixed inset-0 z-[100] hidden flex-col items-center justify-center bg-slate-900/40 backdrop-blur-sm" style="display: none;">
+    <div class="bg-white rounded-[24px] shadow-xl p-6 w-[90%] max-w-[340px] border border-slate-100">
+      <h3 class="text-[18px] font-bold text-[#111827] mb-1 text-center">Welcome!</h3>
+      <p class="text-[14px] text-slate-500 mb-5 text-center leading-relaxed">Enter your name to post and comment.</p>
+      <input type="text" id="nameModalInput" class="w-full bg-slate-50 border border-slate-200 rounded-[16px] px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:bg-white transition-all text-[15px] font-medium text-slate-700" placeholder="Your Name">
+      <div class="flex gap-2">
+        <button id="nameModalCancel" class="flex-1 px-4 py-3 rounded-[16px] text-slate-500 font-bold text-[14px] hover:bg-slate-50 transition-colors">Cancel</button>
+        <button id="nameModalSave" class="flex-1 px-4 py-3 rounded-[16px] bg-[#111827] text-white font-bold text-[14px] hover:bg-black transition-colors shadow-sm">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full max-w-[1100px] mx-auto px-1.5 md:px-6 pt-2 pb-2 md:pt-4 md:pb-6">
+    <div class="flex flex-wrap items-center justify-between gap-y-2 gap-x-2 mb-3">
       <!-- Logo and Subtitle -->
       <div class="flex-shrink-0">
-        <h1 class="font-extrabold text-[#111827] text-[1.8rem] md:text-[2rem] tracking-tight leading-none" style="font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;">
+        <h1 class="font-extrabold text-[#111827] text-[1.6rem] md:text-[2rem] leading-tight tracking-normal">
           Spread<span class="text-[#7C3AED]">One</span>
         </h1>
-        <div class="text-[12px] md:text-[13px] text-slate-500 font-medium flex items-center gap-2 mt-1 md:mt-1.5">
+        <div class="text-[11px] md:text-[13px] text-slate-500 font-medium flex items-center gap-1 mt-0 tracking-normal">
           <span>Communities</span>
-          <span class="text-[8px] text-slate-300">•</span>
+          <span class="text-[6px] text-slate-300 mx-0.5">•</span>
           <span>Jobs</span>
-          <span class="text-[8px] text-slate-300">•</span>
+          <span class="text-[6px] text-slate-300 mx-0.5">•</span>
           <span>Startups</span>
         </div>
       </div>
 
       <!-- Search Bar -->
-      <div class="relative flex-1 max-w-2xl w-full mx-2 md:mx-0">
-        <i class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 text-[16px]"></i>
-        <input type="text" id="searchInput" placeholder="Search communities, jobs, startups..." class="w-full bg-slate-50/50 hover:bg-slate-50 border border-slate-100 rounded-full py-3.5 md:py-4 pl-[4.5rem] pr-4 text-[15px] shadow-[0_2px_10px_rgba(0,0,0,0.02)] outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-300 focus:bg-white transition-all font-medium text-slate-700 placeholder-slate-400">
+      <div class="w-full md:flex-1 md:w-auto order-last md:order-none relative max-w-2xl md:mx-4 mt-0.5 md:mt-0">
+        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[13px]"></i>
+        <input type="text" id="searchInput" placeholder="Search..." class="w-full bg-white md:bg-slate-50/50 hover:bg-slate-50 border border-slate-100 rounded-full py-1.5 md:py-2.5 pl-9 pr-4 text-[13px] md:text-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.03)] outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-300 transition-all font-medium text-slate-700 placeholder-slate-400">
       </div>
 
       <!-- Right Actions -->
-      <div class="flex items-center gap-4 md:gap-5 flex-shrink-0 self-end md:self-auto -mt-[4.5rem] md:mt-0">
-        <button id="headerBellBtn" class="relative text-slate-700 hover:text-black transition-colors focus:outline-none">
-          <i class="far fa-bell text-[1.5rem] md:text-[1.6rem]"></i>
-          <span id="headerBellCount" style="display:none;" class="absolute -top-1.5 -right-1.5 bg-[#ef4444] text-white text-[10px] sm:text-[11px] font-bold w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-2 border-[#f4f6fa] md:border-white">0</span>
-        </button>
-        <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-cover bg-center shadow-sm border border-slate-100 cursor-pointer" style="background-image: url('https://i.pravatar.cc/150?img=11');"></div>
+      <div class="flex items-center gap-4 md:gap-5 flex-shrink-0">
+        <div class="relative" id="userMenuContainer">
+          <button id="headerBellBtn" class="relative text-slate-700 hover:text-black transition-colors focus:outline-none flex items-center justify-center">
+            <i class="far fa-bell text-[1.5rem] md:text-[1.6rem]"></i>
+            <span id="headerBellCount" style="display:none;" class="absolute -top-1.5 -right-1.5 bg-[#ef4444] text-white text-[10px] sm:text-[11px] font-bold w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-2 border-[#f4f6fa] md:border-white">0</span>
+          </button>
+          <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.1)] border border-slate-100 py-1.5 z-50">
+            <div class="px-4 py-2 text-xs text-slate-500 font-bold uppercase tracking-wider border-b border-slate-50/50 mb-1">Appearance</div>
+            <button id="lightModeBtn" class="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 transition-colors font-medium">
+              <i class="fas fa-sun text-slate-400"></i> <span>Light Mode</span>
+            </button>
+            <button id="darkModeBtn" class="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 transition-colors font-medium">
+              <i class="fas fa-moon text-slate-400"></i> <span>Dark Mode</span>
+            </button>
+          </div>
+        </div>
+        <div id="headerAvatar" class="user-avatar-dynamic w-8 h-8 rounded-full shadow-sm cursor-pointer flex items-center justify-center font-bold text-white text-[14px]" style="background-color: #94a3b8;">?</div>
       </div>
     </div>
 
-  <div id="postCreationCard" class="bg-white rounded-[24px] shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-slate-100 p-4 mb-4 mx-2">
-    <div class="flex flex-col gap-4 creator-row">
-      <div class="flex items-start justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-11 h-11 rounded-full bg-cover bg-center shadow-sm" style="background-image: url('https://i.pravatar.cc/150?img=11');"></div>
-          <div class="flex flex-col mt-0.5">
-            <div class="font-bold text-[#111827] text-[15px] tracking-tight flex items-center gap-0.5" style="font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;">Hey <input type="text" id="postAuthorName" placeholder="You" class="bg-transparent focus:outline-none w-16 font-bold" readonly value="Siddik"> <span class="text-base">👋</span></div>
-            <textarea id="postContent" rows="1" placeholder="What's on your mind today?" class="text-[13px] text-slate-500 bg-transparent focus:outline-none resize-none mt-0.5 w-[160px] sm:w-[220px]" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
+  <div id="postCreationCard" class="bg-white rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-slate-100 p-1.5 sm:p-2 mb-2">
+    <div class="flex flex-col gap-1 sm:gap-1.5 creator-row">
+      <div class="flex items-start justify-between gap-1.5">
+        <div class="flex items-start gap-2 flex-1 min-w-0">
+          <div id="creatorAvatar" class="user-avatar-dynamic w-8 h-8 rounded-full shadow-sm flex items-center justify-center font-bold text-white text-[14px]" style="background-color: #94a3b8;">?</div>
+          <div class="flex flex-col flex-1 min-w-0">
+            <div class="font-bold text-[#111827] text-[12px] sm:text-[13px] flex items-center gap-0.5"><span id="postAuthorNameDisplay" class="font-bold">You</span></div>
+            <div id="postContent" contenteditable="true" data-placeholder="What's on your mind today?" class="text-[12px] sm:text-[13px] text-slate-700 bg-transparent focus:outline-none min-h-[18px] mt-0 w-full leading-relaxed break-words whitespace-pre-wrap outline-none cursor-text max-h-[120px] overflow-y-auto"></div>
           </div>
         </div>
-        <button class="flex items-center gap-1.5 bg-slate-50 border border-slate-100 hover:bg-slate-100 text-[#111827] text-[12px] font-bold px-3 py-1.5 rounded-full transition-colors mt-0.5 shadow-sm">
-          <i class="fas fa-globe-americas"></i> Public <i class="fas fa-chevron-down text-[10px] ml-0.5 text-[#111827]"></i>
+        <button class="flex items-center gap-1 bg-slate-50 border border-slate-100 hover:bg-slate-100 text-[#111827] text-[9.5px] font-bold px-1.5 py-1 rounded-full transition-colors shadow-sm flex-shrink-0 self-start">
+          <i class="fas fa-globe-americas"></i> Public <i class="fas fa-chevron-down text-[7px] ml-0.5 text-[#111827]"></i>
         </button>
       </div>
 
-      <div id="imagePreviewContainer" class="hidden relative mt-2 mb-2 w-max mx-auto sm:mx-0 sm:ml-14">
-        <img id="imagePreview" class="h-32 w-auto rounded-xl border object-cover">
-        <button type="button" id="removeImageBtn" class="absolute -top-2.5 -right-2.5 bg-red-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center shadow-md">×</button>
+      <div id="imagePreviewContainer" class="hidden relative mt-1 mb-1 w-max mx-auto sm:mx-0 sm:ml-10">
+        <img id="imagePreview" class="h-16 w-auto rounded-xl border object-cover">
+        <button type="button" id="removeImageBtn" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-4 h-4 text-[10px] flex items-center justify-center shadow-md">×</button>
       </div>
 
-      <div class="flex gap-3">
-        <label class="flex-1 cursor-pointer bg-slate-50 hover:bg-slate-100 text-[#111827] text-[15px] font-bold py-3.5 rounded-[20px] flex items-center justify-center gap-2.5 border border-slate-100 shadow-sm transition-all" style="font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;">
-          <i class="far fa-images text-xl"></i>
+      <div class="flex gap-1.5 mt-0 sm:mt-0">
+        <label class="flex-1 cursor-pointer bg-slate-50 hover:bg-slate-100 text-[#111827] text-[12px] font-bold py-1 rounded-[10px] flex items-center justify-center gap-1 border border-slate-100 shadow-sm transition-all">
+          <i class="far fa-image text-[14px]"></i> Photo
           <input type="file" id="postImageInput" accept="image/*" class="hidden">
         </label>
         
-        <button id="publishPostBtn" class="flex-1 bg-slate-50 hover:bg-slate-100 text-[#111827] text-[15px] font-bold py-3.5 rounded-[20px] shadow-sm transition-all flex items-center justify-center gap-2.5 border border-slate-100" style="font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;">
-          <i class="fas fa-pen text-[15px]"></i> Post
+        <button id="publishPostBtn" class="flex-1 bg-slate-50 hover:bg-slate-100 text-[#111827] text-[12px] font-bold py-1 rounded-[10px] shadow-sm transition-all flex items-center justify-center gap-1 border border-slate-100">
+          <i class="fas fa-pen text-[11px]"></i> Post
         </button>
       </div>
     </div>
   </div>
 
-  <div id="filtersSection" class="bg-white rounded-[24px] shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-slate-100 p-2 mb-4 mx-2 grid grid-cols-4 divide-x divide-slate-100/50">
-    <button onclick="window.location.hash='home'" class="flex flex-col items-center justify-center py-2.5 px-1 text-center hover:bg-slate-50 rounded-xl transition-colors">
-      <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="w-[26px] h-[26px] md:w-[28px] md:h-[28px] text-[#111827] mb-2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"></path></svg>
-      <span class="text-[12px] md:text-[13px] font-bold text-[#111827]">For You</span>
+  <div id="filtersSection" class="bg-white rounded-[16px] shadow-[0_2px_12px_rgba(0,0,0,0.02)] border border-slate-100 py-1.5 px-2 mb-2 flex justify-between gap-1 overflow-hidden">
+    <button onclick="window.location.hash='home'" class="flex flex-col items-center justify-center py-1.5 px-1 sm:px-3 min-w-0 text-center hover:bg-slate-50 rounded-[12px] transition-colors flex-1">
+      <svg class="w-5 h-5 text-slate-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+      <span class="text-[10px] sm:text-[11px] font-semibold text-slate-700 tracking-normal truncate w-full">For You</span>
     </button>
-    <button onclick="gotoStartups('events')" class="flex flex-col items-center justify-center py-2.5 px-1 text-center hover:bg-slate-50 rounded-xl transition-colors">
-      <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="w-[26px] h-[26px] md:w-[28px] md:h-[28px] text-[#111827] mb-2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"></path></svg>
-      <span class="text-[12px] md:text-[13px] font-bold text-[#111827]">Events</span>
+    <button onclick="gotoStartups('events')" class="flex flex-col items-center justify-center py-1.5 px-1 sm:px-3 min-w-0 text-center hover:bg-slate-50 rounded-[12px] transition-colors flex-1">
+      <svg class="w-5 h-5 text-slate-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <span class="text-[10px] sm:text-[11px] font-semibold text-slate-700 tracking-normal truncate w-full">Events</span>
     </button>
-    <button onclick="gotoStartups('funding')" class="flex flex-col items-center justify-center py-2.5 px-1 text-center hover:bg-slate-50 rounded-xl transition-colors">
-      <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="w-[26px] h-[26px] md:w-[28px] md:h-[28px] text-[#111827] mb-2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg>
-      <span class="text-[12px] md:text-[13px] font-bold text-[#111827]">Funding</span>
+    <button onclick="gotoStartups('funding')" class="flex flex-col items-center justify-center py-1.5 px-1 sm:px-3 min-w-0 text-center hover:bg-slate-50 rounded-[12px] transition-colors flex-1">
+      <svg class="w-5 h-5 text-slate-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <span class="text-[10px] sm:text-[11px] font-semibold text-slate-700 tracking-normal truncate w-full">Funding</span>
     </button>
-    <button onclick="gotoStartups('accelerators')" class="flex flex-col items-center justify-center py-2.5 px-1 text-center hover:bg-slate-50 rounded-xl transition-colors">
-      <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="w-[26px] h-[26px] md:w-[28px] md:h-[28px] text-[#111827] mb-2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z"></path></svg>
-      <span class="text-[12px] md:text-[13px] font-bold text-[#111827]">Accelerators</span>
+    <button onclick="gotoStartups('accelerators')" class="flex flex-col items-center justify-center py-1.5 px-1 sm:px-3 min-w-0 text-center hover:bg-slate-50 rounded-[12px] transition-colors flex-1">
+      <svg class="w-5 h-5 text-slate-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+      <span class="text-[10px] sm:text-[11px] font-semibold text-slate-700 tracking-normal truncate w-full">Accelerators</span>
     </button>
   </div>
 
-  <div id="newPostBanner" class="bg-white rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-slate-100 py-3.5 px-4 mb-5 mx-2 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-    <div class="flex items-center gap-2.5 w-max">
-      <i class="fas fa-sparkles text-slate-800 text-[13px]"></i>
-      <span class="text-[13px] font-bold text-[#111827] whitespace-nowrap">New Post</span>
+  <div id="newPostBanner" class="bg-white rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-slate-100 py-2.5 px-3 mb-2 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    <div class="flex items-center gap-2 w-max">
+      <i class="fas fa-sparkles text-slate-800 text-[12px]"></i>
+      <span class="text-[12px] font-bold text-[#111827] whitespace-nowrap">New Post</span>
     </div>
-    <div class="h-5 w-[1px] bg-slate-200 mx-2"></div>
-    <span id="newPostBannerText" class="text-[13px] text-slate-500 truncate flex-1 font-medium">Loading...</span>
-    <i class="fas fa-chevron-right text-slate-400 text-[11px] ml-2"></i>
+    <div class="h-4 w-[1px] bg-slate-200 mx-2"></div>
+    <span id="newPostBannerText" class="text-[12px] text-slate-500 truncate flex-1 font-medium">Loading...</span>
+    <i class="fas fa-chevron-right text-slate-400 text-[10px] ml-1.5"></i>
   </div>
 
   <div id="feedContainer"></div>
@@ -401,6 +462,62 @@
   function getStoredCommenterName() { return localStorage.getItem(STORAGE_COMMENTER_NAME) || ''; }
   function setStoredCommenterName(name) { if(name.trim() && !getStoredCommenterName()) localStorage.setItem(STORAGE_COMMENTER_NAME, name.trim()); }
 
+  let resolveNamePrompt = null;
+  function requestName(callback) {
+    let name = getStoredAuthorName() || getStoredCommenterName();
+    if (name) {
+      if(!getStoredAuthorName()) setStoredAuthorName(name);
+      if(!getStoredCommenterName()) setStoredCommenterName(name);
+      updateUserAvatars(name);
+      return callback(name);
+    }
+    
+    const modal = document.getElementById('nameModal');
+    const input = document.getElementById('nameModalInput');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    input.focus();
+    
+    resolveNamePrompt = function(savedName) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      if (savedName) {
+        setStoredAuthorName(savedName);
+        setStoredCommenterName(savedName);
+        updateUserAvatars(savedName);
+        callback(savedName);
+      }
+    };
+  }
+
+  function updateUserAvatars(name) {
+    const initial = name ? name.charAt(0).toUpperCase() : '?';
+    const color = name ? getAvatarColor(name) : '#94a3b8';
+    document.querySelectorAll('.user-avatar-dynamic').forEach(el => {
+      el.innerHTML = initial;
+      el.style.backgroundColor = color;
+      el.style.backgroundImage = 'none';
+    });
+    const nameDisplay = document.getElementById('postAuthorNameDisplay');
+    if (nameDisplay) {
+        nameDisplay.innerText = name || 'You';
+    }
+  }
+
+  document.getElementById('nameModalSave')?.addEventListener('click', () => {
+    const val = document.getElementById('nameModalInput').value.trim();
+    if (val && resolveNamePrompt) resolveNamePrompt(val);
+  });
+  document.getElementById('nameModalCancel')?.addEventListener('click', () => {
+    if (resolveNamePrompt) resolveNamePrompt(null);
+  });
+  document.getElementById('nameModalInput')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const val = e.currentTarget.value.trim();
+      if (val && resolveNamePrompt) resolveNamePrompt(val);
+    }
+  });
+
   function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
   function linkHashtags(text) { return text.replace(/#(\w+)/g, '<span class="hashtag">#$1</span>'); }
 
@@ -423,33 +540,24 @@
   }
 
   function formatContent(content, postId) {
-    let titleHtml = '';
-    let bodyHtml = '';
+    let bodyHtml = linkHashtags(content);
+    // Basic sanitization
+    bodyHtml = bodyHtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
     
-    // We can assume double newline separates title from body, or the first line if it's short.
-    const parts = content.split('\n\n');
-    if (parts.length > 1) {
-      titleHtml = `\n<h2 class="font-bold text-[#111827] text-[18px] sm:text-[20px] md:text-[22px] leading-tight mb-2 tracking-tight">${escapeHtml(parts[0])}</h2>\n`;
-      bodyHtml = linkHashtags(escapeHtml(parts.slice(1).join('\n\n')));
-    } else {
-      const lines = content.split('\n');
-      if (lines.length > 1 && lines[0].length < 100) {
-        titleHtml = `\n<h2 class="font-bold text-[#111827] text-[18px] sm:text-[20px] md:text-[22px] leading-tight mb-2 tracking-tight">${escapeHtml(lines[0])}</h2>\n`;
-        bodyHtml = linkHashtags(escapeHtml(lines.slice(1).join('\n')));
-      } else {
-        bodyHtml = linkHashtags(escapeHtml(content));
-      }
+    if (content.length > 180 || (content.match(/\n/g) || []).length > 3) {
+      let truncated = content.substring(0, 180);
+      if (content.length > 180) truncated += '...';
+      let truncatedHtml = linkHashtags(truncated);
+      truncatedHtml = truncatedHtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+      
+      return `<div class="post-content-text collapsed" data-post-id="${postId}">
+        <span class="text-slate-900 dark:text-white text-[14px] sm:text-[15px] leading-relaxed mb-0 break-words whitespace-pre-wrap truncated-content">${truncatedHtml}</span><button class="read-more-btn">Read more</button>
+        <span class="text-slate-900 dark:text-white text-[14px] sm:text-[15px] leading-relaxed mb-0 break-words whitespace-pre-wrap full-content">${bodyHtml}</span><button class="read-less-btn">Show less</button>
+      </div>`;
     }
-
-    const needs = bodyHtml.length > 250 || bodyHtml.split('\n').length > 4;
-    if (!needs) return `<div class="post-content-text" data-post-id="${postId}">${titleHtml}<div class="text-[#1e293b] text-[16px] sm:text-[17px] leading-relaxed mb-2 whitespace-pre-wrap">${bodyHtml}</div></div>`;
     
-    const truncatedBody = bodyHtml.slice(0, 200) + (bodyHtml.length>200 ? '...' : '');
-    return `<div class="post-content-text collapsed" data-post-id="${postId}">
-      ${titleHtml}
-      <div class="text-[#1e293b] text-[16px] sm:text-[17px] leading-relaxed mb-1 whitespace-pre-wrap truncated-content">${truncatedBody}</div>
-      <div class="text-[#1e293b] text-[16px] sm:text-[17px] leading-relaxed mb-1 whitespace-pre-wrap full-content" style="display:none;">${bodyHtml}</div>
-      <button class="read-more-btn font-medium mt-1 mb-2 text-slate-500 hover:text-slate-800 transition-colors">Read more</button>
+    return `<div class="post-content-text" data-post-id="${postId}">
+      <div class="text-slate-900 dark:text-white text-[14px] sm:text-[15px] leading-relaxed mb-0 break-words whitespace-pre-wrap">${bodyHtml}</div>
     </div>`;
   }
 
@@ -464,55 +572,56 @@
     if (post.comments && post.comments.length) {
       const recent = post.comments.slice(-3);
       commentsHtml = `<div class="comment-list mt-2 pt-1 text-sm space-y-2 border-t border-slate-100">
-        ${recent.map(c => `<div class="flex gap-2"><span class="font-bold text-[#111827] text-xs">${escapeHtml(c.name)}</span><span class="text-xs text-slate-600">${escapeHtml(c.text)}</span></div>`).join('')}
+        ${recent.map(c => `<div class="flex gap-2"><span class="font-bold text-[#111827] dark:text-white text-xs">${escapeHtml(c.name)}</span><span class="text-xs text-slate-600 dark:text-slate-300 whitespace-pre-wrap break-words flex-1">${escapeHtml(c.text)}</span></div>`).join('')}
         ${post.comments.length > 3 ? `<div class="text-xs text-blue-500 cursor-pointer font-medium mt-1 view-all-comments" data-post-id="${post.id}">View all comments</div>` : ''}
       </div>`;
     } else {
       commentsHtml = `<div class="text-xs text-slate-400 mt-1 italic">No comments yet.</div>`;
     }
 
-    let subtitle = 'Community Member';
-    if (post.source === 'home' || !post.source) subtitle = 'Creator';
-    else if (post.source === 'community') subtitle = 'Community Creator';
-    else if (post.source === 'jobs') subtitle = 'Company';
-    else if (post.source === 'startups') subtitle = 'Startup';
+    let subtitle = post.authorTitle || 'Community Member';
+    if (!post.authorTitle) {
+      if (post.source === 'home' || !post.source) subtitle = 'Creator';
+      else if (post.source === 'community') subtitle = 'Community Creator';
+      else if (post.source === 'jobs') subtitle = 'Company';
+      else if (post.source === 'startups') subtitle = 'Startup';
+    }
 
-    return `<article class="post-card bg-white rounded-[24px] sm:rounded-[32px] mb-4 md:mb-5 border border-slate-100 shadow-[0_4px_24px_rgba(0,0,0,0.03)] overflow-hidden" data-post-id="${post.id}">
-      <div class="flex items-center justify-between px-4 pt-4 sm:px-6 sm:pt-6 pb-1">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center text-white font-bold text-lg" style="background-color: ${avatarBg};">${post.authorName.charAt(0).toUpperCase()}</div>
-          <div class="flex flex-col">
-            <div class="font-bold text-[#111827] text-[15px] sm:text-[16px] flex items-center gap-1.5 leading-none mb-1">${escapeHtml(post.authorName)} <i class="fas fa-check-circle text-blue-600 text-[13px]"></i></div>
-            <div class="text-[12px] sm:text-[13px] text-slate-500 font-medium leading-none">${subtitle} &bull; ${timeAgo}</div>
+    return `<article class="post-card bg-white rounded-[24px] sm:rounded-[32px] mb-2 border border-slate-100 shadow-[0_4px_24px_rgba(0,0,0,0.03)] overflow-hidden" data-post-id="${post.id}">
+      <div class="flex items-center justify-between px-2.5 pt-3 sm:px-4 sm:pt-4 pb-1 sm:pb-1.5">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center text-white font-bold text-sm md:text-base flex-shrink-0" style="background-color: ${avatarBg};">${(post.authorName || '?').charAt(0).toUpperCase()}</div>
+          <div class="flex flex-col min-w-0 flex-1 pr-2">
+            <div class="font-bold text-[#111827] dark:text-white text-[12px] sm:text-[13.5px] flex items-center gap-1 leading-tight mb-0.5">
+              <span class="break-words" style="display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(post.authorName)}</span>
+              <i class="fas fa-check-circle text-blue-600 text-[11px] sm:text-[12px] flex-shrink-0"></i>
+            </div>
+            <div class="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight truncate">
+              ${escapeHtml(subtitle)} &bull; <span class="text-slate-400 font-normal whitespace-nowrap">${timeAgo}</span>
+            </div>
           </div>
         </div>
-        <button class="text-slate-500 hover:text-slate-800 p-2 transition-colors -mt-2"><i class="fas fa-ellipsis-v text-lg"></i></button>
+        <button class="text-slate-500 hover:text-slate-800 p-2 transition-colors flex-shrink-0 -mt-2"><i class="fas fa-ellipsis-v text-lg"></i></button>
       </div>
 
-      <div class="post-content px-4 sm:px-6 tracking-tight">
+      <div class="post-content px-2.5 sm:px-4 pt-0.5 pb-2">
         ${formatContent(post.content, post.id)}
       </div>
 
       ${post.imageUrl ? `<img src="${post.imageUrl}" class="w-full h-auto block" loading="lazy">` : ''}
 
-      <div class="grid grid-cols-3 pt-3 pb-4 px-4 sm:px-6 mt-1 border-t border-slate-50/50">
-        <div class="flex justify-start">
-          <button class="appreciate-btn flex items-center gap-1.5 text-[#111827] font-bold text-[14px] hover:bg-slate-50 px-2 py-1.5 rounded-full transition-colors -ml-2" data-post-id="${post.id}">
-            <i class="${heartClass} text-[18px]"></i> <span class="hidden sm:inline">Appreciate</span>
-            <span class="appreciate-count rounded-md px-2 py-0.5 text-[11px] font-extrabold text-center min-w-[24px] ${post.appreciations > 0 ? 'bg-red-50 text-red-500' : 'opacity-0'}">${post.appreciations > 0 ? post.appreciations : '0'}</span>
-          </button>
-        </div>
-        <div class="flex justify-center">
-          <button class="comment-trigger-btn flex items-center gap-1.5 text-[#111827] font-bold text-[14px] hover:bg-slate-50 px-2 py-1.5 rounded-full transition-colors" data-post-id="${post.id}">
-            <i class="far fa-comment text-[18px]"></i> <span class="hidden sm:inline">Comment</span>
-            <span class="rounded-md px-2 py-0.5 text-[11px] font-extrabold text-center min-w-[24px] ${commentCount > 0 ? 'bg-slate-100 text-slate-600' : 'opacity-0'}">${commentCount > 0 ? commentCount : '0'}</span>
-          </button>
-        </div>
-        <div class="flex justify-end">
-          <button class="share-btn flex items-center gap-1.5 text-[#111827] font-bold text-[14px] hover:bg-slate-50 px-2 py-1.5 rounded-full transition-colors -mr-2" data-post-id="${post.id}">
-            <i class="far fa-share-square text-[18px]"></i> <span class="hidden sm:inline">Share</span>
-          </button>
-        </div>
+      <div class="flex items-center justify-between py-2 sm:py-3 px-2.5 sm:px-4 mt-1 border-t border-slate-50/50">
+        <button class="appreciate-btn flex items-center gap-1.5 text-slate-600 font-normal text-[12px] sm:text-[13px] hover:bg-slate-50 px-1 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+          <i class="${heartClass} text-[11px] sm:text-[12px]"></i> <span>Appreciate</span>
+          <span class="appreciate-count text-[11px] sm:text-[12px] font-bold text-center ${post.appreciations > 0 ? 'text-slate-600 dark:text-slate-400' : 'hidden'}">${post.appreciations > 0 ? post.appreciations : ''}</span>
+        </button>
+        <button class="comment-trigger-btn flex items-center gap-1.5 text-slate-600 font-normal text-[12px] sm:text-[13px] hover:bg-slate-50 px-1 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+          <i class="far fa-comment text-[11px] sm:text-[12px]"></i> <span>Comment</span>
+          <span class="comment-badge text-[11px] sm:text-[12px] font-bold text-center ${commentCount > 0 ? 'text-slate-600 dark:text-slate-400' : 'hidden'}">${commentCount > 0 ? commentCount : ''}</span>
+        </button>
+        <button class="share-btn flex items-center gap-1.5 text-slate-600 font-normal text-[12px] sm:text-[13px] hover:bg-slate-50 px-1 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+          <i class="far fa-share-square text-[11px] sm:text-[12px]"></i> <span>Share</span>
+        </button>
       </div>
 
       <div class="comments-section ${openCommentPostIds.has(post.id) ? '' : 'hidden'} mt-4" id="comments-${post.id}">
@@ -553,7 +662,7 @@
     
     if (hash === 'home') {
       postCreator.classList.remove('hidden-creator');
-      if (filtersSection) filtersSection.style.display = 'grid';
+      if (filtersSection) filtersSection.style.display = 'flex';
       if (newPostBanner) newPostBanner.style.display = 'flex';
     } else {
       postCreator.classList.add('hidden-creator');
@@ -683,7 +792,7 @@
       tag.removeEventListener('click', hashtagClick);
       tag.addEventListener('click', hashtagClick);
     });
-    document.querySelectorAll('.read-more-btn').forEach(btn => {
+    document.querySelectorAll('.read-more-btn, .read-less-btn').forEach(btn => {
       btn.removeEventListener('click', handleReadMore);
       btn.addEventListener('click', handleReadMore);
     });
@@ -707,19 +816,13 @@
     const btn = e.currentTarget;
     const container = btn.closest('.post-content-text');
     if (!container) return;
-    const fullSpan = container.querySelector('.full-content');
-    const truncatedSpan = container.querySelector('.truncated-content');
     const isCollapsed = container.classList.contains('collapsed');
     if (isCollapsed) {
-      fullSpan.style.display = 'inline';
-      truncatedSpan.style.display = 'none';
       container.classList.remove('collapsed');
-      btn.innerText = 'Read less';
+      container.classList.add('expanded');
     } else {
-      fullSpan.style.display = 'none';
-      truncatedSpan.style.display = 'inline';
       container.classList.add('collapsed');
-      btn.innerText = 'Read more';
+      container.classList.remove('expanded');
     }
   }
 
@@ -755,13 +858,13 @@
       }
     }
     if (countSpan) {
-      countSpan.innerText = post.appreciations > 0 ? post.appreciations : '0';
+      countSpan.innerText = post.appreciations > 0 ? post.appreciations : '';
       if (post.appreciations > 0) {
-        countSpan.classList.remove('opacity-0');
-        countSpan.classList.add('bg-red-50', 'text-red-500');
+        countSpan.classList.remove('hidden');
+        countSpan.classList.add('text-slate-600', 'dark:text-slate-400');
       } else {
-        countSpan.classList.add('opacity-0');
-        countSpan.classList.remove('bg-red-50', 'text-red-500');
+        countSpan.classList.add('hidden');
+        countSpan.classList.remove('text-slate-600', 'dark:text-slate-400');
       }
     }
   }
@@ -794,29 +897,25 @@
     const textInput = document.getElementById(`commentText-${postId}`);
     const text = textInput?.value.trim();
     if (!text) return;
-    let commenterName = getStoredCommenterName();
-    if (!commenterName) {
-      commenterName = prompt("Please enter your name to comment:");
-      if (!commenterName) return;
-      setStoredCommenterName(commenterName);
-    }
-    
-    if (!post.comments) post.comments = [];
-    post.comments.push({ name: commenterName, text, timestamp: Date.now() });
 
-    // Ensure comment section stays open and re-render optimistically
-    openCommentPostIds.add(postId);
-    renderFeed();
+    requestName((commenterName) => {
+      if (!post.comments) post.comments = [];
+      post.comments.push({ name: commenterName, text, timestamp: Date.now() });
 
-    db.collection(POSTS_COLLECTION).doc(postId).update({
-      comments: post.comments
-    }).then(() => {
-        // Success - nothing to do since we already re-rendered
-    }).catch(err => {
-        console.error("Comment post error:", err);
-        post.comments.pop(); // Revert local change
-        renderFeed();
-        alert("Failed to submit comment. Please try again.");
+      // Ensure comment section stays open and re-render optimistically
+      openCommentPostIds.add(postId);
+      renderFeed();
+
+      db.collection(POSTS_COLLECTION).doc(postId).set({
+        comments: post.comments
+      }, { merge: true }).then(() => {
+          // Success - nothing to do since we already re-rendered
+      }).catch(err => {
+          console.error("Comment post error:", err);
+          post.comments.pop(); // Revert local change
+          renderFeed();
+          alert("Failed to submit comment. Please try again.");
+      });
     });
   }
 
@@ -854,27 +953,51 @@
   }
 
   function initPostCreator() {
-    const authorInput = document.getElementById('postAuthorName');
     const publishBtn = document.getElementById('publishPostBtn');
-    const textarea = document.getElementById('postContent');
+    const contentEditable = document.getElementById('postContent');
     const fileInput = document.getElementById('postImageInput');
     const previewImg = document.getElementById('imagePreview');
     const previewContainer = document.getElementById('imagePreviewContainer');
     const removeBtn = document.getElementById('removeImageBtn');
 
-    const storedName = getStoredAuthorName();
-    if (storedName) {
-      authorInput.value = storedName;
-      authorInput.readOnly = true;
-    } else {
-      authorInput.readOnly = false;
-    }
+    // Restore name/avatar if exists
+    updateUserAvatars(getStoredAuthorName());
 
     fileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file && file.type.startsWith('image/')) {
         const reader = new FileReader();
-        reader.onload = (ev) => { previewImg.src = ev.target.result; previewContainer.classList.remove('hidden'); };
+        reader.onload = (ev) => { 
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 800;
+            const MAX_HEIGHT = 800;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > MAX_WIDTH) {
+                height *= MAX_WIDTH / width;
+                width = MAX_WIDTH;
+              }
+            } else {
+              if (height > MAX_HEIGHT) {
+                width *= MAX_HEIGHT / height;
+                height = MAX_HEIGHT;
+              }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+            ctx.drawImage(img, 0, 0, width, height);
+            previewImg.src = canvas.toDataURL('image/jpeg', 0.7);
+            previewContainer.classList.remove('hidden');
+          };
+          img.src = ev.target.result;
+        };
         reader.readAsDataURL(file);
       }
     });
@@ -887,49 +1010,90 @@
 
     publishBtn.addEventListener('click', () => {
       if (publishBtn.disabled) return;
-      let name = authorInput.value.trim();
-      const content = textarea.value.trim();
-      if (!name) { alert("Enter your name"); authorInput.focus(); return; }
-      if (!content) { alert("Write something"); return; }
-      if (!getStoredAuthorName()) {
-        setStoredAuthorName(name);
-        authorInput.readOnly = true;
-      } else {
-        name = getStoredAuthorName();
-        authorInput.value = name;
-      }
-
-      const originalBtnContent = publishBtn.innerHTML;
-      publishBtn.disabled = true;
-      publishBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-[15px]"></i> Posting...';
-
-      let imageData = null;
-      if (previewImg.src && previewImg.src.startsWith('data:')) imageData = previewImg.src;
-      const newPost = {
-        authorName: name,
-        authorTitle: 'Community Creator',
-        content: content,
-        imageUrl: imageData,
-        timestamp: new Date().toISOString(),
-        appreciations: 0,
-        appreciatedBy: [],
-        comments: []
-      };
       
-      db.collection(POSTS_COLLECTION).add(newPost).then(docRef => {
-        textarea.value = '';
-        textarea.style.height = '';
-        previewContainer.classList.add('hidden');
-        previewImg.src = '';
-        fileInput.value = '';
-      }).catch(err => {
-        console.error(err);
-        alert('Failed to submit post');
-      }).finally(() => {
-        publishBtn.disabled = false;
-        publishBtn.innerHTML = originalBtnContent;
+      requestName((name) => {
+        const content = contentEditable.innerHTML.trim();
+        let imageData = null;
+        if (previewImg.src && previewImg.src.startsWith('data:')) imageData = previewImg.src;
+
+        if (!content && !imageData) { 
+          alert("Write something or add an image"); 
+          return; 
+        }
+
+        const originalBtnContent = publishBtn.innerHTML;
+        publishBtn.disabled = true;
+        publishBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-[15px]"></i> Posting...';
+
+        const newPost = {
+          authorName: name,
+          authorTitle: 'Community Creator',
+          content: content, // Save raw HTML content from contenteditable
+          imageUrl: imageData,
+          timestamp: new Date().toISOString(),
+          appreciations: 0,
+          appreciatedBy: [],
+          comments: []
+        };
+        
+        db.collection(POSTS_COLLECTION).add(newPost).then(docRef => {
+          contentEditable.innerHTML = '';
+          previewContainer.classList.add('hidden');
+          previewImg.src = '';
+          fileInput.value = '';
+        }).catch(err => {
+          console.error(err);
+          alert('Failed to submit post');
+        }).finally(() => {
+          publishBtn.disabled = false;
+          publishBtn.innerHTML = originalBtnContent;
+        });
       });
     });
+  }
+
+  function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') document.documentElement.classList.add('dark');
+    
+    const bellBtn = document.getElementById('headerBellBtn');
+    const userMenu = document.getElementById('userDropdown');
+    const lightBtn = document.getElementById('lightModeBtn');
+    const darkBtn = document.getElementById('darkModeBtn');
+
+    bellBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!userMenu.contains(e.target) && !bellBtn.contains(e.target)) {
+        userMenu.classList.add('hidden');
+      }
+    });
+
+    function setTheme(theme) {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+      userMenu.classList.add('hidden');
+      
+      // Notify iframes
+      const iframes = ['iframe-community', 'iframe-startups'];
+      iframes.forEach(id => {
+        const iframe = document.getElementById(id);
+        if (iframe && iframe.querySelector('iframe') && iframe.querySelector('iframe').contentWindow) {
+          iframe.querySelector('iframe').contentWindow.postMessage({ type: 'theme', theme: theme }, '*');
+        }
+      });
+    }
+
+    lightBtn.addEventListener('click', () => setTheme('light'));
+    darkBtn.addEventListener('click', () => setTheme('dark'));
   }
 
   function initSearch() {
@@ -942,9 +1106,17 @@
   function initBottomNav() {
     window.addEventListener('hashchange', handleRouting);
     
-    document.getElementById('headerBellBtn')?.addEventListener('click', () => {
-      window.location.hash = 'alerts';
-    });
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('.bottom-nav');
+      if (!nav) return;
+      if (window.scrollY > lastScrollY && window.scrollY > 50) {
+        nav.classList.add('shrunk');
+      } else {
+        nav.classList.remove('shrunk');
+      }
+      lastScrollY = window.scrollY;
+    }, { passive: true });
     
     document.querySelectorAll('.nav-item').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -964,6 +1136,7 @@
   loadPosts();
   loadAllAlerts();
   initPostCreator();
+  initTheme();
   initSearch();
   initBottomNav();
 })();

@@ -21,6 +21,35 @@
       background: linear-gradient(145deg, #f8fafc 0%, #f0f2f5 100%);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
+    html.dark #startup-community-feed {
+      --page: #000000;
+      --surface: #000000;
+      --ink: #f5f5f5;
+      --muted: #a8a8a8;
+      --line: #262626;
+      --green-soft: #121212;
+      --shadow: none;
+      background: #000000;
+    }
+    html.dark #startup-community-feed .topbar { background: #000000; border-bottom: 1px solid #262626; }
+    html.dark #startup-community-feed .search-box { background: #121212; border-color: #262626; color: #f5f5f5; }
+    html.dark #startup-community-feed .notification-dot { background: #ff3040; }
+    html.dark #startup-community-feed .category-btn { background: #121212; border-color: #262626; color: #f5f5f5; }
+    html.dark #startup-community-feed .category-btn.active { background: #f5f5f5; color: #000000; border-color: #f5f5f5; }
+    html.dark #startup-community-feed .icon-btn:hover, html.dark #startup-community-feed .icon-btn.active { background: #121212; color: #f5f5f5; }
+    html.dark #startup-community-feed .more-btn:hover { background: #121212; }
+    html.dark #startup-community-feed .post-action:hover { background: #121212; color: #f5f5f5; }
+    html.dark #startup-community-feed .comment-section { background: #000000; border-color: #262626; }
+    html.dark #startup-community-feed .comment-input input { background: #121212; color: #f5f5f5; border-color: #262626; }
+    html.dark #startup-community-feed .notification-panel { background: #000000; border: 1px solid #262626; }
+    html.dark #startup-community-feed .notification-item:hover { background: #121212; }
+    html.dark #startup-community-feed .post-card { border: 1px solid #262626; }
+    html.dark #startup-community-feed .post-title { color: #f5f5f5; }
+    html.dark #startup-community-feed .post-copy { color: #e5e5e5; }
+    html.dark #startup-community-feed .author-name { color: #f5f5f5; }
+    html.dark #startup-community-feed .post-meta { color: #a8a8a8; }
+    html.dark #startup-community-feed .brand { color: #f5f5f5; }
+    html.dark #startup-community-feed .feed-title { color: #f5f5f5; }
     #startup-community-feed * { box-sizing: border-box; }
     #startup-community-feed {
       scroll-behavior: smooth;
@@ -61,7 +90,7 @@
     }
   
     #startup-community-feed .topbar-inner {
-      width: min(56rem, calc(100% - 32px));
+      width: min(1100px, calc(100% - 32px));
       min-height: 72px;
       margin: auto;
       display: grid;
@@ -107,13 +136,19 @@
   
     #startup-community-feed .search {
       width: 100%;
-      height: 44px;
+      height: 38px;
       border: 1px solid #e2e8f0;
       border-radius: 9999px;
       padding: 0 40px 0 44px;
+      font-size: 13px;
       background: white;
       color: var(--ink);
       transition: .18s ease;
+    }
+    html.dark #startup-community-feed .search {
+      border-color: #262626;
+      background: #121212;
+      color: #f5f5f5;
     }
   
     #startup-community-feed .search:focus {
@@ -202,7 +237,7 @@
     #startup-community-feed .notification-time { font-size: 10px; color: var(--muted); margin-top: 4px; }
   
     #startup-community-feed .page-shell {
-      width: min(56rem, calc(100% - 8px));
+      width: min(1100px, calc(100% - 8px));
       margin: 0 auto;
       padding: 28px 0 calc(120px + env(safe-area-inset-bottom));
     }
@@ -284,9 +319,9 @@
     #startup-community-feed .feed-empty strong { display: block; margin-bottom: 4px; color: var(--ink); font-size: 18px; }
   
     #startup-community-feed .post-card {
-      margin-bottom: 16px;
+      margin-bottom: 10px;
       border: 1px solid var(--line);
-      border-radius: 22px;
+      border-radius: 16px;
       overflow: hidden;
       background: var(--surface);
       box-shadow: 0 5px 24px rgba(20, 37, 27, .04);
@@ -298,7 +333,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
   
-    #startup-community-feed .post-main { padding: 10px 5px 8px; }
+    #startup-community-feed .post-main { padding: 8px 5px 6px; }
     #startup-community-feed .post-head { display: flex; align-items: center; gap: 10px; }
     #startup-community-feed .avatar {
       width: 39px;
@@ -401,23 +436,23 @@
       gap: 5px;
     }
     #startup-community-feed .post-action {
-      min-height: 39px;
+      min-height: 36px;
       border: 0;
-      border-radius: 10px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
+      gap: 5px;
       background: transparent;
       color: #68736c;
       cursor: pointer;
       font-size: 11px;
-      font-weight: 750;
+      font-weight: 600;
     }
-    #startup-community-feed .post-action:hover { background: #f0f3f0; color: var(--ink); }
-    #startup-community-feed .post-action.active { background: var(--green-soft); color: var(--green-dark); }
+    #startup-community-feed .post-action:hover { background: #f1f5f9; color: var(--ink); }
+    #startup-community-feed .post-action.active { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
     #startup-community-feed .post-action.active .icon { fill: currentColor; }
-    #startup-community-feed .post-action .icon { width: 17px; height: 17px; }
+    #startup-community-feed .post-action .icon { width: 15px; height: 15px; }
   
     #startup-community-feed .comments-section {
       display: none;
@@ -541,9 +576,12 @@
     @media (max-width: 440px) {
       #startup-community-feed .brand { font-size: 19px; }
       #startup-community-feed .brand-mark { width: 34px; height: 34px; }
-      #startup-community-feed .post-action { gap: 4px; font-size: 12px; }
-      #startup-community-feed .post-action .icon { width: 17px; height: 17px; }
+      #startup-community-feed .post-action { gap: 4px; font-size: 11px; }
+      #startup-community-feed .post-action .icon { width: 15px; height: 15px; }
       #startup-community-feed .post-action span { display: inline-block; }
+      #startup-community-feed .post-title { font-size: 17px; margin-top: 10px; }
+      #startup-community-feed .post-copy { font-size: 13.5px; }
+      #startup-community-feed .author-name { font-size: 13.5px; }
     }
   
     @media (prefers-reduced-motion: reduce) {
@@ -637,6 +675,19 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+  }
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'theme') {
+      if (event.data.theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  });
+
   const firebaseConfig = {
     apiKey: "AIzaSyDZt0dJQCu0tW9OR9kyyliRPbP47R_z2kw",
     authDomain: "jobs-1015c.firebaseapp.com",
