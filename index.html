@@ -3,26 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-  <title>SpreadOne · Connect & share</title>
+  <title>Spread One · Connect & share</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
+  <script>
+    const originalFetch = window.fetch;
+    if (originalFetch) {
+      try {
+        Object.defineProperty(window, 'fetch', {
+          get: function() { return originalFetch; },
+          set: function(v) { console.log('Ignored fetch override'); },
+          configurable: true
+        });
+      } catch (e) {}
+    }
+  </script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #f4f6fa; padding-bottom: max(85px, calc(85px + env(safe-area-inset-bottom))); -webkit-tap-highlight-color: transparent; }
+    body { background: #f4f6fa; padding-bottom: max(85px, calc(85px + env(safe-area-inset-bottom))); -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+    input, textarea, select, [contenteditable] { -webkit-user-select: text; user-select: text; }
     
     /* Dark Mode Global Overrides - Instagram Style */
-    html.dark body { background: #000000; }
-    html.dark .bg-white { background-color: #000000 !important; }
+    html.dark body { background: #0d0d0d; }
+    html.dark .bg-white { background-color: #0d0d0d !important; }
     html.dark .bg-slate-50 { background-color: #121212 !important; }
     html.dark .bg-slate-50\/50 { background-color: #121212 !important; }
     html.dark .bg-slate-100 { background-color: #262626 !important; }
     html.dark .border-slate-100, html.dark .border-slate-50\/50 { border-color: #262626 !important; }
-    html.dark .text-slate-700, html.dark .text-\[\#111827\], html.dark .text-black { color: #f5f5f5 !important; }
+    html.dark .text-slate-700, html.dark .text-\[\#111827\], html.dark .text-\[\#1e293b\], html.dark .text-black { color: #f5f5f5 !important; }
     html.dark .text-slate-600 { color: #f5f5f5 !important; }
     html.dark .text-slate-500 { color: #a8a8a8 !important; }
     html.dark .text-slate-400 { color: #737373 !important; }
@@ -32,11 +45,11 @@
     html.dark .placeholder-slate-400::placeholder { color: #737373 !important; }
     html.dark input, html.dark [contenteditable] { color: #f5f5f5 !important; }
     html.dark .shadow-\[0_4px_24px_rgba\(0\,0\,0\,0\.03\)\] { box-shadow: none !important; }
-    html.dark .iframe-container { background: #000000; }
-    html.dark .bottom-nav { background: rgba(0, 0, 0, 0.95); border-color: #262626; border-top: 1px solid #262626; }
+    html.dark .iframe-container { background: #0d0d0d; }
+    html.dark .bottom-nav { background: rgba(13, 13, 13, 0.95); border-color: #262626; border-top: 1px solid #262626; }
     html.dark .bottom-nav .nav-item { color: #f5f5f5; }
     html.dark .bottom-nav .nav-item.active { color: #0095f6; }
-    html.dark .alert-item { background: #000000; border-color: #262626; }
+    html.dark .alert-item { background: #0d0d0d; border-color: #262626; }
     html.dark .alert-item:hover { border-color: #383838; }
     html.dark .post-card, html.dark #postCreationCard, html.dark #userDropdown { border: 1px solid #262626 !important; }
 
@@ -93,7 +106,7 @@
       gap: 1.25rem; 
       padding: 0.35rem 1rem; 
       pointer-events: auto; 
-      width: max-content; 
+      width: 800px; 
       max-width: 94%; 
       margin-bottom: 0; 
       overflow-x: auto;
@@ -102,7 +115,7 @@
     }
     .bottom-nav.shrunk {
       transform: scale(0.85) translateY(20px);
-      opacity: 0.5;
+      opacity: 0.88;
     }
     .bottom-nav::-webkit-scrollbar { display: none; }
     .nav-item { 
@@ -112,7 +125,7 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      font-size: 0.6rem; 
+      font-size: 0.75rem; 
       font-weight: 600; 
       padding: 0.3rem 0.4rem; 
       border-radius: 1.5rem; 
@@ -124,17 +137,36 @@
       border: none;
       gap: 0.15rem;
     }
-    .nav-item i { font-size: 1rem; transition: transform 0.2s; }
+    .nav-item i { font-size: 1.25rem; transition: transform 0.2s; }
     .nav-item:hover i { transform: scale(1.1); }
-    .nav-item.active { background: rgba(255, 255, 255, 0.15); color: white; }
+    .nav-item.active { color: white; }
     .nav-item.active i { color: white; }
     
     @media (max-width: 500px) { 
-      .nav-item { font-size: 0.55rem; padding: 0.25rem 0.1rem; } 
-      .nav-item i { font-size: 0.9rem; margin-bottom: -1px; }
-      .bottom-nav { padding: 0.25rem 0.75rem; width: max-content; max-width: 96%; gap: 0.75rem; } 
+      .nav-item { font-size: 0.68rem; padding: 0.18rem 0.2rem; } 
+      .nav-item i { font-size: 1.08rem; margin-bottom: 1px; }
+      .bottom-nav { padding: 0.24rem 1.6rem; width: max-content; max-width: 98%; gap: 1.3rem; } 
+      .bottom-nav-fixed { padding-bottom: max(0.45rem, env(safe-area-inset-bottom)); }
+      
+      #filtersSection {
+        padding-top: 0.25rem !important;
+        padding-bottom: 0.25rem !important;
+        margin-bottom: 0.35rem !important;
+      }
+      #filtersSection button {
+        padding-top: 0.25rem !important;
+        padding-bottom: 0.25rem !important;
+      }
+      #filtersSection button svg {
+        width: 1.1rem !important;
+        height: 1.1rem !important;
+        margin-bottom: 0.15rem !important;
+      }
+      #filtersSection button span {
+        font-size: 9px !important;
+      }
     }
-    .comment-list { max-height: 200px; overflow-y: auto; background: #f9fafb; border-radius: 0.75rem; }
+    .comment-list { max-height: 200px; overflow-y: auto; }
     .hashtag { cursor: pointer; color: #059669; font-weight: 500; }
     .hashtag:hover { text-decoration: underline; }
     .alert-item { background: white; border-radius: 1rem; padding: 0.75rem; margin-bottom: 0.6rem; border: 1px solid #eef2ff; transition: all 0.1s; cursor: pointer; }
@@ -169,16 +201,1773 @@
     }
     #feedContainer { display: block; padding-bottom: max(80px, calc(80px + env(safe-area-inset-bottom))); position: relative; z-index: 10; }
     [contenteditable]:empty::before { content: attr(data-placeholder); color: #94a3b8; pointer-events: none; display: block; }
-  </style>
+    
+    /* Community CSS */
+    .community-page { width: 100%; max-width: 1100px; overflow-x: hidden; background: transparent; padding: 0 6px; margin: 0 auto; }
+    .community-top { display: flex; justify-content: space-between; align-items: center; padding: 8px 6px 6px 6px; gap: 8px; }
+    .community-title { font-size: 24px; font-weight: 900; color: #111827; }
+    .spread-text { color: #111827; }
+    .community-ask-btn { border: none; padding: 8px 12px; border-radius: 12px; background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .community-search-wrap { position: relative; }
+    .community-search { width: 100%; margin-bottom: 6px; padding: 11px; border: none; outline: none; border-radius: 14px; background: white; font-size: 13px; border: 1px solid rgba(0, 0, 0, 0.06); }
+    .search-suggestions { position: absolute; top: 48px; left: 0; right: 0; background: white; border-radius: 14px; overflow: hidden; z-index: 999; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); display: none; }
+    .search-item { padding: 10px 12px; font-size: 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); cursor: pointer; }
+    .community-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+    .community-chips::-webkit-scrollbar { display: none; }
+    .community-chip { padding: 6px 12px; border-radius: 999px; background: white; font-size: 12px; font-weight: 700; white-space: nowrap; border: 1px solid rgba(0, 0, 0, 0.06); cursor: pointer; flex: none; }
+    .community-chip.active { background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; }
+    .community-feed { display: flex; flex-direction: column; gap: 2px; width: 100%; padding-bottom: calc(120px + env(safe-area-inset-bottom)); }
+    .community-card { width: 100%; background: white; padding: 10px 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); border-radius: 14px; margin-bottom: 4px; }
+    .community-header { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+    .community-name { font-size: 12px; font-weight: 700; color: #111827; }
+    .community-dot { width: 4px; height: 4px; border-radius: 50%; background: #d1d5db; }
+    .community-time { font-size: 11px; color: #9ca3af; }
+    .community-category { font-size: 11px; font-weight: 700; color: #b8860b; }
+    .community-question { font-size: 14px; line-height: 1.45; color: #111827; margin-bottom: 2px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .community-question.expanded { -webkit-line-clamp: unset; overflow: visible; }
+    .read-more-btn { font-size: 11px; font-weight: 700; color: #6B7280; cursor: pointer; display: inline-block; margin-bottom: 2px; }
+    .community-actions { display: flex; gap: 16px; margin-top: 2px; margin-bottom: 6px; flex-wrap: wrap; }
+    .community-action { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: #6b7280; cursor: pointer; }
+    .community-action.marked-helpful { color: #b8860b; cursor: pointer; }
+    .helpful-count { background: #f0f0f0; padding: 2px 5px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #4b5563; }
+    .community-action.marked-helpful .helpful-count { background: #fef08a; color: #b8860b; }
+    .comment-helpful.marked-helpful { color: #b8860b; cursor: pointer; }
+    .reply-form { display: none; margin-top: 6px; }
+    .reply-form.active { display: block; }
+    .reply-input, .reply-text { width: 100%; padding: 8px 10px; border: none; outline: none; border-radius: 10px; background: #f5f5f5; font-size: 12px; margin-bottom: 5px; border: 1px solid rgba(0, 0, 0, 0.06); font-family: 'Roboto', sans-serif; }
+    .reply-text { height: 60px; resize: none; }
+    .reply-submit { border: none; padding: 8px 12px; border-radius: 10px; background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .comment-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; max-height: 420px; overflow-y: auto; overflow-x: hidden; padding: 4px 2px 4px 2px; scroll-behavior: smooth; background: #fafafa; border-radius: 14px; }
+    .comment-list::-webkit-scrollbar { width: 5px; }
+    .comment-list::-webkit-scrollbar-track { background: #efefef; border-radius: 8px; }
+    .comment-list::-webkit-scrollbar-thumb { background: #c0c0c0; border-radius: 8px; }
+    .comment-item { width: 100%; background: white; border-radius: 12px; padding: 8px 10px; border: 1px solid rgba(0, 0, 0, 0.03); margin: 0; }
+    .comment-name { font-size: 13px; font-weight: 800; color: #1f2937; margin-bottom: 3px; }
+    .comment-text { font-size: 14px; color: #2c3e50; margin-bottom: 5px; word-break: break-word; }
+    .comment-actions { display: flex; gap: 12px; align-items: center; margin-top: 2px; }
+    .comment-reply-btn { font-size: 10px; font-weight: 600; color: #b8860b; cursor: pointer; background: none; border: none; }
+    .comment-helpful { font-size: 10px; font-weight: 500; color: #6b7280; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
+    .helpful-badge { background: #f3f4f6; padding: 2px 5px; border-radius: 20px; font-size: 9px; font-weight: 600; }
+    .nested-replies, .nested-replies.deep, .comment-list .nested-replies, div.nested-replies { display: flex !important; flex-direction: column !important; gap: 8px !important; margin-top: 8px !important; margin-left: 0 !important; margin-right: 0 !important; padding-left: 0 !important; padding-right: 0 !important; border-left: none !important; border-right: none !important; background: transparent !important; }
+    .nested-replies .comment-item, .nested-replies.deep .comment-item { margin-left: 0 !important; margin-right: 0 !important; }
+    .reply-scroll-controls { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
+    .reply-scroll-btn { border: 1px solid rgba(0, 0, 0, 0.08); background: #f0f0f0; color: #4b5563; border-radius: 999px; padding: 4px 10px; font-size: 10px; font-weight: 600; cursor: pointer; }
+    .community-modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); display: none; align-items: center; justify-content: center; padding: 10px; z-index: 9999; }
+    .community-modal-box { width: 100%; max-width: 500px; background: white; padding: 18px; border-radius: 24px; }
+    .community-modal-title { font-size: 18px; font-weight: 800; margin-bottom: 14px; }
+    .community-field { margin-bottom: 6px; }
+    .community-field input, .community-field select { width: 100%; padding: 10px; border: none; outline: none; border-radius: 14px; background: #f5f5f5; border: 1px solid rgba(0, 0, 0, 0.06); font-family: 'Roboto', sans-serif; font-size: 12px; }
+    .community-submit { width: 100%; border: none; padding: 10px; border-radius: 14px; background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; font-size: 13px; font-weight: 700; cursor: pointer; }
+    
+    html.dark .community-page { background: #0d0d0d; }
+    html.dark .community-title { color: #f5f5f5; }
+    html.dark .spread-text { color: #f5f5f5; }
+    html.dark .community-search, html.dark .search-suggestions { background: #121212; color: #f5f5f5; border-color: #262626; }
+    html.dark .search-item, html.dark .community-filter { border-color: #262626; }
+    html.dark .search-item { color: #f5f5f5; }
+    html.dark .search-item:hover { background: #262626; }
+    html.dark .community-chip { background: #121212; color: #f5f5f5; border-color: #262626; }
+    html.dark .community-chip.active { background: #f5f5f5; color: #0d0d0d; border-color: #f5f5f5; }
+    html.dark .community-card { background: #0d0d0d; border: 1px solid #262626; }
+    html.dark .community-name { color: #f5f5f5; }
+    html.dark .community-time { color: #a8a8a8; }
+    html.dark .community-question { color: #e5e5e5; }
+    html.dark .community-action { color: #f5f5f5; }
+    html.dark .community-action:hover { color: #ffffff; }
+    html.dark .community-modal-box { background: #0d0d0d; color: #f5f5f5; border: 1px solid #262626; }
+    html.dark .community-field input, html.dark .community-field select { background: #121212; color: #f5f5f5; border-color: #262626; }
+    html.dark .community-answer-item { border-color: #262626; background: #0d0d0d; }
+    html.dark .community-answer-author { color: #f5f5f5; }
+    html.dark .community-answer-text { color: #e5e5e5; }
+    html.dark .community-answer-input-wrap { background: #121212; }
+    html.dark .community-answer-input { background: #121212; color: #f5f5f5; }
+    html.dark .comment-item { background: #121212; border-color: #262626; }
+    html.dark .comment-list { background: #0d0d0d; }
+    html.dark .reply-text, html.dark .reply-input { background: #121212; color: #f5f5f5; border-color: #262626; }
+    html.dark .comment-name { color: #f5f5f5; }
+    html.dark .comment-text { color: #e5e5e5; }
+    html.dark .helpful-count { background: #262626; color: #a8a8a8; }
+    html.dark .helpful-badge { background: #262626; color: #a8a8a8; }
+    html.dark .reply-scroll-btn { background: #121212; color: #f5f5f5; border-color: #262626; }
+    
+    @media (max-width: 500px) {
+        .community-title { font-size: 20px; }
+        .community-search { font-size: 12.5px; padding: 10px; }
+        .community-chip { padding: 6px 12px; font-size: 11.5px; }
+        .community-question { font-size: 13.5px; }
+        .community-name { font-size: 11.5px; }
+        .community-action { font-size: 12.5px; }
+        .community-card { padding: 8px 10px; margin-bottom: 2px; }
+        .community-chips { gap: 6px; margin-bottom: 10px; padding: 0 2px; }
+    }
+  
+/* --- JOBS CSS --- */
+
+*{box-sizing:border-box;margin:0;padding:0;}
+.jobs-page-wrapper{min-height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:#fff;}
+.jobs-page-wrapper{
+  -webkit-user-select: none; user-select: none;
+  background:#06080f;
+  background-image:
+    radial-gradient(ellipse 120% 55% at 10% 0%,  rgba(27,79,255,0.52) 0%,transparent 50%),
+    radial-gradient(ellipse 100% 45% at 90% 10%, rgba(0,180,255,0.38) 0%,transparent 50%),
+    radial-gradient(ellipse 100% 55% at 50% 100%,rgba(59,130,246,0.32) 0%,transparent 55%);
+  overflow-x:hidden;
+}
+input, textarea, select, [contenteditable] { -webkit-user-select: text; user-select: text; }
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;animation:orbf 14s ease-in-out infinite alternate;}
+.orb1{width:400px;height:400px;background:rgba(27,79,255,0.22);top:-100px;left:-100px;filter:blur(70px);}
+.orb2{width:340px;height:340px;background:rgba(0,180,255,0.18);top:40px;right:-80px;filter:blur(65px);animation-delay:-5s;}
+.orb3{width:300px;height:300px;background:rgba(59,130,246,0.16);bottom:0;left:35%;filter:blur(60px);animation-delay:-9s;}
+@keyframes orbf{0%{transform:translate(0,0) scale(1);}100%{transform:translate(22px,30px) scale(1.07);}}
+@media(max-width:480px){.orb{display:none;}}
+.wrap{position:relative;z-index:1;width:100%;max-width:1100px;margin:0 auto;padding:10px 6px max(100px, calc(100px + env(safe-area-inset-bottom)));}
+@media(min-width:561px){.wrap{padding:12px 14px max(100px, calc(100px + env(safe-area-inset-bottom)));}}
+.top-nav{display:flex;align-items:center;justify-content:space-between;padding:10px 4px 6px;margin-bottom:4px;}
+.nav-logo{font-size:15px;font-weight:700;color:#fff;display:flex;align-items:center;gap:7px;}
+.nav-logo-dot{width:8px;height:8px;border-radius:50%;background:#1b4fff;display:inline-block;}
+.post-job-btn{background:#1b4fff;color:#fff;border:none;border-radius:9px;padding:8px 18px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;transition:background .18s,transform .1s;display:flex;align-items:center;gap:6px;}
+.post-job-btn:hover{background:#1440e0;}
+.post-job-btn:active{transform:scale(0.97);}
+.post-job-btn svg{width:13px;height:13px;}
+.hero{text-align:center;padding:28px 16px 22px;margin-bottom:10px;}
+.hero-eyebrow{display:inline-block;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.18);border-radius:100px;color:rgba(255,255,255,0.60);font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 12px;margin-bottom:10px;}
+.hero h1{font-size:clamp(22px,4vw,44px);font-weight:700;line-height:1.1;margin-bottom:6px;}
+.hero h1 span{color:#60a5fa;}
+.hero p{color:rgba(255,255,255,0.45);font-size:13px;margin-bottom:22px;}
+.search-glass{background:rgba(255,255,255,0.10);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.20);border-radius:14px;padding:7px;max-width:800px;margin:0 auto;display:flex;gap:6px;flex-wrap:wrap;}
+.s-field{flex:1;min-width:155px;display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.95);border-radius:9px;padding:9px 12px;}
+.s-field svg{width:14px;height:14px;color:#1b4fff;flex-shrink:0;}
+.s-field input,.s-field select{border:none;outline:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:#0f172a;background:transparent;width:100%;font-weight:500;}
+.s-field input::placeholder{color:#94a3b8;}
+.search-btn{background:#1b4fff;color:#fff;border:none;border-radius:9px;padding:9px 22px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .18s,transform .1s;}
+.search-btn:hover{background:#1440e0;}
+.search-btn:active{transform:scale(0.97);}
+.stats-row{display:flex;justify-content:center;gap:30px;margin-top:18px;flex-wrap:wrap;}
+.stat{text-align:center;}
+.stat-num{font-size:20px;font-weight:700;color:#fff;}
+.stat-lbl{font-size:10px;color:rgba(255,255,255,0.36);text-transform:uppercase;letter-spacing:.06em;}
+.filter-bar{width:100%;padding:0 0 10px;}
+.filter-inner{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:12px;padding:9px 13px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.filter-label{font-size:10px;font-weight:600;color:rgba(255,255,255,0.36);text-transform:uppercase;letter-spacing:.07em;}
+.f-chip{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.14);border-radius:100px;padding:4px 11px;font-size:11.5px;font-weight:500;cursor:pointer;transition:background .13s,color .13s;font-family:'Plus Jakarta Sans',sans-serif;}
+.f-chip:hover{background:rgba(255,255,255,0.14);color:#fff;}
+.f-chip.active{background:#1b4fff;color:#fff;border-color:#1b4fff;}
+.result-meta{margin-left:auto;font-size:11px;color:rgba(255,255,255,0.36);white-space:nowrap;font-weight:500;}
+#resultCount{color:#60a5fa;font-weight:700;}
+.lbl{font-size:10px;font-weight:600;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+.lbl::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);}
+.job-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.job-card{display:flex;flex-direction:column;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.13);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:14px;padding:13px 13px 11px;color:#fff;transition:transform .18s,border-color .18s,background .18s;animation:fadeUp .35s ease both;position:relative;overflow:hidden;cursor:pointer;}
+.job-card::after{content:'';position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.45),transparent);}
+.job-card:hover{transform:translateY(-2px);background:rgba(255,255,255,0.10);border-color:rgba(96,165,250,0.45);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.new-tag{position:absolute;top:10px;right:10px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:rgba(48,209,88,0.15);color:#34d399;border:1px solid rgba(52,211,153,0.30);border-radius:5px;padding:2px 6px;line-height:1.5;}
+.job-title{font-size:14px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:9px;padding-right:42px;}
+.detail-list{display:flex;flex-direction:column;gap:3px;margin-bottom:9px;}
+.detail-row{display:flex;align-items:baseline;gap:6px;font-size:12px;line-height:1.45;}
+.detail-label{color:rgba(255,255,255,0.35);font-weight:500;min-width:76px;flex-shrink:0;font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;}
+.detail-value{color:rgba(255,255,255,0.82);font-weight:500;}
+.detail-value.salary-val{color:#60a5fa;font-weight:700;}
+.card-footer{margin-top:auto;border-top:1px solid rgba(255,255,255,0.08);padding-top:9px;display:flex;justify-content:flex-end;}
+.apply-link-trigger{font-size:11.5px;font-weight:700;color:#60a5fa;display:flex;align-items:center;gap:3px;background:transparent;border:none;font-family:inherit;cursor:pointer;padding:4px 8px 4px 4px;border-radius:20px;transition:background 0.1s;}
+.apply-link-trigger:hover{background:rgba(96,165,250,0.1);}
+.apply-link-trigger svg{width:12px;height:12px;flex-shrink:0;}
+.loading-state,.empty-state{text-align:center;padding:50px 20px;color:rgba(255,255,255,0.35);font-size:13px;font-weight:500;grid-column:1/-1;}
+.spinner{width:30px;height:30px;border:2.5px solid rgba(255,255,255,0.10);border-top-color:#1b4fff;border-radius:50%;animation:spin .72s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fi{animation:fu .46s ease both;}
+.modal-overlay{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.80);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.open{display:flex;}
+.modal{background:#0a0f1e;border:1px solid rgba(255,255,255,0.14);border-radius:22px;width:100%;max-width:720px;max-height:85vh;overflow-y:auto;padding:22px 24px 110px;animation:fadeUp .28s ease;position:relative;scrollbar-width:thin;margin-top:-10vh;}
+.mfield{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;font-family:'Plus Jakarta Sans',sans-serif;}
+.mfield label{font-size:11px;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:.05em;}
+.mfield input,.mfield select,.mfield textarea{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:10px 12px;color:#fff;font-size:13px;font-family:inherit;outline:none;transition:border-color 0.15s,background 0.15s;}
+.mfield input::placeholder,.mfield textarea::placeholder{color:rgba(255,255,255,0.25);}
+.mfield input:focus,.mfield select:focus,.mfield textarea:focus{border-color:#60a5fa;background:rgba(255,255,255,0.1);}
+.mfield textarea{resize:vertical;min-height:80px;}
+.mfield .char-count{text-align:right;font-size:10px;color:rgba(255,255,255,0.3);margin-top:-3px;}
+.m-submit-btn{background:#1b4fff;color:#fff;border:none;border-radius:40px;padding:12px 24px;font-weight:700;font-size:14px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:all 0.2s;}
+.m-submit-btn:hover{background:#0f3ad9;}
+.modal-footer{margin-top:20px;}
+.modal-success{display:none;text-align:center;padding:40px 20px;}
+.modal-success.active{display:block;}
+.modal-note{text-align:center;font-size:11px;color:rgba(255,255,255,0.4);margin-top:10px;}
+.modal::-webkit-scrollbar{width:5px;}
+.modal::-webkit-scrollbar-track{background:rgba(255,255,255,0.05);border-radius:10px;}
+.modal::-webkit-scrollbar-thumb{background:rgba(96,165,250,0.4);border-radius:10px;}
+.modal::before{content:'';position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.50),transparent);}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px;}
+.modal-head h2{font-size:19px;font-weight:800;letter-spacing:-0.2px;}
+.modal-close{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.70);border-radius:9px;padding:6px 14px;cursor:pointer;font-size:12px;font-weight:600;transition:all .15s;}
+.modal-close:hover{background:#1b4fff;color:#fff;border-color:#1b4fff;}
+.v-section{font-size:10px;font-weight:700;color:rgba(255,255,255,0.34);text-transform:uppercase;letter-spacing:.09em;border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:6px;margin:16px 0 10px;}
+.v-section:first-of-type{margin-top:0;}
+.v-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 16px;}
+.v-grid-item{display:flex;flex-direction:column;gap:2px;}
+.v-grid-label{font-size:9px;font-weight:700;color:rgba(255,255,255,0.38);text-transform:uppercase;letter-spacing:.06em;}
+.v-grid-value{font-size:13px;font-weight:500;color:#e2e8f0;word-break:break-word;}
+.full-width{grid-column:1/-1;}
+.jd-text{background:rgba(255,255,255,0.04);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.55;color:#cbd5e1;white-space:pre-wrap;margin-top:6px;}
+.apply-btn-modal{background:#1b4fff;color:#fff;border:none;border-radius:40px;padding:12px 24px;font-weight:700;font-size:14px;width:100%;margin-top:18px;margin-bottom:0;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:all 0.2s;font-family:inherit;}
+.apply-btn-modal:hover{background:#0f3ad9;transform:scale(1.01);}
+.apply-btn-modal:active{transform:scale(0.98);}
+.missing-link-msg{background:rgba(255,100,100,0.12);color:#f9a8a8;border-radius:12px;padding:10px;text-align:center;font-size:12px;margin-top:12px;}
+.toast{position:fixed;bottom:max(80px, calc(80px + env(safe-area-inset-bottom)));left:50%;transform:translateX(-50%) translateY(20px);background:rgba(14,22,48,0.97);border:1px solid rgba(96,165,250,0.28);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;color:#fff;display:flex;align-items:center;gap:9px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:9999;max-width:90vw;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.error{border-color:rgba(248,113,113,0.5);}
+@media(max-width:580px){
+  .v-grid{grid-template-columns:1fr;}
+  .modal{padding:16px;}
+  .job-grid{grid-template-columns:1fr;}
+  .filter-inner{flex-wrap:wrap;}
+  .find-job-txt{display:none;}
+}
+
+/* --- STARTUP CSS --- */
+
+    #startup-community-feed {
+      --bg-dark: #060608;
+      --card-dark: #111113;
+      --border-dark: rgba(255, 255, 255, 0.04);
+      --purple-primary: #8b5cf6;
+      --purple-light: #a78bfa;
+      --text-primary: #ffffff;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      
+      display: block;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    
+    #startup-community-feed * {
+      box-sizing: border-box;
+    }
+
+    #startup-community-feed button, 
+    #startup-community-feed input, 
+    #startup-community-feed select, 
+    #startup-community-feed textarea {
+      font-family: inherit;
+    }
+    
+    #startup-community-feed .icon {
+      width: 19px;
+      height: 19px;
+      flex: 0 0 auto;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+
+    /* --- TOPBAR / HEADER --- */
+    #startup-community-feed .topbar {
+      position: sticky;
+      z-index: 50;
+      top: 0;
+      background: rgba(6, 6, 8, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.05);
+      padding: 12px 0;
+    }
+
+    #startup-community-feed .topbar-inner {
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 0.5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    #startup-community-feed .brand-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      margin: 0;
+    }
+
+    #startup-community-feed .spread-bold {
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    #startup-community-feed .startup-sub {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--purple-light);
+      background: rgba(139, 92, 246, 0.15);
+      padding: 2px 8px;
+      border-radius: 99px;
+      margin-left: 6px;
+      text-transform: lowercase;
+    }
+
+    #startup-community-feed .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    #startup-community-feed .icon-btn {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.03);
+      color: #e2e8f0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    #startup-community-feed .icon-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    #startup-community-feed .notification-dot {
+      position: absolute;
+      right: 2px;
+      top: 2px;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--purple-primary);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--bg-dark);
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+    }
+
+    #startup-community-feed .notification-dot.read {
+      display: none;
+    }
+
+    #startup-community-feed .user-avatar-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+    }
+
+    #startup-community-feed .user-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* --- SEARCH --- */
+    #startup-community-feed .search-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    #startup-community-feed .search-wrap .icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6b7280;
+      width: 16px;
+      height: 16px;
+      pointer-events: none;
+    }
+
+    #startup-community-feed .search {
+      width: 100%;
+      height: 36px;
+      border: 1.5px solid rgba(255, 255, 255, 0.05);
+      border-radius: 9999px;
+      padding: 0 40px 0 40px;
+      font-size: 13px;
+      background: #111113;
+      color: #ffffff;
+      transition: all 0.2s ease;
+    }
+
+    #startup-community-feed .search::placeholder {
+      color: #4b5563;
+    }
+
+    #startup-community-feed .search:focus {
+      border-color: var(--purple-primary);
+      background: #15151a;
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.15);
+      outline: none;
+    }
+
+    #startup-community-feed .search-key {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      color: #4b5563;
+      font-size: 9px;
+      padding: 1px 5px;
+      pointer-events: none;
+    }
+
+    /* --- PAGE SHELL & LAYOUT --- */
+    #startup-community-feed .page-shell {
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 8px 0.5% 140px;
+    }
+    /* --- CATEGORY NAVIGATION --- */
+    #startup-community-feed .category-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 2px;
+      overflow-x: visible;
+      padding: 0 4px;
+      margin: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      background: transparent;
+      margin-bottom: 2px;
+    }
+    #startup-community-feed .category-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    #startup-community-feed .category-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: transparent !important;
+      border: none !important;
+      color: #6b7280;
+      padding: 6px 0px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.25s ease;
+      font-family: inherit;
+      min-width: 0;
+    }
+
+    #startup-community-feed .category-btn .category-icon {
+      font-size: 20px;
+      color: #4b5563;
+      transition: all 0.25s ease;
+    }
+
+    #startup-community-feed .category-btn .category-label {
+      font-size: 10px;
+      letter-spacing: -0.2px;
+      font-weight: 600;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+      width: 100%;
+    }
+
+    #startup-community-feed .category-btn.active {
+      color: #ffffff;
+    }
+
+    #startup-community-feed .category-btn.active .category-icon {
+      color: var(--purple-light);
+    }
+
+    #startup-community-feed .category-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 2.5px;
+      background-color: var(--purple-primary);
+      border-radius: 99px;
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.7);
+    }
+
+    /* --- TRENDING HERO CAROUSEL --- */
+    #startup-community-feed .trending-carousel-container {
+      background: linear-gradient(135deg, #09090e 0%, #12121d 100%);
+      border: 1px solid rgba(139, 92, 246, 0.12);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 4px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.04);
+    }
+
+    #startup-community-feed .trending-slides-wrapper {
+      position: relative;
+      min-height: 190px;
+    }
+
+    #startup-community-feed .trending-slide {
+      display: none;
+      grid-template-columns: 1fr 120px;
+      gap: 16px;
+      animation: reveal 0.35s ease-out;
+    }
+
+    #startup-community-feed .trending-slide.active {
+      display: grid;
+    }
+
+    #startup-community-feed .slide-content-left {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    #startup-community-feed .trending-badge {
+      font-size: 9px;
+      font-weight: 900;
+      color: var(--purple-light);
+      background: rgba(139, 92, 246, 0.15);
+      padding: 4px 10px;
+      border-radius: 99px;
+      letter-spacing: 0.8px;
+      margin-bottom: 10px;
+    }
+
+    #startup-community-feed .slide-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0;
+      line-height: 1.3;
+      letter-spacing: -0.2px;
+    }
+
+    #startup-community-feed .slide-accent-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #a78bfa;
+      margin: 2px 0 8px;
+      line-height: 1.2;
+      text-shadow: 0 0 15px rgba(139, 92, 246, 0.35);
+    }
+
+    #startup-community-feed .slide-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin: 0 0 14px;
+      max-width: 90%;
+    }
+
+    #startup-community-feed .slide-cta-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 10.5px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    #startup-community-feed .slide-cta-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    #startup-community-feed .slide-cta-btn i {
+      font-size: 10px;
+      transition: transform 0.2s ease;
+    }
+
+    #startup-community-feed .slide-cta-btn:hover i {
+      transform: translateX(3px);
+    }
+
+    #startup-community-feed .slide-graphic-right {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #startup-community-feed .graphic-stat-badge {
+      position: absolute;
+      top: -10px;
+      right: -5px;
+      background: rgba(11, 11, 19, 0.75);
+      border: 1.5px solid rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(10px);
+      padding: 6px 10px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    #startup-community-feed .stat-badge-num {
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+    }
+
+    #startup-community-feed .stat-badge-label {
+      font-size: 8px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    #startup-community-feed .chart-visual-container {
+      width: 100px;
+      height: 90px;
+      position: relative;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      padding: 8px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    #startup-community-feed .chart-grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 10px 10px;
+      pointer-events: none;
+    }
+
+    #startup-community-feed .chart-bars-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    #startup-community-feed .chart-bar-pillar {
+      width: 14px;
+      height: var(--height);
+      background: linear-gradient(to top, var(--color-end), var(--color-start));
+      border-radius: 3px 3px 0 0;
+      opacity: 0.35;
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+    }
+
+    #startup-community-feed .chart-svg-line {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    #startup-community-feed .carousel-dots-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 18px;
+    }
+
+    #startup-community-feed .carousel-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #27272a;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    #startup-community-feed .carousel-dot.active {
+      background: var(--purple-primary);
+      transform: scale(1.3);
+      box-shadow: 0 0 8px var(--purple-light);
+    }
+
+    /* --- FEED TOOLS & SORT dropdown --- */
+    #startup-community-feed .feed-tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    #startup-community-feed .latest-updates-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0;
+      letter-spacing: -0.3px;
+    }
+
+    #startup-community-feed .sort-dropdown-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    #startup-community-feed .sort-select option { background: #111113; color: #ffffff; }
+    #startup-community-feed .sort-select {
+      appearance: none;
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #e2e8f0;
+      padding: 6px 28px 6px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    #startup-community-feed .sort-select:focus {
+      border-color: var(--purple-primary);
+      box-shadow: 0 0 8px rgba(139, 92, 246, 0.2);
+    }
+
+    #startup-community-feed .sort-select-icon {
+      position: absolute;
+      right: 10px;
+      pointer-events: none;
+      font-size: 9px;
+      color: #9ca3af;
+    }
+
+    /* --- POST CARDS --- */
+    #startup-community-feed .post-card {
+      background: var(--card-dark);
+      border: 1px solid var(--border-dark);
+      border-radius: 0;
+      overflow: hidden;
+      margin-bottom: 4px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      animation: reveal 0.3s ease-out;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    #startup-community-feed .post-card.hidden {
+      display: none;
+    }
+
+    #startup-community-feed .post-cover-img-wrap {
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #startup-community-feed .post-cover-img-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(to top, var(--card-dark), transparent);
+    }
+
+    #startup-community-feed .post-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    #startup-community-feed .post-card:hover .post-cover-img {
+      transform: scale(1.02);
+    }
+
+    #startup-community-feed .post-main {
+      padding: 8px 10px;
+    }
+
+    #startup-community-feed .post-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    #startup-community-feed .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25);
+    }
+
+    #startup-community-feed .post-author {
+      flex: 1;
+      min-width: 0;
+    }
+
+    #startup-community-feed .author-line {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    #startup-community-feed .author-name {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    #startup-community-feed .verified {
+      color: #10b981;
+      display: inline-flex;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    #startup-community-feed .post-meta {
+      font-size: 10px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    #startup-community-feed .category-badge-meta {
+      color: var(--purple-light);
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    #startup-community-feed .more-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: #4b5563;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    #startup-community-feed .more-btn:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: #ffffff;
+    }
+
+    #startup-community-feed .post-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      line-height: 1.35;
+      color: #ffffff;
+      margin: 10px 0 6px;
+      letter-spacing: -0.2px;
+    }
+
+    #startup-community-feed .post-copy {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: 0 0 14px;
+      white-space: pre-wrap;
+    }
+
+    #startup-community-feed .source-row {
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      padding-top: 10px;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 9.5px;
+      color: var(--text-muted);
+    }
+
+    #startup-community-feed .source-link {
+      color: var(--purple-light);
+      text-decoration: none;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s ease;
+    }
+
+    #startup-community-feed .source-link:hover {
+      color: #ffffff;
+    }
+
+    /* --- STATS & FOOTER ACTIONS --- */
+    #startup-community-feed .post-stats-row-container {
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      padding-top: 12px;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #startup-community-feed .post-footer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #startup-community-feed .face-pile {
+      display: flex;
+      align-items: center;
+    }
+
+    #startup-community-feed .pile-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid var(--card-dark);
+      object-fit: cover;
+      display: inline-block;
+    }
+
+    #startup-community-feed .appreciation-text-span {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    #startup-community-feed .appreciation-text-span strong {
+      color: #ffffff;
+    }
+
+    #startup-community-feed .post-footer-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    #startup-community-feed .post-action-icon-only {
+      background: transparent;
+      border: none;
+      color: #6b7280;
+      font-size: 16.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      transition: all 0.2s ease;
+    }
+
+    #startup-community-feed .post-action-icon-only:hover {
+      color: #ffffff;
+    }
+
+    #startup-community-feed .post-action-icon-only.active {
+      color: #ef4444; /* Bright red active state for like heart! */
+    }
+
+    #startup-community-feed .post-action-icon-only.active .fa-heart {
+      font-weight: 900;
+    }
+
+    #startup-community-feed .post-action-icon-only.active .icon {
+      fill: #ef4444;
+    }
+
+    #startup-community-feed .btn-stat-count {
+      font-size: 11px;
+      font-weight: 600;
+      color: #9ca3af;
+    }
+
+    /* --- NOTIFICATION PANEL --- */
+    #startup-community-feed .notifications {
+      position: absolute;
+      right: 0;
+      top: 48px;
+      width: 290px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0;
+      padding: 8px;
+      display: none;
+      background: #0d0d0f;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.8);
+      z-index: 100;
+    }
+
+    #startup-community-feed .notifications.open {
+      display: block;
+      animation: reveal 0.2s ease-out;
+    }
+
+    #startup-community-feed .notifications-head {
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      margin-bottom: 6px;
+    }
+
+    #startup-community-feed .notifications-head strong {
+      font-size: 12.5px;
+      color: #ffffff;
+    }
+
+    #startup-community-feed .mark-read {
+      border: none;
+      background: transparent;
+      color: var(--purple-light);
+      cursor: pointer;
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+
+    #startup-community-feed .notification-item {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    #startup-community-feed .notification-item:last-child {
+      border-bottom: none;
+    }
+
+    #startup-community-feed .notification-title {
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.4;
+    }
+
+    #startup-community-feed .notification-time {
+      font-size: 9px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* --- COMMENTS SECTION --- */
+    #startup-community-feed .comments-section {
+      display: none;
+      background: #0b0b0d;
+      border-top: 1px solid rgba(255,255,255,0.03);
+      padding: 16px;
+    }
+
+    #startup-community-feed .comments-section.open {
+      display: block;
+    }
+
+    #startup-community-feed .comment-list {
+      margin-bottom: 14px;
+      max-height: 240px;
+      overflow-y: auto;
+    }
+
+    #startup-community-feed .comment-item {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 11.5px;
+    }
+
+    #startup-community-feed .comment-item:last-child {
+      border-bottom: none;
+    }
+
+    #startup-community-feed .comment-name {
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    #startup-community-feed .comment-text {
+      color: var(--text-secondary);
+      margin-top: 3px;
+    }
+
+    #startup-community-feed .comment-form-inline {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    #startup-community-feed .comment-input {
+      width: 100%;
+      border: 1.5px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #111113;
+      color: #ffffff;
+      font-size: 12px;
+      resize: vertical;
+      outline: none;
+    }
+
+    #startup-community-feed .comment-input:focus {
+      border-color: var(--purple-primary);
+    }
+
+    #startup-community-feed .name-input {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    #startup-community-feed .name-input input {
+      flex: 1;
+      border: 1.5px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 11.5px;
+      background: #111113;
+      color: #ffffff;
+      outline: none;
+    }
+
+    #startup-community-feed .name-input input:focus {
+      border-color: var(--purple-primary);
+    }
+
+    #startup-community-feed .post-comment-btn {
+      background: var(--purple-primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 30px;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      align-self: flex-end;
+      transition: background 0.2s ease;
+    }
+
+    #startup-community-feed .post-comment-btn:hover {
+      background: #7c3aed;
+    }
+
+    /* --- FEED EMPTY --- */
+    #startup-community-feed .feed-empty {
+      display: none;
+      border: 1px dashed rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 40px 16px;
+      background: rgba(255, 255, 255, 0.01);
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    #startup-community-feed .feed-empty strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #ffffff;
+      font-size: 15px;
+    }
+
+    /* --- TOAST --- */
+    #startup-community-feed .toast {
+      position: fixed;
+      z-index: 1000;
+      left: 50%;
+      bottom: max(80px, calc(80px + env(safe-area-inset-bottom)));
+      min-width: 200px;
+      max-width: 90vw;
+      border-radius: 12px;
+      padding: 10px 16px;
+      background: #1c1c24;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 10px);
+      transition: all 0.2s ease;
+    }
+
+    #startup-community-feed .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    #startup-community-feed .owner-note {
+      margin: 32px auto 0;
+      color: var(--text-muted);
+      font-size: 9px;
+      text-align: center;
+      max-width: 80%;
+      line-height: 1.4;
+    }
+
+    /* --- ANIMATION KEYFRAMES --- */
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- MOBILE & DESKTOP COMPATIBILITY OVERRIDES --- */
+    @media (max-width: 760px) {
+      #startup-community-feed .topbar {
+        padding: 2px 0;
+      }
+      #startup-community-feed .topbar-inner {
+        padding: 0.5px 0.5%;
+        flex-direction: row;
+        gap: 6px;
+      }
+      #startup-community-feed .search-wrap {
+        order: 3;
+        width: 100%;
+        margin-top: 1px;
+      }
+      #startup-community-feed .page-shell {
+        padding-top: 1px;
+      }
+      #startup-community-feed .category-nav {
+        /* Removed negative margins to align perfectly with content */
+      }
+    }
+
+    @media (max-width: 480px) {
+      #startup-community-feed .trending-slide {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      #startup-community-feed .slide-graphic-right {
+        justify-content: flex-start;
+        padding-left: 5px;
+      }
+      #startup-community-feed .chart-visual-container {
+        width: 100%;
+        max-width: 130px;
+        height: 70px;
+      }
+    }
+
+    /* --- DESKTOP REDESIGN (min-width: 761px) --- */
+    @media (min-width: 761px) {
+      #startup-community-feed .topbar {
+        padding: 4px 0;
+        background: #060608;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      #startup-community-feed .topbar-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 0.5%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 16px;
+      }
+
+      #startup-community-feed .brand-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+
+      #startup-community-feed .spread-bold {
+        font-weight: 800;
+        color: #ffffff;
+        background: none;
+        -webkit-background-clip: unset;
+        -webkit-text-fill-color: unset;
+      }
+
+      #startup-community-feed .search-wrap {
+        max-width: 540px;
+        flex: 1;
+        margin-left: auto;
+      }
+
+      #startup-community-feed .search {
+        background: #0d0d0f;
+        border: 1px solid #1f2024;
+        border-radius: 8px; /* Moderately rounded, match reference */
+        font-size: 13.5px;
+        height: 38px;
+        padding-left: 44px;
+      }
+
+      #startup-community-feed .search-wrap .icon {
+        left: 16px;
+        width: 18px;
+        height: 18px;
+        color: #9ca3af;
+      }
+
+      #startup-community-feed .search-key {
+        display: none;
+      }
+
+      #startup-community-feed .user-avatar-container-desktop {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+      }
+
+      #startup-community-feed .user-avatar-container-desktop .avatar-chevron {
+        display: inline-block;
+        font-size: 11px;
+        color: #9ca3af;
+        transition: transform 0.2s ease, color 0.2s ease;
+      }
+
+      #startup-community-feed .user-avatar-container-desktop:hover .avatar-chevron {
+        color: #ffffff;
+        transform: translateY(1px);
+      }
+
+      #startup-community-feed .page-shell {
+        max-width: 1100px;
+        padding: 2px 0.5% 140px;
+      }
+
+      /* Category Navigation Updates */
+      #startup-community-feed .category-nav {
+        justify-content: center;
+        gap: 40px; /* Space out elegantly */
+        padding: 4px 0;
+        margin: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        margin-bottom: 4px;
+      }
+
+      #startup-community-feed .category-btn {
+        flex: 0 0 auto;
+        width: auto;
+        flex-direction: row;
+        gap: 8px;
+        padding: 12px 4px;
+        color: #9ca3af;
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+
+      #startup-community-feed .category-btn .category-icon {
+        font-size: 20px;
+        color: #9ca3af;
+      }
+
+      #startup-community-feed .category-btn .category-label {
+        font-size: 11px;
+        font-weight: 500;
+      }
+
+      #startup-community-feed .category-btn.active {
+        color: #ffffff;
+      }
+
+      #startup-community-feed .category-btn.active .category-icon {
+        color: #ffffff; /* Match active text color on desktop */
+      }
+
+      #startup-community-feed .category-btn.active::after {
+        bottom: -13px; /* Align precisely with Category-Nav border */
+        width: 100%;
+        height: 2px;
+        background-color: #8b5cf6;
+        box-shadow: 0 0 12px rgba(139, 92, 246, 0.8);
+      }
+
+      #startup-community-feed .category-btn:hover {
+        color: #ffffff;
+      }
+
+      #startup-community-feed .category-btn:hover .category-icon {
+        color: #ffffff;
+      }
+
+      /* Hero Carousel Card Updates */
+      #startup-community-feed .trending-carousel-container {
+        padding: 40px 48px;
+        background: linear-gradient(135deg, #09090e 0%, #11111c 100%);
+        border: 1px solid rgba(139, 92, 246, 0.08);
+        border-radius: 20px;
+        margin-bottom: 6px;
+        min-height: 310px;
+      }
+
+      #startup-community-feed .trending-slide {
+        grid-template-columns: 1.1fr 1fr;
+        gap: 48px;
+        min-height: 230px;
+      }
+
+      #startup-community-feed .slide-content-left {
+        padding-right: 12px;
+      }
+
+      #startup-community-feed .trending-badge {
+        font-size: 10px;
+        padding: 5px 12px;
+        background: rgba(139, 92, 246, 0.15);
+        color: #a78bfa;
+        font-weight: 700;
+        border-radius: 4px;
+        margin-bottom: 16px;
+      }
+
+      #startup-community-feed .slide-title {
+        font-size: 1.85rem;
+        font-weight: 800;
+        line-height: 1.15;
+      }
+
+      #startup-community-feed .slide-accent-title {
+        font-size: 1.85rem;
+        font-weight: 900;
+        color: #8b5cf6;
+        margin: 2px 0 16px;
+      }
+
+      #startup-community-feed .slide-desc {
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: #9ca3af;
+        margin-bottom: 24px;
+        max-width: 90%;
+      }
+
+      #startup-community-feed .slide-cta-btn {
+        background: #ffffff;
+        color: #0d0d0f;
+        padding: 10px 22px;
+        font-size: 13px;
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      #startup-community-feed .slide-cta-btn:hover {
+        background: #e2e8f0;
+        transform: translateY(-1px);
+      }
+
+      #startup-community-feed .chart-visual-container {
+        width: 100%;
+        max-width: 440px;
+        height: 180px;
+        background: rgba(255, 255, 255, 0.01);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        border-radius: 0;
+        padding: 16px;
+      }
+
+      #startup-community-feed .chart-bar-pillar {
+        width: 24px;
+        border-radius: 6px 6px 0 0;
+        opacity: 0.25;
+      }
+
+      #startup-community-feed .graphic-stat-badge {
+        top: -15px;
+        right: -15px;
+        padding: 10px 16px;
+        border-radius: 12px;
+        background: rgba(11, 11, 19, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      #startup-community-feed .stat-badge-num {
+        font-size: 17px;
+        font-weight: 800;
+      }
+
+      #startup-community-feed .stat-badge-label {
+        font-size: 9px;
+        margin-top: 3px;
+      }
+
+      #startup-community-feed .carousel-dots-row {
+        margin-top: 24px;
+      }
+
+      /* Feed Tools Section */
+      #startup-community-feed .feed-tools {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        gap: 16px;
+      }
+
+      #startup-community-feed .feed-tools-left {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      #startup-community-feed .latest-updates-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+      }
+
+      #startup-community-feed .feed-subtitle {
+        display: block;
+        font-size: 13.5px;
+        color: #6b7280;
+        margin-top: 4px;
+        font-weight: 400;
+      }
+
+      #startup-community-feed .feed-tools-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      #startup-community-feed .sort-select option { background: #111113; color: #ffffff; }
+    #startup-community-feed .sort-select {
+        padding: 10px 36px 10px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        background: #0d0d0f;
+        border: 1px solid #1f2024;
+      }
+
+      #startup-community-feed .filter-desktop-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #0d0d0f;
+        border: 1.5px solid rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        padding: 9px 18px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      #startup-community-feed .filter-desktop-btn:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+
+      /* Post Card Updates */
+      #startup-community-feed .post-card {
+        border-radius: 0;
+        border: 1.5px solid rgba(255, 255, 255, 0.04);
+        margin-bottom: 6px;
+        background: #0c0c0e;
+        transition: border-color 0.25s ease, transform 0.25s ease;
+      }
+
+      #startup-community-feed .post-card:hover {
+        border-color: rgba(139, 92, 246, 0.15);
+        transform: translateY(-2px);
+      }
+
+      #startup-community-feed .post-cover-img-wrap {
+        height: 380px;
+      }
+
+      #startup-community-feed .post-cover-img-wrap::after {
+        background: linear-gradient(to top, #0c0c0e, transparent);
+        height: 80px;
+      }
+
+      #startup-community-feed .post-main {
+        padding: 16px 20px 20px;
+      }
+
+      #startup-community-feed .post-head {
+        margin-bottom: 18px;
+      }
+
+      #startup-community-feed .avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        font-size: 13px;
+      }
+
+      #startup-community-feed .author-name {
+        font-size: 15px;
+      }
+
+      #startup-community-feed .post-meta {
+        font-size: 11.5px;
+        margin-top: 3px;
+        gap: 8px;
+      }
+
+      #startup-community-feed .post-title {
+        font-size: 1.55rem;
+        font-weight: 800;
+        margin: 18px 0 10px;
+      }
+
+      #startup-community-feed .post-copy {
+        font-size: 14.5px;
+        color: #9ca3af;
+        line-height: 1.65;
+        margin-bottom: 24px;
+      }
+
+      #startup-community-feed .source-row {
+        padding-top: 14px;
+        margin-top: 20px;
+        font-size: 11.5px;
+      }
+
+      #startup-community-feed .post-stats-row-container {
+        padding-top: 18px;
+        margin-top: 22px;
+        border-top: 1.5px solid rgba(255, 255, 255, 0.04);
+      }
+
+      #startup-community-feed .pile-avatar {
+        width: 24px;
+        height: 24px;
+      }
+
+      #startup-community-feed .appreciation-text-span {
+        font-size: 12.5px;
+      }
+
+      #startup-community-feed .post-footer-right-actions {
+        gap: 22px;
+      }
+
+      #startup-community-feed .post-action-icon-only {
+        font-size: 18.5px;
+        gap: 8px;
+      }
+
+      #startup-community-feed .btn-stat-count {
+        font-size: 13px;
+      }
+    }
+  
+    /* --- LIGHT MODE OVERRIDES FOR STARTUP SECTION --- */
+    html:not(.dark) #startup-community-feed {
+      background-color: #f4f6fa;
+      color: #111827;
+    }
+    html:not(.dark) #startup-community-feed .topbar { background: rgba(255, 255, 255, 0.85); border-bottom-color: rgba(0, 0, 0, 0.05); }
+    html:not(.dark) #startup-community-feed .topbar-inner { background: transparent; }
+    @media (min-width: 761px) {
+      html:not(.dark) #startup-community-feed .topbar { background: #ffffff; border-bottom-color: rgba(0, 0, 0, 0.05); }
+    }
+    html:not(.dark) #startup-community-feed .search { background: #f8fafc; border-color: #e2e8f0; color: #111827; }
+    html:not(.dark) #startup-community-feed .search-wrap .icon { color: #64748b; }
+    html:not(.dark) #startup-community-feed .search-key { background: #e2e8f0; color: #475569; }
+    html:not(.dark) #startup-community-feed .user-avatar-container-desktop:hover .avatar-chevron { color: #111827; }
+
+    html:not(.dark) #startup-community-feed .category-btn { color: #64748b; }
+    html:not(.dark) #startup-community-feed .category-btn .category-icon { color: #64748b; }
+    html:not(.dark) #startup-community-feed .category-btn.active { color: #111827; }
+    html:not(.dark) #startup-community-feed .category-btn.active .category-icon { color: #111827; }
+    html:not(.dark) #startup-community-feed .category-btn:hover { color: #111827; }
+    html:not(.dark) #startup-community-feed .category-btn:hover .category-icon { color: #111827; }
+
+    html:not(.dark) #startup-community-feed .trending-carousel-container { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-color: #e2e8f0; }
+    html:not(.dark) #startup-community-feed .slide-desc { color: #64748b; }
+    html:not(.dark) #startup-community-feed .slide-cta-btn { background: #111827; color: #ffffff; }
+    html:not(.dark) #startup-community-feed .slide-cta-btn:hover { background: #334155; }
+    html:not(.dark) #startup-community-feed .chart-visual-container { background: #f1f5f9; border-color: #e2e8f0; }
+    html:not(.dark) #startup-community-feed .graphic-stat-badge { background: rgba(255,255,255,0.9); border-color: #e2e8f0; color: #111827; }
+    html:not(.dark) #startup-community-feed .graphic-stat-badge .stat-badge-num { color: #111827; }
+
+    html:not(.dark) #startup-community-feed .sort-select option { background: #111113; color: #ffffff; }
+    #startup-community-feed .sort-select { background: #f8fafc; border-color: #e2e8f0; color: #111827; }
+    html:not(.dark) #startup-community-feed .filter-desktop-btn { background: #ffffff; border-color: #e2e8f0; color: #111827; }
+    html:not(.dark) #startup-community-feed .filter-desktop-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+
+    html:not(.dark) #startup-community-feed .post-card { background: #ffffff; border-color: #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+    html:not(.dark) #startup-community-feed .post-card:hover { border-color: #cbd5e1; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+    html:not(.dark) #startup-community-feed .post-cover-img-wrap::after { background: linear-gradient(to top, #ffffff, transparent); }
+
+    html:not(.dark) #startup-community-feed .post-copy { color: #475569; }
+    html:not(.dark) #startup-community-feed .source-row { color: #64748b; }
+    html:not(.dark) #startup-community-feed .post-stats-row-container { border-top-color: #f1f5f9; }
+
+    html:not(.dark) #startup-community-feed .post-action-icon-only { color: #64748b; }
+    html:not(.dark) #startup-community-feed .post-action-icon-only:hover { color: #111827; }
+    html:not(.dark) #startup-community-feed .btn-stat-count { color: #64748b; }
+    html:not(.dark) #startup-community-feed .appreciation-text-span { color: #64748b; }
+    html:not(.dark) #startup-community-feed .appreciation-text-span strong { color: #111827; }
+
+    html:not(.dark) #startup-community-feed .comments-section { background: #f8fafc; border-top-color: #e2e8f0; }
+    html:not(.dark) #startup-community-feed .comment-item { border-bottom-color: #e2e8f0; }
+    html:not(.dark) #startup-community-feed .comment-name { color: #111827; }
+    html:not(.dark) #startup-community-feed .comment-text { color: #475569; }
+    html:not(.dark) #startup-community-feed .comment-input,
+    html:not(.dark) #startup-community-feed .name-input input { background: #ffffff; border-color: #cbd5e1; color: #111827; }
+    html:not(.dark) #startup-community-feed .post-comment-btn { color: #111827; }
+
+    html:not(.dark) #startup-community-feed .feed-empty { background: #f8fafc; border-color: #cbd5e1; color: #475569; }
+    html:not(.dark) #startup-community-feed .feed-empty strong { color: #111827; }
+
+    html:not(.dark) #startup-community-feed .brand-title .spread-bold { color: #111827; }
+    html:not(.dark) #startup-community-feed .post-title { color: #111827; }
+    html:not(.dark) #startup-community-feed .author-name { color: #111827; }
+    html:not(.dark) #startup-community-feed .slide-title { color: #111827; }
+    html:not(.dark) #startup-community-feed .latest-updates-title { color: #111827; }
+    html:not(.dark) #startup-community-feed .feed-subtitle { color: #475569; }
+</style>
 </head>
 <body class="bg-[#f4f6fa] text-slate-800 font-sans antialiased overflow-x-hidden" style="font-family: 'Inter', -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Fira Sans', Ubuntu, Oxygen, 'Oxygen Sans', Cantarell, 'Droid Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Lucida Grande', Helvetica, Arial, sans-serif; overflow-y: scroll; scrollbar-gutter: stable;">
 
   <!-- Name Modal -->
-  <div id="nameModal" class="fixed inset-0 z-[100] hidden flex-col items-center justify-center bg-slate-900/40 backdrop-blur-sm" style="display: none;">
+  <div id="nameModal" class="fixed inset-0 z-[100] hidden flex-col items-center justify-center bg-slate-900/40 backdrop-blur-sm">
     <div class="bg-white rounded-[24px] shadow-xl p-6 w-[90%] max-w-[340px] border border-slate-100">
       <h3 class="text-[18px] font-bold text-[#111827] mb-1 text-center">Welcome!</h3>
       <p class="text-[14px] text-slate-500 mb-5 text-center leading-relaxed">Enter your name to post and comment.</p>
-      <input type="text" id="nameModalInput" class="w-full bg-slate-50 border border-slate-200 rounded-[16px] px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:bg-white transition-all text-[15px] font-medium text-slate-700" placeholder="Your Name">
+      <input type="text" id="nameModalInput" class="w-full bg-slate-50 border border-slate-200 rounded-[16px] px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:bg-white transition-all text-[16px] md:text-[15px] font-medium text-slate-700" placeholder="Your Name">
       <div class="flex gap-2">
         <button id="nameModalCancel" class="flex-1 px-4 py-3 rounded-[16px] text-slate-500 font-bold text-[14px] hover:bg-slate-50 transition-colors">Cancel</button>
         <button id="nameModalSave" class="flex-1 px-4 py-3 rounded-[16px] bg-[#111827] text-white font-bold text-[14px] hover:bg-black transition-colors shadow-sm">Continue</button>
@@ -186,12 +1975,22 @@
     </div>
   </div>
 
-  <div class="w-full max-w-[1100px] mx-auto px-1.5 md:px-6 pt-2 pb-2 md:pt-4 md:pb-6">
-    <div class="flex flex-wrap items-center justify-between gap-y-2 gap-x-2 mb-3">
+  <!-- Image Zoom Lightbox Modal -->
+  <div id="imageZoomModal" class="fixed inset-0 z-[110] hidden flex flex-col items-center justify-center bg-black/95 backdrop-blur-sm transition-opacity duration-300 opacity-0 cursor-zoom-out" style="display: none;">
+    <button id="closeZoomModal" class="absolute top-4 right-4 text-white hover:text-slate-300 text-3xl focus:outline-none p-3 z-[120]" aria-label="Close image zoom">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="max-w-[95%] max-h-[85%] overflow-hidden flex items-center justify-center relative p-2">
+      <img id="zoomedImage" src="" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl transition-transform duration-300 scale-95" alt="Zoomed view">
+    </div>
+  </div>
+
+  <div class="w-full max-w-[1100px] mx-auto px-0 md:px-3 pt-2 pb-2 md:pt-4 md:pb-6">
+    <div class="flex flex-wrap items-center justify-between gap-y-2 gap-x-2 mb-3 px-[3%]">
       <!-- Logo and Subtitle -->
       <div class="flex-shrink-0">
-        <h1 class="font-extrabold text-[#111827] text-[1.6rem] md:text-[2rem] leading-tight tracking-normal">
-          Spread<span class="text-[#7C3AED]">One</span>
+        <h1 style="font-weight: 800; font-size: 1.12rem; letter-spacing: normal; display: flex; align-items: center; font-family: 'Inter', sans-serif;" class="text-[#111827]">
+          Spread&nbsp;<span class="text-[#7C3AED]">One</span>
         </h1>
         <div class="text-[11px] md:text-[13px] text-slate-500 font-medium flex items-center gap-1 mt-0 tracking-normal">
           <span>Communities</span>
@@ -205,7 +2004,7 @@
       <!-- Search Bar -->
       <div class="w-full md:flex-1 md:w-auto order-last md:order-none relative max-w-2xl md:mx-4 mt-0.5 md:mt-0">
         <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[13px]"></i>
-        <input type="text" id="searchInput" placeholder="Search..." class="w-full bg-white md:bg-slate-50/50 hover:bg-slate-50 border border-slate-100 rounded-full py-1.5 md:py-2.5 pl-9 pr-4 text-[13px] md:text-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.03)] outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-300 transition-all font-medium text-slate-700 placeholder-slate-400">
+        <input type="text" id="searchInput" placeholder="Search..." class="w-full bg-white md:bg-slate-50/50 hover:bg-slate-50 border border-slate-100 rounded-full py-1.5 md:py-2.5 pl-9 pr-4 text-[16px] md:text-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.03)] outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-300 transition-all font-medium text-slate-700 placeholder-slate-400">
       </div>
 
       <!-- Right Actions -->
@@ -215,6 +2014,9 @@
             <i class="far fa-bell text-[1.5rem] md:text-[1.6rem]"></i>
             <span id="headerBellCount" style="display:none;" class="absolute -top-1.5 -right-1.5 bg-[#ef4444] text-white text-[10px] sm:text-[11px] font-bold w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-2 border-[#f4f6fa] md:border-white">0</span>
           </button>
+        </div>
+        <div class="relative">
+          <div id="headerAvatar" class="user-avatar-dynamic w-8 h-8 rounded-full shadow-sm cursor-pointer flex items-center justify-center font-bold text-white text-[14px]" style="background-color: #94a3b8;">?</div>
           <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.1)] border border-slate-100 py-1.5 z-50">
             <div class="px-4 py-2 text-xs text-slate-500 font-bold uppercase tracking-wider border-b border-slate-50/50 mb-1">Appearance</div>
             <button id="lightModeBtn" class="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 transition-colors font-medium">
@@ -225,17 +2027,16 @@
             </button>
           </div>
         </div>
-        <div id="headerAvatar" class="user-avatar-dynamic w-8 h-8 rounded-full shadow-sm cursor-pointer flex items-center justify-center font-bold text-white text-[14px]" style="background-color: #94a3b8;">?</div>
       </div>
     </div>
 
-  <div id="postCreationCard" class="bg-white rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-slate-100 p-1.5 sm:p-2 mb-2">
+  <div id="postCreationCard" class="bg-white rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-slate-100 p-1.5 sm:p-2 mb-1.5">
     <div class="flex flex-col gap-1 sm:gap-1.5 creator-row">
       <div class="flex items-start justify-between gap-1.5">
         <div class="flex items-start gap-2 flex-1 min-w-0">
           <div id="creatorAvatar" class="user-avatar-dynamic w-8 h-8 rounded-full shadow-sm flex items-center justify-center font-bold text-white text-[14px]" style="background-color: #94a3b8;">?</div>
           <div class="flex flex-col flex-1 min-w-0">
-            <div class="font-bold text-[#111827] text-[12px] sm:text-[13px] flex items-center gap-0.5"><span id="postAuthorNameDisplay" class="font-bold">You</span></div>
+            <div class="font-bold text-[#111827] text-[12px] sm:text-[13px] flex items-center gap-0.5"><span id="postAuthorNameDisplay" class="font-bold" style="padding-right: 4px;">You</span></div>
             <div id="postContent" contenteditable="true" data-placeholder="What's on your mind today?" class="text-[12px] sm:text-[13px] text-slate-700 bg-transparent focus:outline-none min-h-[18px] mt-0 w-full leading-relaxed break-words whitespace-pre-wrap outline-none cursor-text max-h-[120px] overflow-y-auto"></div>
           </div>
         </div>
@@ -262,7 +2063,7 @@
     </div>
   </div>
 
-  <div id="filtersSection" class="bg-white rounded-[16px] shadow-[0_2px_12px_rgba(0,0,0,0.02)] border border-slate-100 py-1.5 px-2 mb-2 flex justify-between gap-1 overflow-hidden">
+  <div id="filtersSection" class="bg-white rounded-[16px] shadow-[0_2px_12px_rgba(0,0,0,0.02)] border border-slate-100 py-1.5 px-2 mb-1.5 flex justify-between gap-1 overflow-hidden">
     <button onclick="window.location.hash='home'" class="flex flex-col items-center justify-center py-1.5 px-1 sm:px-3 min-w-0 text-center hover:bg-slate-50 rounded-[12px] transition-colors flex-1">
       <svg class="w-5 h-5 text-slate-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
       <span class="text-[10px] sm:text-[11px] font-semibold text-slate-700 tracking-normal truncate w-full">For You</span>
@@ -293,14 +2094,309 @@
 
   <div id="feedContainer"></div>
   
-  <div id="iframe-community" class="iframe-container">
-    <iframe src="/community.html" title="Community"></iframe>
+  <div id="iframe-community" class="iframe-container" style="overflow-y: auto;">
+    <div class="community-page">
+      <div class="community-top">
+          <h1 class="community-title" style="font-weight: 800; font-size: 1.12rem; letter-spacing: normal; display: flex; align-items: center; font-family: 'Inter', sans-serif;">
+              <span class="spread-text">Spread</span>&nbsp;<span style="color: #7C3AED;">One</span>&nbsp;<span style="font-weight: 500; font-size: 0.84rem; color: #64748b;">Community</span>
+          </h1>
+          <button class="community-ask-btn" onclick="openCommunityModal()">Ask Question</button>
+      </div>
+  
+      <div class="community-search-wrap">
+          <input type="text" class="community-search" id="communitySearch" placeholder="Search discussions...">
+          <div class="search-suggestions" id="searchSuggestions"></div>
+      </div>
+  
+      <div class="community-chips">
+          <div class="community-chip active" data-category="All">All</div>
+          <div class="community-chip" data-category="Interviews">Interviews</div>
+          <div class="community-chip" data-category="Companies">Companies</div>
+          <div class="community-chip" data-category="Career">Career</div>
+          <div class="community-chip" data-category="Startups">Startups</div>
+          <div class="community-chip" data-category="Finance">Finance</div>
+          <div class="community-chip" data-category="AI">AI</div>
+          <div class="community-chip" data-category="Coding">Coding</div>
+          <div class="community-chip" data-category="Remote Work">Remote Work</div>
+          <div class="community-chip" data-category="Jobs">Jobs</div>
+          <div class="community-chip" data-category="Resume">Resume</div>
+      </div>
+  
+      <div class="community-feed" id="communityFeed"></div>
+    </div>
+  
+    <div class="community-modal" id="communityModal">
+        <div class="community-modal-box">
+            <div class="community-modal-title">Ask Question</div>
+            <div class="community-field" id="questionNameField">
+                <input type="text" id="questionName" placeholder="Your Name">
+            </div>
+            <div class="community-field">
+                <input type="text" id="questionText" placeholder="Ask your question...">
+            </div>
+            <div class="community-field">
+                <select id="questionCategory">
+                    <option>Interviews</option><option>Companies</option><option>Career</option>
+                    <option>Startups</option><option>Finance</option><option>AI</option>
+                    <option>Coding</option><option>Remote Work</option><option>Jobs</option><option>Resume</option>
+                </select>
+            </div>
+            <button class="community-submit" onclick="postQuestion()">Post Question</button>
+        </div>
+    </div>
   </div>
-  <div id="iframe-jobs" class="iframe-container">
-    <iframe src="/jobs.html" title="Jobs"></iframe>
+  <div id="iframe-jobs" class="iframe-container" style="overflow-y: auto; background: #06080f;">
+    <div class="jobs-page-wrapper" style="position:relative; width:100%; height:100%; overflow-y:auto; overflow-x:hidden;">
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div class="wrap">
+  <div class="hero fi d1">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px;">
+        <div style="font-weight: 800; color: #ffffff; font-size: 1.12rem; letter-spacing: normal; font-family: 'Inter', sans-serif; display: flex; align-items: center;">
+            Spread&nbsp;<span style="color: #7C3AED;">One</span>
+        </div>
+        <div style="font-weight:700;font-size:12px;color:#fff;opacity:0.9;" class="find-job-txt">Find your dream job today</div>
+        <button class="post-job-btn" onclick="openPostModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 12px; height: 12px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Post a Job</span>
+        </button>
+    </div>
+    <h1>Find Your <span>Dream Job</span> Today</h1>
+    <p>Thousands of fresh opportunities. Always free.</p>
+
+    <div class="search-glass">
+      <div class="s-field">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="searchKeyword" placeholder="Job title, skills, company...">
+      </div>
+      <div class="s-field">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <input type="text" id="searchLocation" placeholder="City or remote...">
+      </div>
+      <div class="s-field">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <select id="searchExp">
+          <option value="">Experience level</option>
+          <option value="fresher">Fresher / 0-1 yr</option>
+          <option value="1-3">1-3 years</option>
+          <option value="3-5">3-5 years</option>
+          <option value="5-8">5-8 years</option>
+          <option value="8+">8+ years</option>
+        </select>
+      </div>
+      <button class="search-btn" onclick="runSearch()">Search Jobs</button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num" id="heroCount">-</div><div class="stat-lbl">Live Jobs</div></div>
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-lbl">Companies</div></div>
+      <div class="stat"><div class="stat-num">Free</div><div class="stat-lbl">Always</div></div>
+    </div>
   </div>
-  <div id="iframe-startups" class="iframe-container">
-    <iframe src="/startup.html" title="Startups"></iframe>
+
+  <div class="filter-bar fi d2">
+    <div class="filter-inner">
+      <span class="filter-label">Filter</span>
+      <div class="f-chip active" data-filter="">All Jobs</div>
+      <div class="f-chip" data-filter="remote">Remote</div>
+      <div class="f-chip" data-filter="full time">Full Time</div>
+      <div class="f-chip" data-filter="part time">Part Time</div>
+      <div class="f-chip" data-filter="internship">Internship</div>
+      <div class="f-chip" data-filter="fresher">Fresher</div>
+      <div class="result-meta"><span id="resultCount">0</span> jobs found</div>
+    </div>
+  </div>
+
+  <div class="lbl fi d3">Latest Jobs</div>
+  <div class="job-grid fi d3" id="job-list">
+    <div class="loading-state"><div class="spinner"></div>Loading jobs...</div>
+  </div>
+</div>
+
+<!-- Post Job Modal -->
+<div class="modal-overlay" id="postModalOverlay">
+  <div class="modal" id="postModal">
+    <div id="modalForm">
+      <div class="modal-head"><div><h2>Post a Job</h2><p>After review (within 24h) it goes live.</p></div><button class="modal-close" onclick="closePostModal()">Close</button></div>
+      <div class="v-section">Company</div>
+      <div class="v-grid"><div class="mfield"><label>Company *</label><input type="text" id="f_company" placeholder="TechCorp"></div><div class="mfield"><label>Industry *</label><select id="f_industry"><option>IT / Software</option><option>Banking</option><option>Healthcare</option><option>Other</option></select></div><div class="mfield"><label>Recruiter Email *</label><input type="email" id="f_email"></div><div class="mfield"><label>Website</label><input type="url" id="f_website"></div></div>
+      <div class="v-section">Job Details</div>
+      <div class="v-grid"><div class="mfield full"><label>Job Title *</label><input type="text" id="f_title"></div><div class="mfield"><label>Job Type *</label><select id="f_jobType"><option>Full Time</option><option>Part Time</option><option>Remote</option><option>Hybrid</option><option>Internship</option></select></div><div class="mfield"><label>Work Mode</label><select id="f_workMode"><option>On-site</option><option>Remote</option><option>Hybrid</option></select></div><div class="mfield"><label>Location *</label><input type="text" id="f_location"></div><div class="mfield"><label>Role</label><input type="text" id="f_role"></div></div>
+      <div class="v-section">Experience & Compensation</div>
+      <div class="v-grid"><div class="mfield"><label>Experience *</label><select id="f_experience"><option>Fresher / 0-1 yr</option><option>1-3 years</option><option>3-5 years</option><option>5-8 years</option><option>8+ years</option></select></div><div class="mfield"><label>Openings</label><input type="number" id="f_openings" placeholder="1"></div><div class="mfield full"><label>Salary Range</label><div class="salary-pair" style="display:flex;gap:8px;"><input type="number" id="f_salMin" placeholder="Min LPA"><span>to</span><input type="number" id="f_salMax" placeholder="Max LPA"></div></div><div class="mfield"><label>Salary Display</label><select id="f_salVis"><option value="show">Show range</option><option value="negotiable">Negotiable</option><option value="hidden">Not disclosed</option></select></div><div class="mfield"><label>Last Date</label><input type="text" id="f_lastDate" placeholder="31 July 2026"></div></div>
+      <div class="v-section">Skills & Description</div>
+      <div class="mfield"><label>Skills *</label><input type="text" id="f_skills" placeholder="React, Node, SQL"></div>
+      <div class="mfield"><label>Qualifications</label><input type="text" id="f_qual"></div>
+      <div class="mfield"><label>Job Description *</label><textarea id="f_desc" rows="3" maxlength="2000"></textarea><div class="char-count" id="f_descCount">0/2000</div></div>
+      <div class="mfield"><label>Perks</label><textarea id="f_perks" rows="2"></textarea></div>
+      <div class="mfield"><label>Apply Link (URL/Email)</label><input type="text" id="f_applyLink" placeholder="https://... or mailto:..."></div>
+      <div class="modal-footer"><button class="m-submit-btn" id="mSubmitBtn" onclick="handleModalSubmit()"><div class="m-submit-spin" id="mSpin"></div><span id="mLabel">Submit for Review</span></button><p class="modal-note">Pending approval before going live</p></div>
+    </div>
+    <div class="modal-success" id="modalSuccess"><div class="success-icon">✓</div><h3>Job Submitted!</h3><p>Your job is now pending review by founder.</p><button class="another-btn" onclick="resetModal()">Submit Another</button></div>
+  </div>
+</div>
+
+<!-- View Job Modal (JD + Apply Button) -->
+<div class="modal-overlay" id="viewModalOverlay">
+  <div class="modal" id="viewModal" style="max-width: 760px;">
+    <div class="modal-head">
+      <h2 id="viewJobTitle">Job Details</h2>
+      <button class="modal-close" onclick="closeViewModal()">Close</button>
+    </div>
+    <div id="viewJobContent">
+      <!-- dynamic content -->
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="jobsToast"><span id="jobsToastIcon">✓</span><span id="jobsToastMsg"></span></div>
+
+</div>
+  </div>
+  <div id="iframe-startups" class="iframe-container" style="overflow-y: auto;">
+    
+  <div id="startup-community-feed">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <defs>
+        <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#a78bfa" />
+          <stop offset="100%" stop-color="#8b5cf6" />
+        </linearGradient>
+        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+      <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></symbol>
+      <symbol id="i-comment" viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    </svg>
+    
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="#" aria-label="Startups home" style="text-decoration: none;">
+          <h1 class="brand-title" style="font-weight: 800; font-size: 1.12rem; letter-spacing: normal; display: flex; align-items: center; font-family: 'Inter', sans-serif;">
+            <span class="spread-text">Spread</span>&nbsp;<span style="color: #7C3AED;">One</span>&nbsp;<span style="font-weight: 500; font-size: 0.84rem; color: #64748b; text-transform: capitalize;">Startup</span>
+          </h1>
+        </a>
+        <label class="search-wrap" aria-label="Search posts">
+          <svg class="icon"><use href="#i-search"></use></svg>
+          <input class="search" id="startupSearchInput" type="search" placeholder="Search startup news, funding, events...">
+          <span class="search-key">/</span>
+        </label>
+        <div class="top-actions">
+          <button class="icon-btn" id="notificationButton" type="button" aria-label="Open notifications" aria-expanded="false" style="display: none !important;">
+            <svg class="icon"><use href="#i-bell"></use></svg>
+            <span class="notification-dot" id="notificationDot"></span>
+          </button>
+          <div class="user-avatar-container-desktop" style="display: none !important;">
+            <div class="user-avatar-wrap">
+              <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" alt="User Profile" class="user-avatar-img">
+            </div>
+            <i class="fa-solid fa-chevron-down avatar-chevron"></i>
+          </div>
+          <section class="notifications" id="notifications" aria-label="Notifications" style="display: none !important;">
+            <div class="notifications-head">
+              <strong>New today</strong>
+              <button class="mark-read" id="markRead" type="button">Mark all read</button>
+            </div>
+            <div id="notificationsList">Loading...</div>
+          </section>
+        </div>
+      </div>
+    </header>
+    
+    <main class="page-shell" id="publicView">
+      <nav class="category-nav" aria-label="Post categories">
+        <button class="category-btn active" type="button" data-filter="all">
+          <span class="category-icon"><i class="fa-solid fa-house"></i></span>
+          <span class="category-label">For you</span>
+        </button>
+        <button class="category-btn" type="button" data-filter="funding">
+          <span class="category-icon"><i class="fa-solid fa-circle-dollar-to-slot"></i></span>
+          <span class="category-label">Funding</span>
+        </button>
+        <button class="category-btn" type="button" data-filter="stories">
+          <span class="category-icon"><i class="fa-solid fa-file-lines"></i></span>
+          <span class="category-label">Stories</span>
+        </button>
+        <button class="category-btn" type="button" data-filter="events">
+          <span class="category-icon"><i class="fa-solid fa-calendar-days"></i></span>
+          <span class="category-label">Events</span>
+        </button>
+        <button class="category-btn" type="button" data-filter="accelerators">
+          <span class="category-icon"><i class="fa-solid fa-rocket"></i></span>
+          <span class="category-label">Accelerators</span>
+        </button>
+      </nav>
+
+      <!-- Trending Story Interactive Carousel -->
+      <div class="trending-carousel-container" id="trendingCarousel">
+        <div class="trending-slides-wrapper" id="trendingSlides">
+          <!-- Slide 1 -->
+          <div class="trending-slide active" data-slide="0">
+            <div class="slide-content-left">
+              <span class="trending-badge">TRENDING STORY</span>
+              <h2 class="slide-title">Indian VC Funding Hits</h2>
+              <div class="slide-accent-title">$2.8B in May 2026</div>
+              <p class="slide-desc">Strong momentum continues as early-stage startups attract highest investments across sectors.</p>
+              <button class="slide-cta-btn" type="button">
+                Read full story <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+            <div class="slide-graphic-right">
+              <div class="graphic-stat-badge">
+                <span class="stat-badge-num">$2.8B</span>
+                <span class="stat-badge-label">May 2026</span>
+              </div>
+              <div class="chart-visual-container">
+                <div class="chart-grid-lines"></div>
+                <div class="chart-bars-row">
+                  <div class="chart-bar-pillar" style="--height: 55%; --color-start: #3b82f6; --color-end: #1d4ed8;"></div>
+                  <div class="chart-bar-pillar" style="--height: 40%; --color-start: #a78bfa; --color-end: #7c3aed;"></div>
+                  <div class="chart-bar-pillar" style="--height: 85%; --color-start: #3b82f6; --color-end: #1d4ed8;"></div>
+                </div>
+                <svg class="chart-svg-line" viewBox="0 0 100 50" preserveAspectRatio="none">
+                  <path d="M 0,40 C 20,42 40,20 60,35 C 80,45 90,5 100,10" fill="none" stroke="url(#lineGrad)" stroke-width="3" filter="url(#glow)" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-dots-row">
+          <span class="carousel-dot active" data-index="0"></span>
+          <span class="carousel-dot" data-index="1"></span>
+          <span class="carousel-dot" data-index="2"></span>
+          <span class="carousel-dot" data-index="3"></span>
+          <span class="carousel-dot" data-index="4"></span>
+        </div>
+      </div>
+    
+      <div class="feed-tools" style="display: none;">
+        <span class="feed-status" id="feedStatus" style="display:none;">Loading posts...</span>
+      </div>
+    
+      <div class="feed-empty" id="feedEmpty"><strong>No posts found</strong>Try a different search or category.</div>
+      <section id="adminPosts" aria-label="Published posts"></section>
+      <p class="owner-note">Independent startup news summaries with clear source attribution.</p>
+    </main>
+    
+    <div class="toast" id="startupToast" role="status" aria-live="polite"></div>
+  </div>
+
+
   </div>
 
   <div class="bottom-nav-fixed">
@@ -324,8 +2420,29 @@
 (function(){
   let posts = [];
   let currentNav = 'home';
+  let previousNavForAlert = 'home';
   let currentSearchQuery = '';
   let openCommentPostIds = new Set();
+  let lastActiveScrollY = 0;
+
+  function getActiveScrollY() {
+    if (currentNav === 'home' || currentNav === 'alerts') {
+      return window.scrollY;
+    }
+    if (currentNav === 'community') {
+      const c = document.getElementById('iframe-community');
+      return c ? c.scrollTop : 0;
+    }
+    if (currentNav === 'jobs') {
+      const c = document.querySelector('.jobs-page-wrapper') || document.getElementById('iframe-jobs');
+      return c ? c.scrollTop : 0;
+    }
+    if (currentNav === 'startups') {
+      const c = document.getElementById('iframe-startups');
+      return c ? c.scrollTop : 0;
+    }
+    return 0;
+  }
 
   const STORAGE_DEVICE_ID = 'spreadone_device_id';
   const STORAGE_AUTHOR_NAME = 'spreadone_author_name';
@@ -416,15 +2533,85 @@
       s.forEach(d => { let data = d.data(); data.id = d.id; temp.push({ ...data, source: 'jobs', alertContent: data.title + ' at ' + data.company, alertName: data.company, timestamp: data.createdAt }); });
       updateAlerts('jobs', temp);
     });
-    db.collection("startup_posts").orderBy('createdAt', 'desc').limit(20).onSnapshot(s => {
+    db.collection("startup_posts").onSnapshot(s => {
       let temp = [];
       s.forEach(d => { let data = d.data(); data.id = d.id; temp.push({ ...data, source: 'startups', alertContent: data.title || data.text, alertName: data.newsSource || 'Startup', timestamp: data.createdAt }); });
+      temp.sort((a, b) => {
+        const tA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+        const tB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+        return tB - tA;
+      });
+      temp = temp.slice(0, 20);
       updateAlerts('startups', temp);
+    }, err => {
+      console.warn("Startup alerts onSnapshot error:", err);
     });
+  }
+
+  function updatePostDOM(post) {
+    const card = document.querySelector(`.post-card[data-post-id="${post.id}"]`);
+    if (!card) return;
+    
+    const appreciateCountSpan = card.querySelector('.appreciate-count');
+    if (appreciateCountSpan) {
+      appreciateCountSpan.innerText = post.appreciations > 0 ? post.appreciations : '';
+      if (post.appreciations > 0) {
+        appreciateCountSpan.classList.remove('hidden');
+        appreciateCountSpan.classList.add('text-slate-600');
+      } else {
+        appreciateCountSpan.classList.add('hidden');
+        appreciateCountSpan.classList.remove('text-slate-600');
+      }
+    }
+    
+    const hasAppreciated = post.appreciatedBy?.includes(DEVICE_ID);
+    const heartIcon = card.querySelector('.appreciate-btn i');
+    if (heartIcon) {
+      if (hasAppreciated) {
+        heartIcon.className = 'fas fa-heart text-red-500 text-[13px] sm:text-[14px]';
+      } else {
+        heartIcon.className = 'far fa-heart text-[13px] sm:text-[14px]';
+      }
+    }
+    
+    const commentCountSpan = card.querySelector('.comment-badge');
+    const commentCount = post.comments?.length || 0;
+    
+    if (commentCountSpan) {
+      commentCountSpan.innerText = commentCount > 0 ? commentCount : '';
+      if (commentCount > 0) {
+        commentCountSpan.classList.remove('hidden');
+        commentCountSpan.classList.add('text-slate-600');
+      } else {
+        commentCountSpan.classList.add('hidden');
+        commentCountSpan.classList.remove('text-slate-600');
+      }
+    }
+    
+    const commentsContainer = card.querySelector('.comment-items-container');
+    if (commentsContainer) {
+      let commentsHtml = '';
+      if (post.comments && post.comments.length) {
+        const recent = post.comments.slice(-3);
+        commentsHtml = `<div class="comment-list text-sm space-y-1">
+          ${recent.map(c => `<div class="flex gap-2"><span class="font-bold text-black text-[14px]">${escapeHtml(c.name)}</span><span class="text-[14px] text-slate-600 whitespace-pre-wrap break-words flex-1">${escapeHtml(c.text)}</span></div>`).join('')}
+          ${post.comments.length > 3 ? `<div class="text-[14px] text-blue-500 cursor-pointer font-medium mt-1 view-all-comments" data-post-id="${post.id}">View all comments</div>` : ''}
+        </div>`;
+      }
+      commentsContainer.innerHTML = commentsHtml;
+      
+      // Re-attach event listener for view all comments
+      const viewAllBtn = commentsContainer.querySelector('.view-all-comments');
+      if (viewAllBtn) {
+        viewAllBtn.addEventListener('click', viewAllComments);
+      }
+    }
   }
 
   function loadPosts() {
     db.collection(POSTS_COLLECTION).orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+      const oldLen = posts.length;
+      const oldFirstId = posts.length > 0 ? posts[0].id : null;
       posts = [];
       snapshot.forEach(doc => {
         let p = doc.data();
@@ -435,6 +2622,11 @@
         if (!p.comments) p.comments = [];
         posts.push(p);
       });
+      if (oldLen === 0 || oldLen !== posts.length || (posts.length > 0 && oldFirstId !== posts[0].id)) {
+        if (currentNav === 'home') renderFeed();
+      } else {
+        posts.forEach(p => updatePostDOM(p));
+      }
       const bannerText = document.getElementById('newPostBannerText');
       if (bannerText) {
           if (posts.length > 0) {
@@ -444,7 +2636,6 @@
               bannerText.textContent = 'Welcome! Start the conversation.';
           }
       }
-      if (currentNav === 'home' || currentNav === 'alerts') renderFeed();
     });
   }
 
@@ -474,11 +2665,13 @@
     
     const modal = document.getElementById('nameModal');
     const input = document.getElementById('nameModalInput');
+    modal.style.display = 'flex';
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     input.focus();
     
     resolveNamePrompt = function(savedName) {
+      modal.style.display = 'none';
       modal.classList.add('hidden');
       modal.classList.remove('flex');
       if (savedName) {
@@ -523,12 +2716,9 @@
 
   window.gotoStartups = function(filter) {
     window.location.hash = 'startups';
-    setTimeout(() => {
-      const iframe = document.getElementById('iframe-startups');
-      if (iframe && iframe.contentWindow) {
-        iframe.contentWindow.postMessage({ type: 'filter', filter: filter }, '*');
-      }
-    }, 100);
+    if (window.setStartupFilter) {
+      window.setStartupFilter(filter);
+    }
   };
 
   function getTimeAgo(date) {
@@ -551,13 +2741,13 @@
       truncatedHtml = truncatedHtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
       
       return `<div class="post-content-text collapsed" data-post-id="${postId}">
-        <span class="text-slate-900 dark:text-white text-[14px] sm:text-[15px] leading-relaxed mb-0 break-words whitespace-pre-wrap truncated-content">${truncatedHtml}</span><button class="read-more-btn">Read more</button>
-        <span class="text-slate-900 dark:text-white text-[14px] sm:text-[15px] leading-relaxed mb-0 break-words whitespace-pre-wrap full-content">${bodyHtml}</span><button class="read-less-btn">Show less</button>
+        <span class="text-[#1e293b] text-[14px] sm:text-[15px] leading-relaxed mb-0 break-words whitespace-pre-wrap truncated-content">${truncatedHtml}</span><button class="read-more-btn">Read more</button>
+        <span class="text-[#1e293b] text-[14px] sm:text-[15px] leading-relaxed mb-0 break-words whitespace-pre-wrap full-content">${bodyHtml}</span><button class="read-less-btn">Show less</button>
       </div>`;
     }
     
     return `<div class="post-content-text" data-post-id="${postId}">
-      <div class="text-slate-900 dark:text-white text-[14px] sm:text-[15px] leading-relaxed mb-0 break-words whitespace-pre-wrap">${bodyHtml}</div>
+      <div class="text-[#1e293b] text-[14px] sm:text-[15px] leading-relaxed mb-0 break-words whitespace-pre-wrap">${bodyHtml}</div>
     </div>`;
   }
 
@@ -571,12 +2761,10 @@
     let commentsHtml = '';
     if (post.comments && post.comments.length) {
       const recent = post.comments.slice(-3);
-      commentsHtml = `<div class="comment-list mt-2 pt-1 text-sm space-y-2 border-t border-slate-100">
-        ${recent.map(c => `<div class="flex gap-2"><span class="font-bold text-[#111827] dark:text-white text-xs">${escapeHtml(c.name)}</span><span class="text-xs text-slate-600 dark:text-slate-300 whitespace-pre-wrap break-words flex-1">${escapeHtml(c.text)}</span></div>`).join('')}
-        ${post.comments.length > 3 ? `<div class="text-xs text-blue-500 cursor-pointer font-medium mt-1 view-all-comments" data-post-id="${post.id}">View all comments</div>` : ''}
+      commentsHtml = `<div class="comment-list text-sm space-y-1">
+        ${recent.map(c => `<div class="flex gap-2"><span class="font-bold text-black text-[14px]">${escapeHtml(c.name)}</span><span class="text-[14px] text-slate-600 whitespace-pre-wrap break-words flex-1">${escapeHtml(c.text)}</span></div>`).join('')}
+        ${post.comments.length > 3 ? `<div class="text-[14px] text-blue-500 cursor-pointer font-medium mt-1 view-all-comments" data-post-id="${post.id}">View all comments</div>` : ''}
       </div>`;
-    } else {
-      commentsHtml = `<div class="text-xs text-slate-400 mt-1 italic">No comments yet.</div>`;
     }
 
     let subtitle = post.authorTitle || 'Community Member';
@@ -587,13 +2775,13 @@
       else if (post.source === 'startups') subtitle = 'Startup';
     }
 
-    return `<article class="post-card bg-white rounded-[24px] sm:rounded-[32px] mb-2 border border-slate-100 shadow-[0_4px_24px_rgba(0,0,0,0.03)] overflow-hidden" data-post-id="${post.id}">
-      <div class="flex items-center justify-between px-2.5 pt-3 sm:px-4 sm:pt-4 pb-1 sm:pb-1.5">
+    return `<article class="post-card bg-white rounded-[16px] sm:rounded-[20px] mb-1.5 border border-slate-100 shadow-[0_4px_24px_rgba(0,0,0,0.03)] overflow-hidden" data-post-id="${post.id}">
+      <div class="flex items-center justify-between px-2.5 pt-1.5 sm:px-4 sm:pt-2 pb-0 sm:pb-0.5">
         <div class="flex items-center gap-2 min-w-0">
-          <div class="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center text-white font-bold text-sm md:text-base flex-shrink-0" style="background-color: ${avatarBg};">${(post.authorName || '?').charAt(0).toUpperCase()}</div>
+          <div class="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center text-white font-bold text-sm md:text-base flex-shrink-0 leading-none" style="background-color: ${avatarBg};">${(post.authorName || '?').charAt(0).toUpperCase()}</div>
           <div class="flex flex-col min-w-0 flex-1 pr-2">
-            <div class="font-bold text-[#111827] dark:text-white text-[12px] sm:text-[13.5px] flex items-center gap-1 leading-tight mb-0.5">
-              <span class="break-words" style="display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(post.authorName)}</span>
+            <div class="font-bold text-[#111827] text-[12px] sm:text-[13.5px] flex items-center gap-1 leading-tight mb-0.5">
+              <span class="break-words" style="display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden; padding-right: 4px;">${escapeHtml(post.authorName)}</span>
               <i class="fas fa-check-circle text-blue-600 text-[11px] sm:text-[12px] flex-shrink-0"></i>
             </div>
             <div class="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight truncate">
@@ -604,32 +2792,32 @@
         <button class="text-slate-500 hover:text-slate-800 p-2 transition-colors flex-shrink-0 -mt-2"><i class="fas fa-ellipsis-v text-lg"></i></button>
       </div>
 
-      <div class="post-content px-2.5 sm:px-4 pt-0.5 pb-2">
+      <div class="post-content px-2.5 sm:px-4 pt-0.5 pb-1">
         ${formatContent(post.content, post.id)}
       </div>
 
-      ${post.imageUrl ? `<img src="${post.imageUrl}" class="w-full h-auto block" loading="lazy">` : ''}
+      ${post.imageUrl ? `<img src="${post.imageUrl}" class="w-full h-auto block cursor-zoom-in post-image-zoomable hover:opacity-95 transition-all" loading="lazy">` : ''}
 
-      <div class="flex items-center justify-between py-2 sm:py-3 px-2.5 sm:px-4 mt-1 border-t border-slate-50/50">
-        <button class="appreciate-btn flex items-center gap-1.5 text-slate-600 font-normal text-[12px] sm:text-[13px] hover:bg-slate-50 px-1 py-1 rounded-full transition-colors" data-post-id="${post.id}">
-          <i class="${heartClass} text-[11px] sm:text-[12px]"></i> <span>Appreciate</span>
-          <span class="appreciate-count text-[11px] sm:text-[12px] font-bold text-center ${post.appreciations > 0 ? 'text-slate-600 dark:text-slate-400' : 'hidden'}">${post.appreciations > 0 ? post.appreciations : ''}</span>
+      <div class="flex items-center justify-between px-2.5 sm:px-4 border-t border-slate-50/50">
+        <button class="appreciate-btn flex items-center gap-1.5 text-slate-600 font-normal text-[13px] sm:text-[14.5px] hover:bg-slate-50 px-1 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+          <i class="${heartClass} text-[13px] sm:text-[14px]"></i> <span>Appreciate</span>
+          <span class="appreciate-count text-[13px] sm:text-[14px] font-bold text-center ${post.appreciations > 0 ? 'text-slate-600' : 'hidden'}">${post.appreciations > 0 ? post.appreciations : ''}</span>
         </button>
-        <button class="comment-trigger-btn flex items-center gap-1.5 text-slate-600 font-normal text-[12px] sm:text-[13px] hover:bg-slate-50 px-1 py-1 rounded-full transition-colors" data-post-id="${post.id}">
-          <i class="far fa-comment text-[11px] sm:text-[12px]"></i> <span>Comment</span>
-          <span class="comment-badge text-[11px] sm:text-[12px] font-bold text-center ${commentCount > 0 ? 'text-slate-600 dark:text-slate-400' : 'hidden'}">${commentCount > 0 ? commentCount : ''}</span>
+        <button class="comment-trigger-btn flex items-center gap-1.5 text-slate-600 font-normal text-[13px] sm:text-[14.5px] hover:bg-slate-50 px-1 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+          <i class="far fa-comment text-[13px] sm:text-[14px]"></i> <span>Comment</span>
+          <span class="comment-badge text-[13px] sm:text-[14px] font-bold text-center ${commentCount > 0 ? 'text-slate-600' : 'hidden'}">${commentCount > 0 ? commentCount : ''}</span>
         </button>
-        <button class="share-btn flex items-center gap-1.5 text-slate-600 font-normal text-[12px] sm:text-[13px] hover:bg-slate-50 px-1 py-1 rounded-full transition-colors" data-post-id="${post.id}">
-          <i class="far fa-share-square text-[11px] sm:text-[12px]"></i> <span>Share</span>
+        <button class="share-btn flex items-center gap-1.5 text-slate-600 font-normal text-[13px] sm:text-[14.5px] hover:bg-slate-50 px-1 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+          <i class="far fa-share-square text-[13px] sm:text-[14px]"></i> <span>Share</span>
         </button>
       </div>
 
-      <div class="comments-section ${openCommentPostIds.has(post.id) ? '' : 'hidden'} mt-4" id="comments-${post.id}">
-        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+      <div class="comments-section ${openCommentPostIds.has(post.id) ? '' : 'hidden'} mt-1 mb-1" id="comments-${post.id}">
+        <div>
           <div class="comment-items-container">${commentsHtml}</div>
-          <div class="mt-3 flex gap-2">
-            <input type="text" id="commentText-${post.id}" placeholder="Write a comment..." class="flex-1 text-sm border-0 focus:ring-0 rounded-full px-4 py-2 bg-white shadow-sm font-medium">
-            <button class="submit-comment-btn bg-[#111827] text-white font-bold text-xs px-4 py-2 rounded-full shadow-md" data-post-id="${post.id}">Post</button>
+          <div class="mt-1 flex gap-2">
+            <input type="text" id="commentText-${post.id}" placeholder="Write a comment..." class="flex-1 text-[16px] md:text-[13px] border border-slate-200 focus:ring-0 rounded-full px-3 py-0.5 bg-white shadow-sm font-medium">
+            <button class="submit-comment-btn bg-[#111827] text-white font-bold text-[13px] px-3 py-0.5 rounded-full shadow-md" data-post-id="${post.id}">Post</button>
           </div>
         </div>
       </div>
@@ -671,7 +2859,7 @@
     }
     
     if (hash === 'alerts') {
-      feedContainer.innerHTML = `<div><h3 class="text-sm font-semibold mb-2">🔔 Recent activity</h3>${renderAlerts()}</div>`;
+      feedContainer.innerHTML = `<div class="px-[3%]"><h3 class="text-sm font-semibold mb-2 flex items-center gap-1.5"><i class="fas fa-bell text-slate-400"></i> Recent activity</h3>${renderAlerts()}</div>`;
       document.querySelectorAll('.alert-item').forEach(el => el.addEventListener('click', (e) => {
         const id = el.getAttribute('data-alert-id');
         const source = el.getAttribute('data-alert-source');
@@ -723,6 +2911,8 @@
       lastSeenAlerts = Date.now();
       localStorage.setItem('last_seen_alerts', lastSeenAlerts);
       updateAlertBadge();
+    } else {
+      previousNavForAlert = hash;
     }
 
     currentNav = hash;
@@ -757,6 +2947,13 @@
       else if (hash === 'jobs') iframeJobs.classList.add('active');
       else if (hash === 'startups') iframeStartups.classList.add('active');
     }
+
+    const nav = document.querySelector('.bottom-nav');
+    if (nav) nav.classList.remove('shrunk');
+
+    setTimeout(() => {
+      lastActiveScrollY = getActiveScrollY();
+    }, 10);
   }
 
   function renderFeed() {
@@ -799,6 +2996,7 @@
   }
 
   function toggleComment(e) {
+    if (e) e.preventDefault();
     const id = e.currentTarget.getAttribute('data-post-id');
     const div = document.getElementById(`comments-${id}`);
     if (div) {
@@ -845,34 +3043,12 @@
       appreciations: post.appreciations,
       appreciatedBy: post.appreciatedBy
     });
-
-    const heartIcon = btn.querySelector('i');
-    const countSpan = btn.querySelector('.appreciate-count');
-    if (heartIcon) {
-      if (hasAppreciated) {
-        heartIcon.classList.remove('fas', 'text-rose-500');
-        heartIcon.classList.add('far');
-      } else {
-        heartIcon.classList.remove('far');
-        heartIcon.classList.add('fas', 'text-rose-500');
-      }
-    }
-    if (countSpan) {
-      countSpan.innerText = post.appreciations > 0 ? post.appreciations : '';
-      if (post.appreciations > 0) {
-        countSpan.classList.remove('hidden');
-        countSpan.classList.add('text-slate-600', 'dark:text-slate-400');
-      } else {
-        countSpan.classList.add('hidden');
-        countSpan.classList.remove('text-slate-600', 'dark:text-slate-400');
-      }
-    }
   }
 
   function handleShare(e) {
     const postId = e.currentTarget.getAttribute('data-post-id');
     const post = posts.find(p => p.id === postId);
-    if (post) navigator.clipboard.writeText(`"${post.content.substring(0,100)}" — ${post.authorName} on SpreadOne`).then(()=>alert('Copied!'));
+    if (post) navigator.clipboard.writeText(`"${post.content.substring(0,100)}" — ${post.authorName} on Spread One`).then(()=>alert('Copied!'));
   }
 
   function handleComment(e) {
@@ -902,18 +3078,19 @@
       if (!post.comments) post.comments = [];
       post.comments.push({ name: commenterName, text, timestamp: Date.now() });
 
-      // Ensure comment section stays open and re-render optimistically
+      // Ensure comment section stays open and update optimistically
       openCommentPostIds.add(postId);
-      renderFeed();
+      updatePostDOM(post);
+      if (textInput) textInput.value = '';
 
       db.collection(POSTS_COLLECTION).doc(postId).set({
         comments: post.comments
       }, { merge: true }).then(() => {
-          // Success - nothing to do since we already re-rendered
+          // Success - nothing to do
       }).catch(err => {
           console.error("Comment post error:", err);
           post.comments.pop(); // Revert local change
-          renderFeed();
+          updatePostDOM(post);
           alert("Failed to submit comment. Please try again.");
       });
     });
@@ -1056,18 +3233,33 @@
     const savedTheme = localStorage.getItem('theme') || 'light';
     if (savedTheme === 'dark') document.documentElement.classList.add('dark');
     
-    const bellBtn = document.getElementById('headerBellBtn');
+    const headerAvatar = document.getElementById('headerAvatar');
+    const creatorAvatar = document.getElementById('creatorAvatar');
     const userMenu = document.getElementById('userDropdown');
     const lightBtn = document.getElementById('lightModeBtn');
     const darkBtn = document.getElementById('darkModeBtn');
-
-    bellBtn.addEventListener('click', (e) => {
+    
+    function toggleMenu(e) {
       e.stopPropagation();
       userMenu.classList.toggle('hidden');
-    });
+    }
+
+    if (headerAvatar) headerAvatar.addEventListener('click', toggleMenu);
+    if (creatorAvatar) creatorAvatar.addEventListener('click', toggleMenu);
+    
+    const bellBtn = document.getElementById('headerBellBtn');
+    if (bellBtn) {
+      bellBtn.addEventListener('click', () => {
+        if (currentNav === 'alerts') {
+          window.location.hash = previousNavForAlert || 'home';
+        } else {
+          window.location.hash = 'alerts';
+        }
+      });
+    }
 
     document.addEventListener('click', (e) => {
-      if (!userMenu.contains(e.target) && !bellBtn.contains(e.target)) {
+      if (!userMenu.contains(e.target) && e.target !== headerAvatar && e.target !== creatorAvatar) {
         userMenu.classList.add('hidden');
       }
     });
@@ -1106,21 +3298,34 @@
   function initBottomNav() {
     window.addEventListener('hashchange', handleRouting);
     
-    let lastScrollY = window.scrollY;
-    window.addEventListener('scroll', () => {
+    function handleScroll(event) {
       const nav = document.querySelector('.bottom-nav');
       if (!nav) return;
-      if (window.scrollY > lastScrollY && window.scrollY > 50) {
+      
+      const currentScrollY = getActiveScrollY();
+      if (currentScrollY > lastActiveScrollY && currentScrollY > 50) {
         nav.classList.add('shrunk');
       } else {
         nav.classList.remove('shrunk');
       }
-      lastScrollY = window.scrollY;
-    }, { passive: true });
+      lastActiveScrollY = currentScrollY;
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Bind scroll listener directly to all container elements for robust cross-browser support
+    document.getElementById('iframe-community')?.addEventListener('scroll', handleScroll, { passive: true });
+    document.getElementById('iframe-jobs')?.addEventListener('scroll', handleScroll, { passive: true });
+    document.querySelector('.jobs-page-wrapper')?.addEventListener('scroll', handleScroll, { passive: true });
+    document.getElementById('iframe-startups')?.addEventListener('scroll', handleScroll, { passive: true });
     
     document.querySelectorAll('.nav-item').forEach(btn => {
       btn.addEventListener('click', () => {
         const nav = btn.getAttribute('data-nav');
+        if (nav === 'alerts' && currentNav === 'alerts') {
+          window.location.hash = previousNavForAlert || 'home';
+          return;
+        }
         if (nav !== 'home' && nav !== 'alerts') {
           currentSearchQuery = '';
           document.getElementById('searchInput').value = '';
@@ -1133,6 +3338,59 @@
     handleRouting();
   }
 
+  // --- IMAGE ZOOM LIGHTBOX LOGIC ---
+  function openImageZoom(src) {
+    const modal = document.getElementById('imageZoomModal');
+    const img = document.getElementById('zoomedImage');
+    if (!modal || !img) return;
+    img.src = src;
+    modal.style.display = 'flex';
+    modal.classList.remove('hidden');
+    // Force reflow
+    modal.offsetHeight;
+    modal.classList.remove('opacity-0');
+    modal.classList.add('opacity-100');
+    img.classList.remove('scale-95');
+    img.classList.add('scale-100');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeImageZoom() {
+    const modal = document.getElementById('imageZoomModal');
+    const img = document.getElementById('zoomedImage');
+    if (!modal || !img) return;
+    modal.classList.remove('opacity-100');
+    modal.classList.add('opacity-0');
+    img.classList.remove('scale-100');
+    img.classList.add('scale-95');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      modal.style.display = 'none';
+      img.src = '';
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  // Event delegation for zoomable post images
+  document.addEventListener('click', (e) => {
+    const img = e.target.closest('.post-image-zoomable');
+    if (img) {
+      openImageZoom(img.src);
+    }
+  });
+
+  // Close when clicking anywhere on the lightbox overlay or zoom close button
+  document.getElementById('imageZoomModal')?.addEventListener('click', () => {
+    closeImageZoom();
+  });
+
+  // Close with escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeImageZoom();
+    }
+  });
+
   loadPosts();
   loadAllAlerts();
   initPostCreator();
@@ -1140,6 +3398,1194 @@
   initSearch();
   initBottomNav();
 })();
+
+// --- COMMUNITY PAGE LOGIC ---
+(function() {
+    const db = firebase.firestore();
+    const COMMUNITY_USER_NAME_KEY = "community_saved_user_name";
+    let discussions = [];
+    let openReplyForms = {};
+    let openReplies = {};
+    let selectedCategory = "All";
+
+    function getSavedCommunityName() { return localStorage.getItem(COMMUNITY_USER_NAME_KEY) || ""; }
+    function saveCommunityName(name) { if(name.trim() !== "") localStorage.setItem(COMMUNITY_USER_NAME_KEY, name.trim()); }
+    function escapeHtml(str) {
+        if(!str) return "";
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function fillQuestionName() {
+        const saved = getSavedCommunityName();
+        const nameInput = document.getElementById("questionName");
+        const nameField = document.getElementById("questionNameField");
+        if(saved !== "") {
+            if(nameInput) nameInput.value = saved;
+            if(nameField) nameField.style.display = "none";
+        } else {
+            if(nameField) nameField.style.display = "block";
+        }
+    }
+
+    function savedNameInputHtml() {
+        const saved = getSavedCommunityName();
+        if(saved !== "") {
+            return `<input type="hidden" class="reply-input-hidden" value="${escapeHtml(saved)}">`;
+        }
+        return `<input type="text" class="reply-input" placeholder="Your Name">`;
+    }
+
+    function formatTime(timestamp) {
+        const now = Date.now();
+        const seconds = Math.floor((now - timestamp) / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        if(seconds < 60) return "Just now";
+        if(minutes < 60) return `${minutes}m ago`;
+        if(hours < 24) return `${hours}h ago`;
+        if(days === 1) return "Yesterday";
+        return `${days}d ago`;
+    }
+
+    function countAllReplies(comments) {
+        let count = 0;
+        comments.forEach(c => {
+            count++;
+            if(c.replies && c.replies.length) count += countAllReplies(c.replies);
+        });
+        return count;
+    }
+
+    function loadFirebasePosts() {
+        db.collection("community_posts").orderBy("createdAt","desc").onSnapshot((snapshot) => {
+            discussions = [];
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                discussions.push({
+                    id: doc.id,
+                    name: data.name,
+                    createdAt: data.createdAt,
+                    category: data.category,
+                    question: data.question,
+                    comments: data.comments || [],
+                    helpfulCount: data.helpfulCount || 0
+                });
+            });
+            renderDiscussions();
+        });
+    }
+
+    function renderSuggestions() {
+        const input = document.getElementById("communitySearch")?.value?.toLowerCase() || "";
+        const box = document.getElementById("searchSuggestions");
+        if(!box) return;
+        if(input === "") { box.style.display = "none"; return; }
+        const matched = discussions.filter(d => d.question.toLowerCase().includes(input));
+        if(matched.length === 0) { box.style.display = "none"; return; }
+        box.innerHTML = "";
+        matched.slice(0,5).forEach(item => {
+            box.innerHTML += `<div class="search-item">${escapeHtml(item.question)}</div>`;
+        });
+        box.style.display = "block";
+    }
+
+    window.scrollReplies = function(containerId, direction) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const scrollAmount = Math.max(160, Math.floor(container.clientHeight * 0.75));
+        container.scrollBy({ top: direction * scrollAmount, behavior: "smooth" });
+    };
+
+    function getReplyNameFromForm(formElement) {
+        let hiddenInput = formElement.querySelector(".reply-input-hidden");
+        if(hiddenInput) return hiddenInput.value.trim();
+        let nameInput = formElement.querySelector(".reply-input");
+        if(nameInput) return nameInput.value.trim();
+        return "";
+    }
+
+    function renderComments(comments, discussionId, depth = 0) {
+        if(!comments.length) return "";
+        let html = "";
+        comments.forEach(c => {
+            const helpful = c.helpfulCount || 0;
+            const isHelpfulMarked = hasMarkedHelpful(c.id) ? 'marked-helpful' : '';
+            const visualDepth = Math.min(depth, 3);
+            const marginLeft = visualDepth * 16;
+            html += `
+                <div class="comment-item" style="margin-left: ${marginLeft}px; width: calc(100% - ${marginLeft}px);">
+                    <div class="comment-name">${escapeHtml(c.name)}</div>
+                    <div class="comment-text">${escapeHtml(c.text)}</div>
+                    <div class="comment-actions">
+                        <button class="comment-reply-btn" onclick="toggleReplyForm('comment-${c.id}')">↩ Reply</button>
+                        <span class="comment-helpful ${isHelpfulMarked}" onclick="markCommentHelpful('${discussionId}', '${c.id}')">
+                            👍 Helpful <span class="helpful-badge">${helpful}</span>
+                        </span>
+                    </div>
+                    <div class="reply-form ${openReplyForms[`comment-${c.id}`] ? 'active' : ''}" id="comment-${c.id}">
+                        ${savedNameInputHtml()}
+                        <textarea class="reply-text" placeholder="Write a reply..."></textarea>
+                        <button class="reply-submit" onclick="addNestedReply('${discussionId}','${c.id}',this)">Post Reply</button>
+                    </div>
+                </div>
+            `;
+            if(c.replies && c.replies.length) {
+                html += renderComments(c.replies, discussionId, depth + 1);
+            }
+        });
+        return html;
+    }
+
+    function renderDiscussions() {
+        const feed = document.getElementById("communityFeed");
+        if(!feed) return;
+        feed.innerHTML = "";
+        const searchInput = document.getElementById("communitySearch");
+        const search = searchInput ? searchInput.value.toLowerCase() : "";
+        let filtered = discussions.filter(d => {
+            const categoryMatch = selectedCategory === "All" || d.category === selectedCategory;
+            const searchMatch = d.question.toLowerCase().includes(search);
+            return categoryMatch && searchMatch;
+        });
+
+        filtered.forEach(d => {
+            const totalReplies = countAllReplies(d.comments);
+            const repliesContainerId = `repliesBox-${d.id}`;
+            const isRepliesOpen = openReplies[repliesContainerId] || false;
+            const showScrollBtns = isRepliesOpen && totalReplies > 0;
+            const postHelpful = d.helpfulCount || 0;
+            const isHelpfulMarked = hasMarkedHelpful(d.id) ? 'marked-helpful' : '';
+
+            feed.innerHTML += `
+                <div class="community-card" data-id="${d.id}">
+                    <div class="community-header">
+                        <div class="community-name">${escapeHtml(d.name)}</div>
+                        <div class="community-dot"></div>
+                        <div class="community-time">${formatTime(d.createdAt)}</div>
+                        <div class="community-dot"></div>
+                        <div class="community-category">${escapeHtml(d.category)}</div>
+                    </div>
+                    <div class="community-question" id="question-${d.id}">${escapeHtml(d.question)}</div>
+                    <div class="read-more-btn" onclick="toggleReadMore('${d.id}',this)">Read More</div>
+                    <div class="community-actions">
+                        <div class="community-action ${isHelpfulMarked}" onclick="markPostHelpful('${d.id}')">
+                            👍 Helpful <span class="helpful-count" id="helpful-${d.id}">${postHelpful}</span>
+                        </div>
+                        <div class="community-action" onclick="toggleReplyForm('main-${d.id}')">💬 Reply</div>
+                        <div class="community-action" onclick="toggleReplies('${repliesContainerId}')">${isRepliesOpen ? 'Hide' : totalReplies} Replies</div>
+                    </div>
+                    <div class="reply-form ${openReplyForms[`main-${d.id}`] ? 'active' : ''}" id="main-${d.id}">
+                        ${savedNameInputHtml()}
+                        <textarea class="reply-text" placeholder="Write your reply..."></textarea>
+                        <button class="reply-submit" onclick="addMainReply('${d.id}',this)">Post Reply</button>
+                    </div>
+                    <div class="comment-list" id="${repliesContainerId}" style="display: ${isRepliesOpen ? 'flex' : 'none'};">
+                        ${renderComments(d.comments, d.id)}
+                    </div>
+                    ${showScrollBtns ? `
+                        <div class="reply-scroll-controls">
+                            <button class="reply-scroll-btn" onclick="scrollReplies('${repliesContainerId}', -1)">▲ Up</button>
+                            <button class="reply-scroll-btn" onclick="scrollReplies('${repliesContainerId}', 1)">▼ Down</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        });
+    }
+
+    window.toggleReadMore = function(id, btn) {
+        const el = document.getElementById(`question-${id}`);
+        if(!el) return;
+        el.classList.toggle("expanded");
+        btn.innerText = el.classList.contains("expanded") ? "Less" : "Read More";
+    };
+
+    window.toggleReplyForm = function(id) {
+        openReplyForms[id] = !openReplyForms[id];
+        renderDiscussions();
+    };
+
+    window.toggleReplies = function(containerId) {
+        openReplies[containerId] = !openReplies[containerId];
+        renderDiscussions();
+        if(openReplies[containerId]) {
+            setTimeout(() => {
+                const container = document.getElementById(containerId);
+                if(container) container.scrollTop = 0;
+            }, 50);
+        }
+    };
+
+    const getHelpfulCache = () => {
+        try { return JSON.parse(localStorage.getItem('spreadone_helpful_cache') || '[]'); } catch(e) { return []; }
+    };
+    const addHelpfulCache = (id) => {
+        const cache = getHelpfulCache();
+        if(!cache.includes(id)) {
+            cache.push(id);
+            localStorage.setItem('spreadone_helpful_cache', JSON.stringify(cache));
+        }
+    };
+    const removeHelpfulCache = (id) => {
+        let cache = getHelpfulCache();
+        if(cache.includes(id)) {
+            cache = cache.filter(item => item !== id);
+            localStorage.setItem('spreadone_helpful_cache', JSON.stringify(cache));
+        }
+    };
+    const hasMarkedHelpful = (id) => getHelpfulCache().includes(id);
+
+    window.markPostHelpful = async function(postId) {
+        const postRef = db.collection("community_posts").doc(postId);
+        const post = discussions.find(p => p.id === postId);
+        if(post) {
+            const isMarked = hasMarkedHelpful(postId);
+            const modifier = isMarked ? -1 : 1;
+            const newCount = Math.max(0, (post.helpfulCount || 0) + modifier);
+            post.helpfulCount = newCount;
+            if (isMarked) {
+                removeHelpfulCache(postId);
+            } else {
+                addHelpfulCache(postId);
+            }
+            await postRef.update({ helpfulCount: newCount }).catch(e => console.warn(e));
+            renderDiscussions();
+        }
+    };
+
+    window.markCommentHelpful = async function(discussionId, commentId) {
+        const discussion = discussions.find(d => d.id == discussionId);
+        if(!discussion) return;
+        
+        const isMarked = hasMarkedHelpful(commentId);
+        const modifier = isMarked ? -1 : 1;
+        
+        const updateCommentHelpful = (commentsArr) => {
+            for(let i = 0; i < commentsArr.length; i++) {
+                if(commentsArr[i].id == commentId) {
+                    commentsArr[i].helpfulCount = Math.max(0, (commentsArr[i].helpfulCount || 0) + modifier);
+                    return true;
+                }
+                if(commentsArr[i].replies && commentsArr[i].replies.length) {
+                    if(updateCommentHelpful(commentsArr[i].replies)) return true;
+                }
+            }
+            return false;
+        };
+        if (updateCommentHelpful(discussion.comments)) {
+            if (isMarked) {
+                removeHelpfulCache(commentId);
+            } else {
+                addHelpfulCache(commentId);
+            }
+            await db.collection("community_posts").doc(discussionId).update({ comments: discussion.comments }).catch(e => console.warn(e));
+            renderDiscussions();
+        }
+    };
+
+    window.addMainReply = function(discussionId, button) {
+        const form = button.parentElement;
+        let name = getReplyNameFromForm(form);
+        const textarea = form.querySelector(".reply-text");
+        const text = textarea ? textarea.value.trim() : "";
+        if(name === "" || text === "") return;
+        saveCommunityName(name);
+        const discussion = discussions.find(d => d.id == discussionId);
+        if(!discussion) return;
+        discussion.comments.push({
+            id: Date.now(),
+            name: name,
+            text: text,
+            replies: [],
+            helpfulCount: 0
+        });
+        openReplyForms[`main-${discussionId}`] = false;
+        const repliesBoxId = `repliesBox-${discussionId}`;
+        openReplies[repliesBoxId] = true;
+        db.collection("community_posts").doc(discussionId).update({ comments: discussion.comments }).catch(e => console.warn(e));
+    };
+
+    window.addNestedReply = function(discussionId, commentId, button) {
+        const form = button.parentElement;
+        let name = getReplyNameFromForm(form);
+        const textarea = form.querySelector(".reply-text");
+        const text = textarea ? textarea.value.trim() : "";
+        if(name === "" || text === "") return;
+        saveCommunityName(name);
+        const discussion = discussions.find(d => d.id == discussionId);
+        if(!discussion) return;
+        function insertReply(commentsArr, targetId, newReply) {
+            for(let i = 0; i < commentsArr.length; i++) {
+                if(commentsArr[i].id == targetId) {
+                    if(!commentsArr[i].replies) commentsArr[i].replies = [];
+                    commentsArr[i].replies.push(newReply);
+                    return true;
+                }
+                if(commentsArr[i].replies && commentsArr[i].replies.length) {
+                    if(insertReply(commentsArr[i].replies, targetId, newReply)) return true;
+                }
+            }
+            return false;
+        }
+        const newReplyObj = { id: Date.now(), name: name, text: text, replies: [], helpfulCount: 0 };
+        insertReply(discussion.comments, commentId, newReplyObj);
+        openReplyForms[`comment-${commentId}`] = false;
+        const repliesBoxId = `repliesBox-${discussionId}`;
+        openReplies[repliesBoxId] = true;
+        db.collection("community_posts").doc(discussionId).update({ comments: discussion.comments }).catch(e => console.warn(e));
+    };
+
+    window.openCommunityModal = function() { fillQuestionName(); document.getElementById("communityModal").style.display = "flex"; };
+    
+    // Close modal on click outside
+    document.addEventListener("click", function(e) { 
+        const modal = document.getElementById("communityModal");
+        if(e.target === modal) modal.style.display = "none"; 
+    });
+
+    window.postQuestion = function() {
+        let name = document.getElementById("questionName").value.trim();
+        const question = document.getElementById("questionText").value.trim();
+        const category = document.getElementById("questionCategory").value;
+        if(name === "" || question === "") return;
+        saveCommunityName(name);
+        db.collection("community_posts").add({
+            name: name,
+            createdAt: Date.now(),
+            category: category,
+            question: question,
+            comments: [],
+            helpfulCount: 0
+        });
+        document.getElementById("questionText").value = "";
+        document.getElementById("communityModal").style.display = "none";
+        if(getSavedCommunityName() !== "") {
+            const nameInp = document.getElementById("questionName");
+            if(nameInp) nameInp.value = getSavedCommunityName();
+        }
+    };
+
+    document.querySelectorAll(".community-chip").forEach(chip => {
+        chip.addEventListener("click", function() {
+            document.querySelectorAll(".community-chip").forEach(c => c.classList.remove("active"));
+            this.classList.add("active");
+            selectedCategory = this.dataset.category;
+            renderDiscussions();
+        });
+    });
+
+    const searchInput = document.getElementById("communitySearch");
+    if (searchInput) {
+        searchInput.addEventListener("input", function() {
+            renderSuggestions();
+            renderDiscussions();
+        });
+    }
+
+    fillQuestionName();
+    loadFirebasePosts();
+})();
+
+
+// --- JOBS JS ---
+(function(){
+
+  
+
+  
+  const _db = firebase.firestore();
+  const JOBS_COLLECTION = 'founder_job_portal_jobs_v1';
+
+  window._loadApprovedJobs = async function(){
+    const snap = await _db.collection(JOBS_COLLECTION)
+      .where('status', '==', 'approved')
+      .get();
+
+    return snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => {
+        const ad = a.approvedAt && a.approvedAt.toDate ? a.approvedAt.toDate() : new Date(0);
+        const bd = b.approvedAt && b.approvedAt.toDate ? b.approvedAt.toDate() : new Date(0);
+        return bd - ad;
+      });
+  };
+
+  window._submitJob = async function(data){
+    await _db.collection(JOBS_COLLECTION).add({
+      ...data,
+      status: 'pending',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  };
+
+})();
+
+// --- JOBS JS ---
+(function(){
+
+let allJobs = [];      // full job objects array
+let activeChip = '';
+
+function showToast(msg, type='success'){
+  const t = document.getElementById('jobsToast');
+  document.getElementById('jobsToastMsg').textContent = msg;
+  document.getElementById('jobsToastIcon').textContent = type==='success'?'✓':'⚠️';
+  t.className = `toast ${type} show`;
+  setTimeout(()=>t.classList.remove('show'), 3500);
+}
+
+// LOAD jobs with full data
+async function loadJobs(){
+  try{
+    const jobs = await window._loadApprovedJobs();
+    allJobs = jobs.map(job => ({
+      id: job.id,
+      title: job.title || 'Untitled Role',
+      company: job.company || 'Company',
+      location: job.location || 'Not specified',
+      salary: job.salary || 'Not disclosed',
+      exp: job.experience || '',
+      type: job.jobType || '',
+      role: job.role || '',
+      applyLink: job.applyLink || '',
+      skills: job.skills || '',
+      description: job.description || '',
+      perks: job.perks || '',
+      qualification: job.qualification || '',
+      lastDate: job.lastDate || '',
+      openings: job.openings || '',
+      workMode: job.workMode || '',
+      industry: job.industry || '',
+      raw: Object.values(job).join(' ').toLowerCase(),
+    }));
+    document.getElementById('heroCount').textContent = allJobs.length;
+    renderJobs(allJobs);
+  }catch(e){
+    console.error(e);
+    document.getElementById('job-list').innerHTML = `<div class="empty-state">⚠️ Failed to load jobs. Check Firestore rules.</div>`;
+  }
+}
+
+function formatField(value, fallback='—'){
+  if(!value || value.trim() === '') return fallback;
+  return value;
+}
+
+window.openViewModal = function(job){
+  const modal = document.getElementById('viewModalOverlay');
+  const container = document.getElementById('viewJobContent');
+  document.getElementById('viewJobTitle').innerHTML = `${escapeHtml(job.title)} <span style="font-size:12px; font-weight:normal; color:#60a5fa;">${escapeHtml(job.company)}</span>`;
+  
+  const applyLinkValid = job.applyLink && job.applyLink.trim() !== '' && (job.applyLink.startsWith('http') || job.applyLink.startsWith('mailto:'));
+  const applyUrl = job.applyLink && (job.applyLink.startsWith('http') || job.applyLink.startsWith('mailto:')) ? job.applyLink : (job.applyLink && !job.applyLink.startsWith('http') ? `https://${job.applyLink}` : '#');
+  
+  container.innerHTML = `
+    <div class="v-section">Job Overview</div>
+    <div class="v-grid">
+      <div class="v-grid-item"><span class="v-grid-label">Location</span><span class="v-grid-value">${escapeHtml(job.location)}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Job Type</span><span class="v-grid-value">${escapeHtml(job.type)}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Work Mode</span><span class="v-grid-value">${escapeHtml(job.workMode || 'Not specified')}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Experience</span><span class="v-grid-value">${escapeHtml(job.exp)}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Salary</span><span class="v-grid-value salary-val" style="color:#60a5fa;">${escapeHtml(job.salary)}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Openings</span><span class="v-grid-value">${escapeHtml(job.openings || '1')}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Last Date</span><span class="v-grid-value">${escapeHtml(job.lastDate || 'Rolling')}</span></div>
+      <div class="v-grid-item"><span class="v-grid-label">Role / Dept</span><span class="v-grid-value">${escapeHtml(job.role || '—')}</span></div>
+    </div>
+    
+    <div class="v-section">Required Skills</div>
+    <div class="jd-text" style="margin-bottom:8px;">${escapeHtml(job.skills || 'Not specified')}</div>
+    
+    <div class="v-section">Job Description</div>
+    <div class="jd-text">${escapeHtml(job.description || 'No description provided.').replace(/\n/g, '<br>')}</div>
+    
+    ${job.qualification ? `<div class="v-section">Qualifications</div><div class="jd-text">${escapeHtml(job.qualification)}</div>` : ''}
+    ${job.perks ? `<div class="v-section">Perks & Benefits</div><div class="jd-text">${escapeHtml(job.perks)}</div>` : ''}
+    
+    <div class="v-section">How to Apply</div>
+    ${applyLinkValid ? 
+      `<button class="apply-btn-modal" id="modalApplyBtn">✨ Apply Now <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>` : 
+      `<div class="missing-link-msg">⚠️ No direct apply link provided by employer. You can still email your resume mentioning job title.</div>
+       <button class="apply-btn-modal" id="modalApplyBtn" style="background:#334155;">📧 Request Info / Contact</button>`
+    }
+  `;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  
+  // attach apply event after rendering
+  const applyBtn = document.getElementById('modalApplyBtn');
+  if(applyBtn){
+    applyBtn.onclick = () => {
+      if(applyLinkValid && job.applyLink && job.applyLink.trim()){
+        window.open(job.applyLink, '_blank', 'noopener');
+        showToast('Redirecting to application page...', 'success');
+      } else {
+        // no link: suggest copy recruiter email? Actually we don't have recruiter email in view, but can fallback.
+        showToast('No application link provided. Please contact the company directly via the job portal.', 'error');
+      }
+    };
+  }
+}
+
+window.closeViewModal = function(){
+  document.getElementById('viewModalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function escapeHtml(str){
+  if(!str) return '';
+  return str.replace(/[&<>]/g, function(m){
+    if(m === '&') return '&amp;';
+    if(m === '<') return '&lt;';
+    if(m === '>') return '&gt;';
+    return m;
+  }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c){
+    return c;
+  });
+}
+
+function renderJobs(jobs){
+  document.getElementById('resultCount').textContent = jobs.length;
+  if(!jobs.length){
+    document.getElementById('job-list').innerHTML = `<div class="empty-state">✨ No matching jobs. Adjust filters.</div>`;
+    return;
+  }
+  const container = document.getElementById('job-list');
+  container.innerHTML = jobs.map((j, idx) => `
+    <div class="job-card" data-job-id="${j.id}" style="animation-delay:${Math.min(idx,14)*25}ms">
+      ${idx<5 ? '<span class="new-tag">New</span>' : ''}
+      <div class="job-title">${escapeHtml(j.title)}</div>
+      <div class="detail-list">
+        <div class="detail-row"><span class="detail-label">Company</span><span class="detail-value">${escapeHtml(j.company)}</span></div>
+        <div class="detail-row"><span class="detail-label">Location</span><span class="detail-value">${escapeHtml(j.location)}</span></div>
+        <div class="detail-row"><span class="detail-label">Experience</span><span class="detail-value">${escapeHtml(j.exp)}</span></div>
+        <div class="detail-row"><span class="detail-label">Salary</span><span class="detail-value salary-val">${escapeHtml(j.salary)}</span></div>
+        <div class="detail-row"><span class="detail-label">Job Type</span><span class="detail-value">${escapeHtml(j.type)}</span></div>
+      </div>
+      <div class="card-footer">
+        <button class="apply-link-trigger" data-job-id="${j.id}">
+          View Job & Apply
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  `).join('');
+  
+  // attach event listeners to "View Job & Apply" buttons
+  document.querySelectorAll('.apply-link-trigger').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const jobId = btn.getAttribute('data-job-id');
+      const job = allJobs.find(j => j.id === jobId);
+      if(job) openViewModal(job);
+      else showToast('Job details missing', 'error');
+    });
+  });
+  // Optional: click on card background also opens same modal
+  document.querySelectorAll('.job-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if(e.target.classList.contains('apply-link-trigger') || e.target.closest('.apply-link-trigger')) return;
+      const jobId = card.getAttribute('data-job-id');
+      const job = allJobs.find(j => j.id === jobId);
+      if(job) openViewModal(job);
+    });
+  });
+}
+
+window.runSearch = function(){
+  const kw = document.getElementById('searchKeyword').value.toLowerCase().trim();
+  const loc = document.getElementById('searchLocation').value.toLowerCase().trim();
+  const exp = document.getElementById('searchExp').value.toLowerCase();
+  renderJobs(allJobs.filter(j => {
+    const matchKw = !kw || j.title.toLowerCase().includes(kw) || j.company.toLowerCase().includes(kw) || j.raw.includes(kw);
+    const matchLoc = !loc || j.location.toLowerCase().includes(loc) || j.raw.includes(loc);
+    const matchExp = !exp || j.exp.toLowerCase().includes(exp) || j.raw.includes(exp);
+    const matchChip = !activeChip || j.raw.includes(activeChip) || j.type.toLowerCase().includes(activeChip);
+    return matchKw && matchLoc && matchExp && matchChip;
+  }));
+}
+
+function setChip(el, val){
+  document.querySelectorAll('.f-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  activeChip = val;
+  runSearch();
+}
+
+document.querySelectorAll('.f-chip').forEach(chip => {
+  chip.addEventListener('click', () => setChip(chip, chip.getAttribute('data-filter') || ''));
+});
+document.getElementById('searchKeyword').addEventListener('input', runSearch);
+document.getElementById('searchLocation').addEventListener('input', runSearch);
+document.getElementById('searchExp').addEventListener('change', runSearch);
+
+window.openPostModal = function(){ document.getElementById('postModalOverlay').classList.add('open'); document.body.style.overflow='hidden'; }
+window.closePostModal = function(){ document.getElementById('postModalOverlay').classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('postModalOverlay').addEventListener('click',e=>{ if(e.target===document.getElementById('postModalOverlay')) closePostModal(); });
+document.getElementById('viewModalOverlay').addEventListener('click',e=>{ if(e.target===document.getElementById('viewModalOverlay')) closeViewModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closePostModal(); closeViewModal(); } });
+
+// post job form logic (preserved)
+const descEl = document.getElementById('f_desc');
+if(descEl){
+  descEl.addEventListener('input',()=>{ document.getElementById('f_descCount').textContent = `${descEl.value.length}/2000`; });
+}
+function validateModal(){ 
+  const reqFields = ['f_company','f_email','f_title','f_jobType','f_location','f_experience','f_skills','f_desc'];
+  for(let id of reqFields){
+    const val = document.getElementById(id).value.trim();
+    if(!val){ showToast(`${id.replace('f_','')} is required`,'error'); return false; }
+  }
+  const email = document.getElementById('f_email').value;
+  if(!/^\S+@\S+\.\S+$/.test(email)){ showToast('Valid email needed','error'); return false; }
+  return true;
+}
+function buildSalary(){ 
+  const min=document.getElementById('f_salMin').value, max=document.getElementById('f_salMax').value, vis=document.getElementById('f_salVis').value;
+  if(vis==='hidden') return 'Not disclosed';
+  if(!min && !max) return 'Not disclosed';
+  if(vis==='negotiable') return `₹ ${min||max} LPA (Negotiable)`;
+  if(min && max) return `₹ ${min}-${max} LPA`;
+  return `₹ ${min||max} LPA`;
+}
+window.handleModalSubmit = async function(){
+  if(!validateModal()) return;
+  const btn = document.getElementById('mSubmitBtn'), spin = document.getElementById('mSpin'), label = document.getElementById('mLabel');
+  btn.disabled=true; spin.style.display='block'; label.textContent='Submitting...';
+  const data = {
+    company:document.getElementById('f_company').value.trim(), industry:document.getElementById('f_industry').value,
+    email:document.getElementById('f_email').value.trim(), website:document.getElementById('f_website').value.trim(),
+    title:document.getElementById('f_title').value.trim(), jobType:document.getElementById('f_jobType').value,
+    workMode:document.getElementById('f_workMode').value, location:document.getElementById('f_location').value.trim(),
+    role:document.getElementById('f_role').value.trim(), experience:document.getElementById('f_experience').value,
+    openings:document.getElementById('f_openings').value||'1', salary:buildSalary(), lastDate:document.getElementById('f_lastDate').value.trim(),
+    skills:document.getElementById('f_skills').value.trim(), qualification:document.getElementById('f_qual').value.trim(),
+    description:document.getElementById('f_desc').value.trim(), perks:document.getElementById('f_perks').value.trim(),
+    applyLink:document.getElementById('f_applyLink').value.trim(),
+  };
+  try{ await window._submitJob(data); document.getElementById('modalForm').style.display='none'; document.getElementById('modalSuccess').classList.add('show'); }
+  catch(err){ showToast('Submission failed','error'); btn.disabled=false; spin.style.display='none'; label.textContent='Submit for Review'; }
+}
+window.resetModal = function(){
+  document.querySelectorAll('#modalForm input, #modalForm select, #modalForm textarea').forEach(el=>el.value='');
+  document.getElementById('f_descCount').textContent='0/2000';
+  document.getElementById('modalForm').style.display=''; document.getElementById('modalSuccess').classList.remove('show');
+  document.getElementById('mSubmitBtn').disabled=false; document.getElementById('mSpin').style.display='none';
+  document.getElementById('mLabel').textContent='Submit for Review';
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadJobs);
+} else {
+  loadJobs();
+}
+
+})();
+
+// --- JOBS JS ---
+(function(){
+
+})();
+
+
+// --- STARTUP JS ---
+(function(){
+
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+  }
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'theme') {
+      if (event.data.theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  });
+
+  
+  
+  const db = firebase.firestore();
+  const POSTS_COLLECTION = "startup_posts";
+  const COMMENTS_COLLECTION = "startup_comments";
+  const LIKES_COLLECTION = "startup_likes"; 
+
+  let activeFilter = "all";
+  let allPosts = [];
+  let currentUserId = null;
+
+  function getUserId() {
+    let id = localStorage.getItem("startup_user_id");
+    if (!id) {
+      id = "user_" + Date.now() + "_" + Math.random().toString(36).substr(2, 8);
+      localStorage.setItem("startup_user_id", id);
+    }
+    return id;
+  }
+
+  const searchInput = document.getElementById("startupSearchInput");
+  const feedEmpty = document.getElementById("feedEmpty");
+  const feedStatus = document.getElementById("feedStatus");
+  const adminPosts = document.getElementById("adminPosts");
+  const toast = document.getElementById("startupToast");
+
+  function escapeHtml(value = "") {
+    return value.replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[character]));
+  }
+
+  function safeSourceUrl(value = "") {
+    try {
+      const url = new URL(value);
+      return ["http:", "https:"].includes(url.protocol) ? url.href : "#";
+    } catch {
+      return "#";
+    }
+  }
+
+  function showToast(message, isError = false) {
+    toast.textContent = message;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+  }
+
+  function formatTime(value) {
+    if (!value) return "Recently";
+    const date = value.toDate ? value.toDate() : new Date(value);
+    if (isNaN(date.getTime())) return "Recently";
+    return date.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+  }
+
+  async function getLikeCount(postId) {
+    const doc = await db.collection(LIKES_COLLECTION).doc(postId).get();
+    return doc.exists ? (doc.data().count || 0) : 0;
+  }
+
+  async function hasUserLiked(postId, userId) {
+    const likeRef = db.collection(LIKES_COLLECTION).doc(postId).collection("users").doc(userId);
+    const doc = await likeRef.get();
+    return doc.exists;
+  }
+
+  async function toggleLike(postId, userId) {
+    const postLikeRef = db.collection(LIKES_COLLECTION).doc(postId);
+    const userLikeRef = postLikeRef.collection("users").doc(userId);
+    const userDoc = await userLikeRef.get();
+    if (userDoc.exists) {
+      await userLikeRef.delete();
+      await postLikeRef.update({ count: firebase.firestore.FieldValue.increment(-1) });
+      return false;
+    } else {
+      await userLikeRef.set({ userId, createdAt: new Date().toISOString() });
+      await postLikeRef.set({ count: firebase.firestore.FieldValue.increment(1) }, { merge: true });
+      return true;
+    }
+  }
+
+  async function loadLikeStates() {
+    const userId = getUserId();
+    const postCards = document.querySelectorAll("#adminPosts .post-card");
+    for (const card of postCards) {
+      const id = card.dataset.id;
+      const liked = await hasUserLiked(id, userId);
+      const count = await getLikeCount(id);
+      const likeSpans = card.querySelectorAll(`.like-count-${id}`);
+      likeSpans.forEach(span => span.textContent = count);
+      const likeBtn = card.querySelector(`.like-btn-${id}`);
+      if (likeBtn && liked) likeBtn.classList.add("active");
+    }
+  }
+
+  function postMarkup(post, id) {
+    const category = post.category || "general";
+    const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1);
+    
+    let coverUrl = "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80";
+    if (category === 'funding') {
+      coverUrl = "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80";
+    } else if (category === 'stories') {
+      coverUrl = "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80";
+    } else if (category === 'events') {
+      coverUrl = "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80";
+    } else if (category === 'accelerators') {
+      coverUrl = "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80";
+    }
+    
+    return `<article class="post-card" data-id="${escapeHtml(id)}" data-category="${escapeHtml(category)}" data-search="${escapeHtml(`${post.title} ${post.article} ${post.sourceName}`.toLowerCase())}">
+      <div class="post-cover-img-wrap">
+        <img class="post-cover-img" src="${coverUrl}" alt="${escapeHtml(categoryLabel)} Graphic" loading="lazy">
+      </div>
+      <div class="post-main">
+        <header class="post-head">
+          <span class="avatar" style="--avatar:#8b5cf6">SP</span>
+          <div class="post-author">
+            <div class="author-line">
+              <span class="author-name">Spread</span>
+              <span class="verified"><svg class="icon" style="width:13px;height:13px;stroke:#10b981;fill:#10b981;"><use href="#i-check"></use></svg></span>
+            </div>
+            <div class="post-meta">
+              <span>${formatTime(post.createdAt)}</span>
+              <span>•</span>
+              <span class="category-badge-meta">${escapeHtml(categoryLabel)}</span>
+            </div>
+          </div>
+          <button class="more-btn" type="button" aria-label="More post options" data-toast="More options will be available soon.">
+            <svg class="icon"><use href="#i-more"></use></svg>
+          </button>
+        </header>
+        
+        <h2 class="post-title">${escapeHtml(post.title)}</h2>
+        <p class="post-copy">${escapeHtml(post.article)}</p>
+        
+        <div class="source-row">
+          <span>Brief summary by Spread.</span>
+          <a class="source-link" href="${escapeHtml(safeSourceUrl(post.sourceUrl))}" target="_blank" rel="noopener noreferrer">
+            Source: ${escapeHtml(post.sourceName)} <svg class="icon"><use href="#i-link"></use></svg>
+          </a>
+        </div>
+
+        <div class="post-stats-row-container">
+          <div class="post-footer-left">
+            <div class="face-pile">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="user" class="pile-avatar">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="user" class="pile-avatar" style="margin-left: -8px;">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="user" class="pile-avatar" style="margin-left: -8px;">
+            </div>
+            <span class="appreciation-text-span">
+              <strong class="like-count-${id}">0</strong> appreciations
+            </span>
+          </div>
+          
+          <div class="post-footer-right-actions">
+            <!-- Like (Appreciate) -->
+            <button class="post-action-icon-only like-btn-${id} like-btn" data-id="${id}" type="button" aria-label="Like post">
+              <svg class="icon"><use href="#i-heart"></use></svg>
+              <span class="btn-stat-count like-count-${id}">0</span>
+            </button>
+            
+            <!-- Comment -->
+            <button class="post-action-icon-only toggle-comments-btn" data-id="${id}" type="button" aria-label="Comment post">
+              <svg class="icon"><use href="#i-comment"></use></svg>
+              <span class="btn-stat-count comment-count-${id}">0</span>
+            </button>
+            
+            <!-- Share -->
+            <button class="post-action-icon-only share-btn" data-id="${id}" type="button" aria-label="Share post">
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="comments-section" id="comments-${id}"></div>
+    </article>`;
+  }
+
+  async function getComments(postId) {
+    const doc = await db.collection(COMMENTS_COLLECTION).doc(postId).get();
+    return doc.exists ? doc.data().comments || [] : [];
+  }
+
+  async function addComment(postId, name, text) {
+    const ref = db.collection(COMMENTS_COLLECTION).doc(postId);
+    const doc = await ref.get();
+    const comments = doc.exists ? doc.data().comments || [] : [];
+    comments.push({ name, text, createdAt: new Date().toISOString() });
+    await ref.set({ comments });
+  }
+
+  async function loadCommentsIntoSection(postId) {
+    const section = document.getElementById(`comments-${postId}`);
+    if (!section) return;
+    const comments = await getComments(postId);
+    const savedName = localStorage.getItem("startup_reader_name");
+    let nameHtml = '';
+    if (!savedName) {
+      nameHtml = `
+        <div class="name-input">
+          <input type="text" id="name-${postId}" placeholder="Your name" class="comment-input">
+          <button class="post-comment-btn" data-save-name="${postId}">Save</button>
+        </div>
+      `;
+    }
+    const commentsHtml = comments.length ? comments.map(c => `
+      <div class="comment-item">
+        <div class="comment-name">${escapeHtml(c.name)}</div>
+        <div class="comment-text">${escapeHtml(c.text)}</div>
+      </div>
+    `).join('') : '<div class="comment-item">No comments yet. Start the conversation.</div>';
+    section.innerHTML = `
+      <div class="comment-list">${commentsHtml}</div>
+      <div class="comment-form-inline">
+        ${nameHtml}
+        <textarea id="comment-text-${postId}" class="comment-input" rows="2" placeholder="Write a comment..."></textarea>
+        <button class="post-comment-btn" data-submit="${postId}">Post comment</button>
+      </div>
+    `;
+    if (!savedName) {
+      const saveBtn = section.querySelector(`[data-save-name="${postId}"]`);
+      if (saveBtn) saveBtn.onclick = () => {
+        const nameInput = document.getElementById(`name-${postId}`);
+        if (nameInput.value.trim()) {
+          localStorage.setItem("startup_reader_name", nameInput.value.trim());
+          loadCommentsIntoSection(postId);
+          showToast("Name saved");
+        } else showToast("Please enter a name");
+      };
+    }
+    const submitBtn = section.querySelector(`[data-submit="${postId}"]`);
+    if (submitBtn) submitBtn.onclick = async () => {
+      let name = localStorage.getItem("startup_reader_name");
+      if (!name) {
+        const nameInput = document.getElementById(`name-${postId}`);
+        if (nameInput && nameInput.value.trim()) {
+          name = nameInput.value.trim();
+          localStorage.setItem("startup_reader_name", name);
+        } else {
+          showToast("Please enter your name first");
+          return;
+        }
+      }
+      const textarea = document.getElementById(`comment-text-${postId}`);
+      const text = textarea.value.trim();
+      if (!text) { showToast("Write something"); return; }
+      await addComment(postId, name, text);
+      textarea.value = "";
+      await loadCommentsIntoSection(postId);
+      updateCommentCounts();
+      showToast("Comment posted");
+    };
+  }
+
+  function toggleComments(postId) {
+    const section = document.getElementById(`comments-${postId}`);
+    if (!section) return;
+    const isOpen = section.classList.contains("open");
+    if (!isOpen) {
+      section.classList.add("open");
+      loadCommentsIntoSection(postId);
+    } else {
+      section.classList.remove("open");
+    }
+  }
+
+  async function updateCommentCounts() {
+    const postCards = document.querySelectorAll("#adminPosts .post-card");
+    for (const card of postCards) {
+      const id = card.dataset.id;
+      const comments = await getComments(id);
+      const countSpan = card.querySelector(`.comment-count-${id}`);
+      if (countSpan) countSpan.textContent = comments.length;
+    }
+  }
+
+  async function loadPosts() {
+    feedStatus.textContent = "Loading posts...";
+    try {
+      const snapshot = await db.collection(POSTS_COLLECTION).get();
+      allPosts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      allPosts.sort((a, b) => {
+        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return timeB - timeA;
+      });
+
+      if (allPosts.length === 0) {
+        adminPosts.innerHTML = '<div class="feed-empty">No posts yet. Check back later.</div>';
+        feedStatus.textContent = "No posts";
+        feedEmpty.style.display = "block";
+        return;
+      }
+      let html = "";
+      allPosts.forEach(post => {
+        html += postMarkup(post, post.id);
+      });
+      adminPosts.innerHTML = html;
+      feedEmpty.style.display = "none";
+      feedStatus.textContent = allPosts.length + " posts";
+      attachInteractions();
+      await loadLikeStates();
+      await updateCommentCounts();
+      applyFilters();
+      updateNotifications();
+    } catch (err) {
+      console.error(err);
+      feedStatus.textContent = "Error loading feed";
+      showToast("Failed to load posts");
+    }
+  }
+
+  async function attachInteractions() {
+    document.querySelectorAll("#adminPosts .like-btn").forEach(btn => {
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = "true";
+      btn.addEventListener("click", async (e) => {
+        const postId = btn.dataset.id;
+        const userId = getUserId();
+        const liked = await toggleLike(postId, userId);
+        const newCount = await getLikeCount(postId);
+        const countSpans = document.querySelectorAll(`.like-count-${postId}`);
+        countSpans.forEach(span => span.textContent = newCount);
+        if (liked) {
+          btn.classList.add("active");
+          showToast("Appreciation added");
+        } else {
+          btn.classList.remove("active");
+          showToast("Appreciation removed");
+        }
+      });
+    });
+
+    document.querySelectorAll("#adminPosts .toggle-comments-btn").forEach(btn => {
+      if (btn.dataset.boundComments) return;
+      btn.dataset.boundComments = "true";
+      btn.addEventListener("click", () => toggleComments(btn.dataset.id));
+    });
+
+    document.querySelectorAll("#adminPosts .share-btn").forEach(btn => {
+      if (btn.dataset.boundShare) return;
+      btn.dataset.boundShare = "true";
+      btn.addEventListener("click", async () => {
+        try { await navigator.clipboard.writeText(location.href.split("#")[0] + "#" + btn.dataset.id); showToast("Post link copied."); }
+        catch { showToast("Post is ready to share."); }
+      });
+    });
+
+    document.querySelectorAll("#adminPosts [data-toast]").forEach(btn => {
+      if (btn.dataset.toastBound) return;
+      btn.dataset.toastBound = "true";
+      btn.addEventListener("click", () => showToast(btn.dataset.toast));
+    });
+  }
+
+  function applyFilters() {
+    const query = searchInput.value.trim().toLowerCase();
+    let visible = 0;
+    document.querySelectorAll("#adminPosts .post-card").forEach(card => {
+      const categoryStr = card.dataset.category || "general";
+      const categories = categoryStr.split(" ");
+      const matchesFilter = activeFilter === "all" || categories.includes(activeFilter);
+      const searchStr = card.dataset.search || "";
+      const matchesSearch = !query || searchStr.includes(query) || card.textContent.toLowerCase().includes(query);
+      const show = matchesFilter && matchesSearch;
+      card.classList.toggle("hidden", !show);
+      if (show) visible++;
+    });
+    feedEmpty.style.display = visible ? "none" : "block";
+    feedStatus.textContent = query ? `${visible} search result${visible === 1 ? "" : "s"}` : activeFilter === "all" ? `Showing all (${visible})` : `Showing ${activeFilter} (${visible})`;
+  }
+
+  window.setStartupFilter = function(filter) {
+    activeFilter = filter;
+    document.querySelectorAll(".category-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.filter === filter));
+    applyFilters();
+  }
+
+  function getTodayStart() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
+  }
+
+  function updateNotifications() {
+    const lastSeenStr = localStorage.getItem("startup_last_notification_seen");
+    const lastSeen = lastSeenStr ? new Date(lastSeenStr) : getTodayStart();
+    const todayStart = getTodayStart();
+    const sinceDate = lastSeen > todayStart ? lastSeen : todayStart;
+    const newPosts = allPosts.filter(post => {
+      const postDate = post.createdAt ? new Date(post.createdAt) : null;
+      return postDate && postDate > sinceDate;
+    });
+    const dot = document.getElementById("notificationDot");
+    if (newPosts.length > 0) {
+      dot.classList.remove("read");
+      dot.textContent = newPosts.length;
+    } else {
+      dot.classList.add("read");
+      dot.textContent = "";
+    }
+    const panel = document.getElementById("notificationsList");
+    if (newPosts.length === 0) {
+      panel.innerHTML = '<div class="notification-item">No new posts since your last visit.</div>';
+    } else {
+      panel.innerHTML = newPosts.map(post => `
+        <div class="notification-item">
+          <div class="notification-title">📢 ${escapeHtml(post.title)}</div>
+          <div class="notification-time">${formatTime(post.createdAt)}</div>
+        </div>
+      `).join('');
+    }
+  }
+
+  function markNotificationsRead() {
+    localStorage.setItem("startup_last_notification_seen", new Date().toISOString());
+    document.getElementById("notificationDot").classList.add("read");
+    updateNotifications(); 
+    showToast("Notifications marked as read");
+  }
+
+  document.querySelectorAll(".category-btn").forEach(btn => btn.addEventListener("click", () => window.setStartupFilter(btn.dataset.filter)));
+  searchInput.addEventListener("input", applyFilters);
+  
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'filter') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.setStartupFilter(event.data.filter);
+    }
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "/" && !["INPUT","TEXTAREA"].includes(document.activeElement.tagName)) { e.preventDefault(); searchInput.focus(); }
+    if (e.key === "Escape") {
+      document.querySelectorAll(".comments-section.open").forEach(s => s.classList.remove("open"));
+    }
+  });
+
+  const notifBtn = document.getElementById("notificationButton");
+  const notifPanel = document.getElementById("notifications");
+  notifBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    notifPanel.classList.toggle("open");
+    if (notifPanel.classList.contains("open")) {
+      markNotificationsRead();
+    }
+  });
+  document.getElementById("markRead").addEventListener("click", () => {
+    markNotificationsRead();
+    notifPanel.classList.remove("open");
+  });
+  document.addEventListener("click", (e) => {
+    if (!notifBtn.contains(e.target) && !notifPanel.contains(e.target)) {
+      notifPanel.classList.remove("open");
+    }
+  });
+
+  async function seedSamplePosts() {
+    const snapshot = await db.collection(POSTS_COLLECTION).limit(1).get();
+    if (snapshot.empty) {
+      const samples = [
+        { id: "sample-funding", category: "funding", title: "Startup XYZ raises ₹5 crore to make AI useful for small teams", article: "The Bengaluru startup will use its seed round to expand across India and hire new engineers. Its founder says the focus is simple: give lean teams practical tools that save hours every week, without needing a dedicated AI department.", sourceName: "XYZ Website", sourceUrl: "https://example.com", createdAt: "2026-07-01T08:00:00.000Z" },
+        { id: "sample-accelerator", category: "accelerators", title: "Applications are open for the next T-Hub founder cohort", article: "Six months of focused support for teams building ambitious products from India. Selected founders get operator office hours, investor introductions, customer pilots, and a room full of peers who understand the work.", sourceName: "T-Hub", sourceUrl: "https://t-hub.co", createdAt: "2026-06-30T10:00:00.000Z" }
+      ];
+      for (const s of samples) await db.collection(POSTS_COLLECTION).doc(s.id).set(s);
+    }
+  }
+
+  seedSamplePosts()
+    .catch(err => console.error("Error seeding posts:", err))
+    .finally(() => loadPosts());
+
+})();
+
+// --- STARTUP JS ---
+(function(){
+
+})();
+
 </script>
 </body>
 </html>
