@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-  <title>Spread One · Connect & share</title>
+  <title>Spred One · Connect & share</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <script>
@@ -31,19 +33,21 @@
     /* Dark Mode Global Overrides - Instagram Style */
     html.dark body { background: #0d0d0d; }
     html.dark .bg-white { background-color: #0d0d0d !important; }
-    html.dark .bg-slate-50 { background-color: #121212 !important; }
-    html.dark .bg-slate-50\/50 { background-color: #121212 !important; }
+    html.dark .bg-slate-50 { background-color: #171717 !important; }
+    html.dark .bg-slate-50\/20 { background-color: #121212 !important; }
+    html.dark .bg-slate-50\/50 { background-color: #171717 !important; }
     html.dark .bg-slate-100 { background-color: #262626 !important; }
-    html.dark .border-slate-100, html.dark .border-slate-50\/50 { border-color: #262626 !important; }
-    html.dark .text-slate-700, html.dark .text-\[\#111827\], html.dark .text-\[\#1e293b\], html.dark .text-black { color: #f5f5f5 !important; }
-    html.dark .text-slate-600 { color: #f5f5f5 !important; }
-    html.dark .text-slate-500 { color: #a8a8a8 !important; }
-    html.dark .text-slate-400 { color: #737373 !important; }
+    html.dark .border-slate-100, html.dark .border-slate-50\/50, html.dark .border-slate-100\/70 { border-color: #262626 !important; }
+    html.dark .text-slate-800, html.dark .text-slate-700, html.dark .text-\[\#111827\], html.dark .text-\[\#1e293b\], html.dark .text-black { color: #f8fafc !important; }
+    html.dark .text-slate-600 { color: #f1f5f9 !important; }
+    html.dark .text-slate-500 { color: #cbd5e1 !important; }
+    html.dark .text-slate-400 { color: #94a3b8 !important; }
+    html.dark .text-slate-300 { color: #64748b !important; }
     html.dark .post-content-text { color: #ffffff !important; }
-    html.dark .hover\:bg-slate-50:hover { background-color: #121212 !important; }
-    html.dark .hover\:bg-slate-100:hover { background-color: #262626 !important; }
-    html.dark .placeholder-slate-400::placeholder { color: #737373 !important; }
-    html.dark input, html.dark [contenteditable] { color: #f5f5f5 !important; }
+    html.dark .hover\:bg-slate-50:hover { background-color: #262626 !important; }
+    html.dark .hover\:bg-slate-100:hover { background-color: #334155 !important; }
+    html.dark .placeholder-slate-400::placeholder { color: #94a3b8 !important; }
+    html.dark input, html.dark [contenteditable] { color: #f8fafc !important; }
     html.dark .shadow-\[0_4px_24px_rgba\(0\,0\,0\,0\.03\)\] { box-shadow: none !important; }
     html.dark .iframe-container { background: #0d0d0d; }
     html.dark .bottom-nav { background: rgba(13, 13, 13, 0.95); border-color: #262626; border-top: 1px solid #262626; }
@@ -51,7 +55,7 @@
     html.dark .bottom-nav .nav-item.active { color: #0095f6; }
     html.dark .alert-item { background: #0d0d0d; border-color: #262626; }
     html.dark .alert-item:hover { border-color: #383838; }
-    html.dark .post-card, html.dark #postCreationCard, html.dark #userDropdown { border: 1px solid #262626 !important; }
+    html.dark .post-card, html.dark #postCreationCard, html.dark .header-container, html.dark #filtersSection, html.dark #userDropdown { border: 1px solid #262626 !important; }
 
     .post-card { transition: box-shadow 0.2s ease; overflow: hidden; contain: layout style; }
     .post-inner { padding: 0.5rem 0; }
@@ -65,6 +69,32 @@
     .post-content-text.collapsed .read-less-btn { display: none; }
     .read-more-btn, .read-less-btn { color: #6B7280; font-weight: 500; cursor: pointer; margin-left: 0.25rem; font-size: 0.85rem; display: inline; background: none; border: none; padding: 0; }
     .read-more-btn:hover, .read-less-btn:hover { color: #4B5563; text-decoration: underline; }
+    .btn-glass-purple {
+      background: rgba(124, 58, 237, 0.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(124, 58, 237, 0.18);
+      color: #7C3AED;
+      font-weight: 600;
+      transition: all 0.2s ease-in-out;
+    }
+    .btn-glass-purple:hover {
+      background: rgba(124, 58, 237, 0.12);
+      border-color: rgba(124, 58, 237, 0.3);
+      transform: translateY(-0.5px);
+    }
+    .btn-glass-purple:active {
+      transform: translateY(0);
+    }
+    html.dark .btn-glass-purple {
+      background: rgba(139, 92, 246, 0.12) !important;
+      border-color: rgba(139, 92, 246, 0.25) !important;
+      color: #c084fc !important;
+    }
+    html.dark .btn-glass-purple:hover {
+      background: rgba(139, 92, 246, 0.18) !important;
+      border-color: rgba(139, 92, 246, 0.35) !important;
+    }
     .post-image { width: 100%; display: block; margin-top: 0.3rem; overflow: hidden; }
     .post-image img { width: 100%; height: auto; display: block; }
     .action-btn { transition: all 0.15s ease; background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.4rem 0.6rem; border-radius: 2rem; font-weight: 500; }
@@ -171,7 +201,7 @@
     .hashtag:hover { text-decoration: underline; }
     .alert-item { background: white; border-radius: 1rem; padding: 0.75rem; margin-bottom: 0.6rem; border: 1px solid #eef2ff; transition: all 0.1s; cursor: pointer; }
     .alert-item:active { transform: scale(0.98); }
-    .header-container { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.75rem; padding: 0 0.25rem; }
+    .header-container { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 0.75rem; }
     .logo-spreadone { font-size: 1.65rem; font-weight: 800; background: linear-gradient(135deg, #0f2c1f, #2b6e3c); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -0.5px; margin-left: 0.5rem; white-space: nowrap; }
     .search-wrapper { flex: 1; max-width: none; min-width: 0; }
     .hidden-creator { display: none !important; }
@@ -190,9 +220,25 @@
       z-index: 50;
       background: #f4f6fa;
       -webkit-overflow-scrolling: touch;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .iframe-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    .iframe-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .iframe-container::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.35);
+      border-radius: 4px;
     }
     .iframe-container.active { display: block; }
+    html.iframe-active,
+    body.iframe-active {
+      overflow: hidden !important;
+      height: 100vh !important;
+    }
     iframe {
       width: 100%;
       height: 100%;
@@ -204,7 +250,7 @@
     
     /* Community CSS */
     .community-page { width: 100%; max-width: 1100px; overflow-x: hidden; background: transparent; padding: 0 6px; margin: 0 auto; }
-    .community-top { display: flex; justify-content: space-between; align-items: center; padding: 8px 6px 6px 6px; gap: 8px; }
+    .community-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; gap: 8px; background-color: #ffffff; border-radius: 12px; margin-bottom: 8px; border: 1px solid rgba(0, 0, 0, 0.05); }
     .community-title { font-size: 24px; font-weight: 900; color: #111827; }
     .spread-text { color: #111827; }
     .community-ask-btn { border: none; padding: 8px 12px; border-radius: 12px; background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
@@ -228,15 +274,16 @@
     .read-more-btn { font-size: 11px; font-weight: 700; color: #6B7280; cursor: pointer; display: inline-block; margin-bottom: 2px; }
     .community-actions { display: flex; gap: 16px; margin-top: 2px; margin-bottom: 6px; flex-wrap: wrap; }
     .community-action { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: #6b7280; cursor: pointer; }
-    .community-action.marked-helpful { color: #b8860b; cursor: pointer; }
-    .helpful-count { background: #f0f0f0; padding: 2px 5px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #4b5563; }
-    .community-action.marked-helpful .helpful-count { background: #fef08a; color: #b8860b; }
-    .comment-helpful.marked-helpful { color: #b8860b; cursor: pointer; }
+    .community-action.marked-helpful { color: #8b5cf6; cursor: pointer; }
+    .helpful-count { background: #f3f4f6; padding: 2px 6px; border-radius: 20px; font-size: 11px; font-weight: 700; color: #4b5563; }
+    .community-action.marked-helpful .helpful-count { background: #ede9fe; color: #8b5cf6; }
+    .comment-helpful.marked-helpful { color: #8b5cf6; cursor: pointer; }
     .reply-form { display: none; margin-top: 6px; }
     .reply-form.active { display: block; }
     .reply-input, .reply-text { width: 100%; padding: 8px 10px; border: none; outline: none; border-radius: 10px; background: #f5f5f5; font-size: 12px; margin-bottom: 5px; border: 1px solid rgba(0, 0, 0, 0.06); font-family: 'Roboto', sans-serif; }
     .reply-text { height: 60px; resize: none; }
-    .reply-submit { border: none; padding: 8px 12px; border-radius: 10px; background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .reply-submit { border: none; padding: 8px 12px; border-radius: 10px; background: #8b5cf6; color: white; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s ease; }
+    .reply-submit:hover { background: #7c3aed; }
     .comment-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; max-height: 420px; overflow-y: auto; overflow-x: hidden; padding: 4px 2px 4px 2px; scroll-behavior: smooth; background: #fafafa; border-radius: 14px; }
     .comment-list::-webkit-scrollbar { width: 5px; }
     .comment-list::-webkit-scrollbar-track { background: #efefef; border-radius: 8px; }
@@ -304,7 +351,7 @@
 /* --- JOBS CSS --- */
 
 *{box-sizing:border-box;margin:0;padding:0;}
-.jobs-page-wrapper{min-height:100%;font-family:'Plus Jakarta Sans',sans-serif;color:#fff;}
+.jobs-page-wrapper{min-height:100%;font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color:#fff;}
 .jobs-page-wrapper{
   -webkit-user-select: none; user-select: none;
   background:#06080f;
@@ -346,16 +393,16 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 .stats-row{display:flex;justify-content:center;gap:30px;margin-top:18px;flex-wrap:wrap;}
 .stat{text-align:center;}
 .stat-num{font-size:20px;font-weight:700;color:#fff;}
-.stat-lbl{font-size:10px;color:rgba(255,255,255,0.36);text-transform:uppercase;letter-spacing:.06em;}
+.stat-lbl{font-size:10px;color:rgba(255,255,255,0.9);text-transform:uppercase;letter-spacing:.06em;}
 .filter-bar{width:100%;padding:0 0 10px;}
 .filter-inner{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:12px;padding:9px 13px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
-.filter-label{font-size:10px;font-weight:600;color:rgba(255,255,255,0.36);text-transform:uppercase;letter-spacing:.07em;}
-.f-chip{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.14);border-radius:100px;padding:4px 11px;font-size:11.5px;font-weight:500;cursor:pointer;transition:background .13s,color .13s;font-family:'Plus Jakarta Sans',sans-serif;}
+.filter-label{font-size:10px;font-weight:600;color:rgba(255,255,255,0.9);text-transform:uppercase;letter-spacing:.07em;}
+.f-chip{background:rgba(255,255,255,0.08);color:#ffffff;border:1px solid rgba(255,255,255,0.14);border-radius:100px;padding:4px 11px;font-size:11.5px;font-weight:500;cursor:pointer;transition:background .13s,color .13s;font-family:'Plus Jakarta Sans',sans-serif;}
 .f-chip:hover{background:rgba(255,255,255,0.14);color:#fff;}
 .f-chip.active{background:#1b4fff;color:#fff;border-color:#1b4fff;}
-.result-meta{margin-left:auto;font-size:11px;color:rgba(255,255,255,0.36);white-space:nowrap;font-weight:500;}
+.result-meta{margin-left:auto;font-size:11px;color:rgba(255,255,255,0.9);white-space:nowrap;font-weight:500;}
 #resultCount{color:#60a5fa;font-weight:700;}
-.lbl{font-size:10px;font-weight:600;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+.lbl{font-size:10px;font-weight:600;color:#ffffff;text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
 .lbl::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);}
 .job-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
 .job-card{display:flex;flex-direction:column;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.13);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:14px;padding:13px 13px 11px;color:#fff;transition:transform .18s,border-color .18s,background .18s;animation:fadeUp .35s ease both;position:relative;overflow:hidden;cursor:pointer;}
@@ -363,11 +410,11 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 .job-card:hover{transform:translateY(-2px);background:rgba(255,255,255,0.10);border-color:rgba(96,165,250,0.45);}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 .new-tag{position:absolute;top:10px;right:10px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:rgba(48,209,88,0.15);color:#34d399;border:1px solid rgba(52,211,153,0.30);border-radius:5px;padding:2px 6px;line-height:1.5;}
-.job-title{font-size:14px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:9px;padding-right:42px;}
+.job-title{font-size:15px;font-weight:600;letter-spacing:-0.01em;color:#fff;line-height:1.35;margin-bottom:9px;padding-right:42px;}
 .detail-list{display:flex;flex-direction:column;gap:3px;margin-bottom:9px;}
 .detail-row{display:flex;align-items:baseline;gap:6px;font-size:12px;line-height:1.45;}
-.detail-label{color:rgba(255,255,255,0.35);font-weight:500;min-width:76px;flex-shrink:0;font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;}
-.detail-value{color:rgba(255,255,255,0.82);font-weight:500;}
+.detail-label{color:rgba(255,255,255,0.9);font-weight:500;min-width:76px;flex-shrink:0;font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;}
+.detail-value{color:#ffffff;font-weight:500;}
 .detail-value.salary-val{color:#60a5fa;font-weight:700;}
 .card-footer{margin-top:auto;border-top:1px solid rgba(255,255,255,0.08);padding-top:9px;display:flex;justify-content:flex-end;}
 .apply-link-trigger{font-size:11.5px;font-weight:700;color:#60a5fa;display:flex;align-items:center;gap:3px;background:transparent;border:none;font-family:inherit;cursor:pointer;padding:4px 8px 4px 4px;border-radius:20px;transition:background 0.1s;}
@@ -402,14 +449,14 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 .modal-head h2{font-size:19px;font-weight:800;letter-spacing:-0.2px;}
 .modal-close{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.70);border-radius:9px;padding:6px 14px;cursor:pointer;font-size:12px;font-weight:600;transition:all .15s;}
 .modal-close:hover{background:#1b4fff;color:#fff;border-color:#1b4fff;}
-.v-section{font-size:10px;font-weight:700;color:rgba(255,255,255,0.34);text-transform:uppercase;letter-spacing:.09em;border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:6px;margin:16px 0 10px;}
+.v-section{font-size:10px;font-weight:700;color:#ffffff;text-transform:uppercase;letter-spacing:.09em;border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:6px;margin:16px 0 10px;}
 .v-section:first-of-type{margin-top:0;}
 .v-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 16px;}
 .v-grid-item{display:flex;flex-direction:column;gap:2px;}
-.v-grid-label{font-size:9px;font-weight:700;color:rgba(255,255,255,0.38);text-transform:uppercase;letter-spacing:.06em;}
-.v-grid-value{font-size:13px;font-weight:500;color:#e2e8f0;word-break:break-word;}
+.v-grid-label{font-size:10px;font-weight:600;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:.06em;}
+.v-grid-value{font-size:13px;font-weight:600;color:#ffffff;word-break:break-word;}
 .full-width{grid-column:1/-1;}
-.jd-text{background:rgba(255,255,255,0.04);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.55;color:#cbd5e1;white-space:pre-wrap;margin-top:6px;}
+.jd-text{background:rgba(255,255,255,0.04);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.6;color:#f1f5f9;font-weight:400;white-space:pre-wrap;margin-top:6px;}
 .apply-btn-modal{background:#1b4fff;color:#fff;border:none;border-radius:40px;padding:12px 24px;font-weight:700;font-size:14px;width:100%;margin-top:18px;margin-bottom:0;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:all 0.2s;font-family:inherit;}
 .apply-btn-modal:hover{background:#0f3ad9;transform:scale(1.01);}
 .apply-btn-modal:active{transform:scale(0.98);}
@@ -493,7 +540,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
 
     #startup-community-feed .brand-title {
-      font-size: 1.25rem;
+      font-size: 18px;
       font-weight: 900;
       letter-spacing: -0.5px;
       color: var(--text-primary);
@@ -638,37 +685,43 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     /* --- PAGE SHELL & LAYOUT --- */
     #startup-community-feed .page-shell {
       width: 100%;
-      max-width: 680px;
+      max-width: 1084px;
       margin: 0 auto;
       padding: 8px 0.5% 140px;
     }
     /* --- CATEGORY NAVIGATION --- */
     #startup-community-feed .category-nav {
       display: flex;
-      justify-content: space-between;
-      gap: 2px;
-      overflow-x: visible;
-      padding: 0 4px;
-      margin: 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      background: transparent;
-      margin-bottom: 2px;
+      justify-content: center !important;
+      gap: 32px !important;
+      width: 1084px;
+      max-width: 100%;
+      overflow-x: auto;
+      padding: 0 16px !important;
+      margin: 0 auto 10px auto;
+      border: none !important;
+      background-color: #ffffff !important;
+      height: 52px !important;
+      align-items: center;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
     #startup-community-feed .category-nav::-webkit-scrollbar {
       display: none;
     }
 
     #startup-community-feed .category-btn {
-      flex: 1;
+      flex: 0 0 auto !important;
+      width: auto !important;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 4px;
+      gap: 3px !important;
       background: transparent !important;
       border: none !important;
-      color: #6b7280;
-      padding: 6px 0px;
+      color: #64748b;
+      padding: 4px 18px !important;
       cursor: pointer;
       position: relative;
       transition: all 0.25s ease;
@@ -677,143 +730,301 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
 
     #startup-community-feed .category-btn .category-icon {
-      font-size: 20px;
-      color: #4b5563;
+      font-size: 18px;
+      color: #64748b;
       transition: all 0.25s ease;
     }
 
     #startup-community-feed .category-btn .category-label {
-      font-size: 10px;
+      font-size: 12px;
       letter-spacing: -0.2px;
-      font-weight: 600;
+      font-weight: 700;
+      color: #334155;
       transition: all 0.25s ease;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       text-align: center;
-      width: 100%;
+      width: auto;
     }
 
     #startup-community-feed .category-btn.active {
-      color: #ffffff;
+      color: #6d28d9;
     }
 
     #startup-community-feed .category-btn.active .category-icon {
-      color: var(--purple-light);
+      color: #7c3aed;
     }
 
     #startup-community-feed .category-btn.active::after {
       content: '';
       position: absolute;
-      bottom: -4px;
+      bottom: 2px;
       left: 50%;
       transform: translateX(-50%);
       width: 24px;
       height: 2.5px;
-      background-color: var(--purple-primary);
+      background-color: #7c3aed;
       border-radius: 99px;
-      box-shadow: 0 0 10px rgba(139, 92, 246, 0.7);
+      box-shadow: 0 0 8px rgba(124, 58, 237, 0.4);
     }
 
-    /* --- TRENDING HERO CAROUSEL --- */
+    /* --- TRENDING HERO CAROUSEL (Full-Bleed Blurred Background Image & Centered Overlay) --- */
+    div#trendingCarousel,
     #startup-community-feed .trending-carousel-container {
-      background: linear-gradient(135deg, #09090e 0%, #12121d 100%);
-      border: 1px solid rgba(139, 92, 246, 0.12);
+      background: #090814;
+      border: 1px solid rgba(139, 92, 246, 0.3);
       border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 4px;
+      padding: 0 !important;
+      margin-bottom: 20px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.04);
+      box-shadow: 0 16px 38px -6px rgba(0, 0, 0, 0.55), 0 0 28px rgba(124, 58, 237, 0.18);
+      height: 330px; /* Reduced vertical height by 25% */
+      touch-action: pan-y;
+    }
+
+    div#trendingCarousel::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      left: -40px;
+      width: 200px;
+      height: 200px;
+      background: rgba(124, 58, 237, 0.25);
+      filter: blur(55px);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    #startup-community-feed .carousel-progress-track {
+      display: none !important;
+    }
+
+    #startup-community-feed .carousel-progress-bar {
+      display: none !important;
+    }
+
+    /* Candidate / User / Recruiter profile pictures forced to clean circle */
+    .avatar, 
+    .user-avatar-wrap, 
+    .user-avatar-img, 
+    .candidate-avatar, 
+    .candidate-img, 
+    .candidate-pic, 
+    .profile-avatar, 
+    .recruiter-avatar, 
+    #startup-community-feed .avatar,
+    #startup-community-feed .user-avatar-img {
+      border-radius: 50% !important;
+      aspect-ratio: 1 / 1 !important;
+      object-fit: cover !important;
+      overflow: hidden !important;
+    }
+
+    /* Transparent Left & Right Scrolling Nav Buttons */
+    #startup-community-feed .carousel-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 25;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    #startup-community-feed .carousel-nav-btn:hover {
+      background: rgba(124, 58, 237, 0.7);
+      border-color: rgba(255, 255, 255, 0.6);
+      transform: translateY(-50%) scale(1.12);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.6);
+    }
+
+    #startup-community-feed .carousel-nav-btn:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    #startup-community-feed .carousel-prev-btn {
+      left: 16px;
+    }
+
+    #startup-community-feed .carousel-next-btn {
+      right: 16px;
     }
 
     #startup-community-feed .trending-slides-wrapper {
       position: relative;
-      min-height: 190px;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
     }
 
     #startup-community-feed .trending-slide {
       display: none;
-      grid-template-columns: 1fr 120px;
-      gap: 16px;
-      animation: reveal 0.35s ease-out;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 !important;
+      margin: 0 !important;
+      overflow: hidden;
+      animation: fadeInSlide 0.35s ease-out;
+    }
+
+    @keyframes fadeInSlide {
+      from { opacity: 0; transform: scale(0.99); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     #startup-community-feed .trending-slide.active {
-      display: grid;
+      display: flex;
     }
 
-    #startup-community-feed .slide-content-left {
+    /* Full-bleed Landscape Background Image Container with 15% Blur */
+    #startup-community-feed .slide-bg-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+      background: #090814;
+    }
+
+    #startup-community-feed .slide-bg-img {
+      width: 1084px;
+      max-width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.8s ease, filter 0.6s ease;
+      display: block;
+    }
+
+    #startup-community-feed .slide-bg-img.has-image {
+      filter: blur(3px) brightness(0.72) saturate(1.15); /* Subtle ambient blur so landscape image remains clear & bright */
+      transform: scale(1.05);
+    }
+
+    #startup-community-feed .slide-bg-img.no-image {
+      filter: blur(18px) brightness(0.35); /* Darker blur for fallback without custom image */
+      transform: scale(1.12);
+    }
+
+    #startup-community-feed .trending-slide:hover .slide-bg-img.has-image {
+      transform: scale(1.08);
+      filter: blur(2px) brightness(0.78) saturate(1.2);
+    }
+
+    #startup-community-feed .slide-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(13, 12, 32, 0.38) 0%, rgba(9, 8, 20, 0.8) 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Centered Text Overlay in Middle of Slide (Without Inner Card Box) */
+    #startup-community-feed .slide-content-center {
+      position: relative;
+      z-index: 5;
+      max-width: 820px;
+      width: 92%;
+      margin: 0 auto;
+      padding: 32px 24px;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
       justify-content: center;
+      gap: 16px;
+      text-align: center;
+      box-sizing: border-box;
+      background: transparent;
+      border: none;
+      box-shadow: none;
     }
 
-    #startup-community-feed .trending-badge {
-      font-size: 9px;
-      font-weight: 900;
-      color: var(--purple-light);
-      background: rgba(139, 92, 246, 0.15);
-      padding: 4px 10px;
-      border-radius: 99px;
-      letter-spacing: 0.8px;
-      margin-bottom: 10px;
-    }
-
-    #startup-community-feed .slide-title {
-      font-size: 1.15rem;
+    #startup-community-feed .slide-title,
+    #startup-community-feed .slide-content-center h2 {
+      font-size: 1.65rem;
       font-weight: 800;
-      color: #ffffff;
+      color: #ffffff !important;
       margin: 0;
-      line-height: 1.3;
-      letter-spacing: -0.2px;
+      line-height: 1.35;
+      letter-spacing: -0.3px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+      text-align: center;
+      text-wrap: balance;
+      -webkit-text-wrap: balance;
+      word-break: normal;
+      overflow-wrap: break-word;
+      max-width: 720px;
     }
 
-    #startup-community-feed .slide-accent-title {
-      font-size: 1.35rem;
-      font-weight: 900;
-      color: #a78bfa;
-      margin: 2px 0 8px;
-      line-height: 1.2;
-      text-shadow: 0 0 15px rgba(139, 92, 246, 0.35);
-    }
-
-    #startup-community-feed .slide-desc {
-      font-size: 11px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin: 0 0 14px;
-      max-width: 90%;
+    #startup-community-feed .slide-desc,
+    #startup-community-feed .slide-content-center p {
+      font-size: 14.5px;
+      color: #ffffff !important; /* Pure white text */
+      line-height: 1.6;
+      margin: 0;
+      max-width: 680px;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+      text-align: center;
+      text-wrap: balance;
+      -webkit-text-wrap: balance;
+      word-break: normal;
+      overflow-wrap: break-word;
     }
 
     #startup-community-feed .slide-cta-btn {
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      color: #ffffff;
-      padding: 6px 14px;
+      background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+      border: 1px solid rgba(196, 181, 253, 0.5);
+      color: #ffffff !important;
+      padding: 11px 26px;
       border-radius: 9999px;
-      font-size: 10.5px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 9px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+      margin-top: 6px;
+      text-decoration: none;
     }
 
     #startup-community-feed .slide-cta-btn:hover {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+      border-color: rgba(221, 214, 254, 0.8);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(124, 58, 237, 0.65);
     }
 
     #startup-community-feed .slide-cta-btn i {
       font-size: 10px;
-      transition: transform 0.2s ease;
+      transition: transform 0.25s ease;
     }
 
     #startup-community-feed .slide-cta-btn:hover i {
-      transform: translateX(3px);
+      transform: translateX(4px);
     }
 
     #startup-community-feed .slide-graphic-right {
@@ -901,27 +1112,46 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       pointer-events: none;
     }
 
+    #startup-community-feed .carousel-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
     #startup-community-feed .carousel-dots-row {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 18px;
+      gap: 8px;
+      margin-top: 0;
     }
 
     #startup-community-feed .carousel-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #27272a;
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.2);
       cursor: pointer;
       transition: all 0.25s ease;
     }
 
     #startup-community-feed .carousel-dot.active {
-      background: var(--purple-primary);
-      transform: scale(1.3);
-      box-shadow: 0 0 8px var(--purple-light);
+      width: 24px;
+      background: #7C3AED;
+      box-shadow: 0 0 10px rgba(124, 58, 237, 0.8);
+    }
+
+    #startup-community-feed .carousel-slide-counter {
+      font-size: 11px;
+      font-weight: 800;
+      color: #a78bfa;
+      background: rgba(124, 58, 237, 0.15);
+      border: 1px solid rgba(124, 58, 237, 0.25);
+      padding: 2px 10px;
+      border-radius: 99px;
+      letter-spacing: 0.5px;
     }
 
     /* --- FEED TOOLS & SORT dropdown --- */
@@ -976,7 +1206,8 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
 
     /* --- POST CARDS --- */
-    #startup-community-feed .post-card {
+    #startup-community-feed .post-card,
+    .post-card {
       background: var(--card-dark);
       border: 1px solid var(--border-dark);
       border-radius: 0;
@@ -984,7 +1215,13 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       margin-bottom: 4px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
       animation: reveal 0.3s ease-out;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      transition: border-color 0.2s ease;
+      transform: none !important;
+    }
+
+    #startup-community-feed .post-card:hover,
+    .post-card:hover {
+      transform: none !important;
     }
 
     #startup-community-feed .post-card.hidden {
@@ -993,34 +1230,31 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 
     #startup-community-feed .post-cover-img-wrap {
       width: 100%;
-      height: 180px;
+      max-height: 280px;
       overflow: hidden;
       position: relative;
     }
 
     #startup-community-feed .post-cover-img-wrap::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 40px;
-      background: linear-gradient(to top, var(--card-dark), transparent);
+      display: none !important;
     }
 
     #startup-community-feed .post-cover-img {
       width: 100%;
       height: 100%;
+      max-height: 280px;
       object-fit: cover;
-      transition: transform 0.3s ease;
+      display: block;
+      transform: none !important;
     }
 
-    #startup-community-feed .post-card:hover .post-cover-img {
-      transform: scale(1.02);
+    #startup-community-feed .post-card:hover .post-cover-img,
+    .post-image-zoomable:hover {
+      transform: none !important;
     }
 
     #startup-community-feed .post-main {
-      padding: 8px 10px;
+      padding: 8px 10px 2px 10px;
     }
 
     #startup-community-feed .post-head {
@@ -1033,15 +1267,18 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     #startup-community-feed .avatar {
       width: 38px;
       height: 38px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      border-radius: 50%;
+      aspect-ratio: 1 / 1;
+      flex-shrink: 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
       color: #ffffff;
       display: grid;
       place-items: center;
       font-size: 11px;
       font-weight: 900;
       letter-spacing: 0.5px;
-      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
     }
 
     #startup-community-feed .post-author {
@@ -1115,14 +1352,11 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       font-size: 13px;
       color: var(--text-secondary);
       line-height: 1.6;
-      margin: 0 0 14px;
+      margin: 0 0 6px;
       white-space: pre-wrap;
     }
 
-    #startup-community-feed .source-row {
-      border-top: 1px solid rgba(255, 255, 255, 0.04);
-      padding-top: 10px;
-      margin-top: 14px;
+    #startup-community-feed .source-row { border-top: 1px solid rgba(255, 255, 255, 0.04); padding-top: 4px; margin-top: 3px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1131,97 +1365,128 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
 
     #startup-community-feed .source-link {
-      color: var(--purple-light);
+      color: #a78bfa;
       text-decoration: none;
       font-weight: 700;
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      transition: color 0.15s ease;
+      transition: all 0.2s ease;
     }
 
     #startup-community-feed .source-link:hover {
-      color: #ffffff;
+      color: #c4b5fd;
+      text-decoration: underline;
+    }
+
+    #startup-community-feed .source-link i {
+      font-size: 9px;
+      transition: transform 0.2s ease;
+    }
+
+    #startup-community-feed .source-link:hover i {
+      transform: translate(1px, -1px);
     }
 
     /* --- STATS & FOOTER ACTIONS --- */
-    #startup-community-feed .post-stats-row-container {
-      border-top: 1px solid rgba(255, 255, 255, 0.04);
-      padding-top: 12px;
-      margin-top: 14px;
+    #startup-community-feed .post-stats-row-container { 
+      border-top: 1px solid rgba(255, 255, 255, 0.08); 
+      padding: 3px 0 0 0; 
+      margin-top: 6px;
+      margin-bottom: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    #startup-community-feed .post-footer-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    #startup-community-feed .face-pile {
-      display: flex;
-      align-items: center;
-    }
-
-    #startup-community-feed .pile-avatar {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      border: 1.5px solid var(--card-dark);
-      object-fit: cover;
-      display: inline-block;
-    }
-
-    #startup-community-feed .appreciation-text-span {
-      font-size: 11px;
-      color: var(--text-secondary);
-    }
-
-    #startup-community-feed .appreciation-text-span strong {
-      color: #ffffff;
-    }
-
-    #startup-community-feed .post-footer-right-actions {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
+    .appreciate-btn,
+    .comment-trigger-btn,
+    .share-btn,
     #startup-community-feed .post-action-icon-only {
       background: transparent;
       border: none;
-      color: #6b7280;
-      font-size: 16.5px;
+      color: #9ca3af;
+      font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      padding: 4px;
+      padding: 3px 6px;
+      border-radius: 9999px;
       transition: all 0.2s ease;
+      flex: 1 1 0% !important;
     }
 
     #startup-community-feed .post-action-icon-only:hover {
+      background: rgba(255, 255, 255, 0.08);
       color: #ffffff;
     }
 
     #startup-community-feed .post-action-icon-only.active {
-      color: #ef4444; /* Bright red active state for like heart! */
+      color: #ef4444; /* Bright red active state for heart */
     }
 
-    #startup-community-feed .post-action-icon-only.active .fa-heart {
-      font-weight: 900;
-    }
-
-    #startup-community-feed .post-action-icon-only.active .icon {
-      fill: #ef4444;
+    #startup-community-feed .post-action-icon-only.active i,
+    #startup-community-feed .post-action-icon-only.active svg {
+      color: #ef4444 !important;
+      fill: #ef4444 !important;
     }
 
     #startup-community-feed .btn-stat-count {
-      font-size: 11px;
-      font-weight: 600;
-      color: #9ca3af;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #a78bfa;
+      margin-left: 2px;
+    }
+
+    @media (min-width: 641px) {
+      /* Desktop specific refinement for Appreciate/Comment/Share buttons on startup page */
+      #startup-community-feed .post-stats-row-container { 
+        padding: 4px 0 2px 0 !important; 
+        margin-top: 4px !important;
+        margin-bottom: 0 !important;
+      }
+
+      #startup-community-feed .appreciate-btn,
+      #startup-community-feed .comment-trigger-btn,
+      #startup-community-feed .share-btn,
+      #startup-community-feed .post-action-icon-only {
+        font-size: 13.5px !important;
+        line-height: 20.25px !important;
+        font-weight: 500 !important;
+        padding: 4px 10px !important;
+        gap: 6px !important;
+      }
+
+      #startup-community-feed .appreciate-btn span,
+      #startup-community-feed .comment-trigger-btn span,
+      #startup-community-feed .share-btn span,
+      #startup-community-feed .post-action-icon-only span {
+        font-size: 13.5px !important;
+        line-height: 20.25px !important;
+      }
+
+      #startup-community-feed .appreciate-btn i,
+      #startup-community-feed .comment-trigger-btn i,
+      #startup-community-feed .share-btn i,
+      #startup-community-feed .post-action-icon-only i,
+      #startup-community-feed .post-action-icon-only svg {
+        font-size: 14px !important;
+      }
+
+      #startup-community-feed .btn-stat-count,
+      #startup-community-feed .appreciate-count,
+      #startup-community-feed .comment-badge {
+        font-size: 13.5px !important;
+        line-height: 20.25px !important;
+        margin-left: 2px !important;
+      }
+
+      #startup-community-feed .post-main {
+        padding-bottom: 4px !important;
+      }
     }
 
     /* --- NOTIFICATION PANEL --- */
@@ -1467,24 +1732,137 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       #startup-community-feed .page-shell {
         padding-top: 1px;
       }
+
+      /* Hero Carousel Mobile Optimization */
+      div#trendingCarousel,
+      #startup-community-feed .trending-carousel-container {
+        height: 240px !important;
+        margin-bottom: 12px;
+        border-radius: 14px;
+      }
+
+      #startup-community-feed .slide-bg-img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+      }
+
+      #startup-community-feed .slide-content-center {
+        padding: 10px 42px !important;
+        gap: 6px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        justify-content: center !important;
+        align-items: center !important;
+        box-sizing: border-box !important;
+      }
+
+      #startup-community-feed .slide-title,
+      #startup-community-feed .slide-content-center h2 {
+        font-size: 1.15rem !important;
+        line-height: 1.3 !important;
+        max-width: 100% !important;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      #startup-community-feed .slide-desc,
+      #startup-community-feed .slide-content-center p {
+        font-size: 12px !important;
+        line-height: 1.45 !important;
+        max-width: 100% !important;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      #startup-community-feed .slide-cta-btn {
+        padding: 8px 18px !important;
+        font-size: 11.5px !important;
+        margin-top: 4px !important;
+        flex-shrink: 0;
+      }
+
+      #startup-community-feed .carousel-nav-btn {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 11px !important;
+        background: rgba(0, 0, 0, 0.22) !important;
+        border: 1px solid rgba(255, 255, 255, 0.22) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+        z-index: 25 !important;
+      }
+
+      #startup-community-feed .carousel-prev-btn {
+        left: 5px !important;
+      }
+
+      #startup-community-feed .carousel-next-btn {
+        right: 5px !important;
+      }
+
+      /* Navigation Bar Mobile Layout & Font Size */
       #startup-community-feed .category-nav {
-        /* Removed negative margins to align perfectly with content */
+        justify-content: center !important;
+        gap: 8px !important;
+        padding: 0 6px !important;
+        border: none !important;
+      }
+      #startup-community-feed .category-btn {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        padding: 3px 8px !important;
+      }
+      #startup-community-feed #filtersSection button span,
+      #startup-community-feed nav button span,
+      #startup-community-feed .category-btn .category-label {
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        color: #334155 !important;
+      }
+      #startup-community-feed #filtersSection button svg,
+      #startup-community-feed nav button svg,
+      #startup-community-feed .category-btn .category-icon {
+        font-size: 17px !important;
+        width: 17px !important;
+        height: 17px !important;
+      }
+      #startup-community-feed .post-copy {
+        margin-bottom: 5px !important;
+      }
+      #startup-community-feed .source-row {
+        margin-top: 3px !important;
+        padding-top: 3px !important;
       }
     }
 
     @media (max-width: 480px) {
-      #startup-community-feed .trending-slide {
-        grid-template-columns: 1fr;
-        gap: 12px;
+      div#trendingCarousel,
+      #startup-community-feed .trending-carousel-container {
+        height: 218px !important;
       }
-      #startup-community-feed .slide-graphic-right {
-        justify-content: flex-start;
-        padding-left: 5px;
+      #startup-community-feed .slide-content-center {
+        padding: 8px 38px !important;
+        gap: 4px !important;
       }
-      #startup-community-feed .chart-visual-container {
-        width: 100%;
-        max-width: 130px;
-        height: 70px;
+      #startup-community-feed .slide-title,
+      #startup-community-feed .slide-content-center h2 {
+        font-size: 1.05rem !important;
+      }
+      #startup-community-feed .slide-desc,
+      #startup-community-feed .slide-content-center p {
+        font-size: 11.5px !important;
+      }
+      #startup-community-feed .slide-cta-btn {
+        padding: 7px 16px !important;
+        font-size: 11px !important;
+        margin-top: 2px !important;
       }
     }
 
@@ -1507,7 +1885,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       }
 
       #startup-community-feed .brand-title {
-        font-size: 1.5rem;
+        font-size: 18px;
         font-weight: 800;
         letter-spacing: -0.5px;
       }
@@ -1573,7 +1951,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       /* Category Navigation Updates */
       #startup-community-feed .category-nav {
         justify-content: center;
-        gap: 40px; /* Space out elegantly */
+        gap: 12px; /* Brought sections closer together */
         padding: 4px 0;
         margin: 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -1594,12 +1972,12 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       }
 
       #startup-community-feed .category-btn .category-icon {
-        font-size: 20px;
+        font-size: 23px;
         color: #9ca3af;
       }
 
       #startup-community-feed .category-btn .category-label {
-        font-size: 11px;
+        font-size: 14.5px;
         font-weight: 500;
       }
 
@@ -1627,66 +2005,60 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         color: #ffffff;
       }
 
-      /* Hero Carousel Card Updates */
+      /* Hero Carousel Card Responsive Updates */
       #startup-community-feed .trending-carousel-container {
-        padding: 40px 48px;
-        background: linear-gradient(135deg, #09090e 0%, #11111c 100%);
-        border: 1px solid rgba(139, 92, 246, 0.08);
-        border-radius: 20px;
-        margin-bottom: 6px;
-        min-height: 310px;
+        padding: 0 !important;
+        background: #090814;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 18px;
+        margin-bottom: 20px;
+        height: 440px;
       }
 
       #startup-community-feed .trending-slide {
-        grid-template-columns: 1.1fr 1fr;
-        gap: 48px;
-        min-height: 230px;
+        display: none;
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
       }
 
-      #startup-community-feed .slide-content-left {
-        padding-right: 12px;
+      #startup-community-feed .trending-slide.active {
+        display: flex;
       }
 
-      #startup-community-feed .trending-badge {
-        font-size: 10px;
-        padding: 5px 12px;
-        background: rgba(139, 92, 246, 0.15);
-        color: #a78bfa;
-        font-weight: 700;
-        border-radius: 4px;
-        margin-bottom: 16px;
+      #startup-community-feed .slide-content-center {
+        padding: 32px 36px;
+        gap: 16px;
       }
 
-      #startup-community-feed .slide-title {
-        font-size: 1.85rem;
+      #startup-community-feed .slide-title,
+      #startup-community-feed .slide-content-center h2 {
+        font-size: 1.7rem;
         font-weight: 800;
-        line-height: 1.15;
+        line-height: 1.35;
+        color: #ffffff !important;
+        text-align: center;
+        text-wrap: balance;
+        -webkit-text-wrap: balance;
+        word-break: normal;
+        overflow-wrap: break-word;
       }
 
-      #startup-community-feed .slide-accent-title {
-        font-size: 1.85rem;
-        font-weight: 900;
-        color: #8b5cf6;
-        margin: 2px 0 16px;
-      }
-
-      #startup-community-feed .slide-desc {
-        font-size: 13.5px;
+      #startup-community-feed .slide-desc,
+      #startup-community-feed .slide-content-center p {
+        font-size: 15px;
         line-height: 1.6;
-        color: #9ca3af;
-        margin-bottom: 24px;
-        max-width: 90%;
-      }
-
-      #startup-community-feed .slide-cta-btn {
-        background: #ffffff;
-        color: #0d0d0f;
-        padding: 10px 22px;
-        font-size: 13px;
-        font-weight: 600;
-        border: none;
-        border-radius: 6px;
-        transition: transform 0.2s ease, background 0.2s ease;
+        color: #ffffff !important;
+        margin-bottom: 0;
+        text-align: center;
+        text-wrap: balance;
+        -webkit-text-wrap: balance;
+        word-break: normal;
+        overflow-wrap: break-word;
       }
 
       #startup-community-feed .slide-cta-btn:hover {
@@ -1850,22 +2222,14 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         margin: 18px 0 10px;
       }
 
-      #startup-community-feed .post-copy {
-        font-size: 14.5px;
-        color: #9ca3af;
-        line-height: 1.65;
-        margin-bottom: 24px;
+      #startup-community-feed .post-copy { font-size: 14.5px; color: #9ca3af; line-height: 1.65; margin-bottom: 8px;
       }
 
-      #startup-community-feed .source-row {
-        padding-top: 14px;
-        margin-top: 20px;
+      #startup-community-feed .source-row { padding-top: 4px; margin-top: 8px;
         font-size: 11.5px;
       }
 
-      #startup-community-feed .post-stats-row-container {
-        padding-top: 18px;
-        margin-top: 22px;
+      #startup-community-feed .post-stats-row-container { padding-top: 10px; margin-top: 10px;
         border-top: 1.5px solid rgba(255, 255, 255, 0.04);
       }
 
@@ -1960,7 +2324,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     html:not(.dark) #startup-community-feed .feed-subtitle { color: #475569; }
 </style>
 </head>
-<body class="bg-[#f4f6fa] text-slate-800 font-sans antialiased overflow-x-hidden" style="font-family: 'Inter', -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Fira Sans', Ubuntu, Oxygen, 'Oxygen Sans', Cantarell, 'Droid Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Lucida Grande', Helvetica, Arial, sans-serif; overflow-y: scroll; scrollbar-gutter: stable;">
+<body class="bg-[#f4f6fa] text-slate-800 font-sans antialiased overflow-x-hidden" style="font-family: 'Inter', -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Fira Sans', Ubuntu, Oxygen, 'Oxygen Sans', Cantarell, 'Droid Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Lucida Grande', Helvetica, Arial, sans-serif;">
 
   <!-- Name Modal -->
   <div id="nameModal" class="fixed inset-0 z-[100] hidden flex-col items-center justify-center bg-slate-900/40 backdrop-blur-sm">
@@ -1985,38 +2349,111 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     </div>
   </div>
 
-  <div class="w-full max-w-[1100px] mx-auto px-0 md:px-3 pt-2 pb-2 md:pt-4 md:pb-6">
-    <div class="flex flex-wrap items-center justify-between gap-y-2 gap-x-2 mb-3 px-[3%]">
+  <!-- Startup Article Admin Post Modal -->
+  <div id="startupPostModal" class="fixed inset-0 z-[100] hidden flex flex-col items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 overflow-y-auto" style="display: none;">
+    <div class="bg-white rounded-[24px] shadow-2xl p-5 sm:p-6 w-full max-w-[500px] border border-slate-100 my-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+        <h3 class="text-[17px] font-bold text-[#111827] flex items-center gap-2">
+          <i class="fa-solid fa-rocket text-[#7C3AED]"></i> Post Startup Article
+        </h3>
+        <button id="startupPostModalClose" type="button" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-colors">
+          <i class="fas fa-times text-base"></i>
+        </button>
+      </div>
+      <form id="startupPostForm" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Article Title *</label>
+          <input type="text" id="startupPostTitleInput" required placeholder="e.g., Startup XYZ raises ₹5 crore seed round" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-200 focus:bg-white text-slate-800">
+        </div>
+        
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Category *</label>
+            <select id="startupPostCategoryInput" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-purple-200 text-slate-800">
+              <option value="funding">Funding</option>
+              <option value="stories">Stories</option>
+              <option value="events">Events</option>
+              <option value="accelerators">Accelerators</option>
+              <option value="general">General</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Source Name</label>
+            <input type="text" id="startupPostSourceNameInput" placeholder="e.g., TechCrunch, Press Release" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-purple-200 text-slate-800">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Source Link (URL)</label>
+          <input type="url" id="startupPostSourceUrlInput" placeholder="https://..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-purple-200 text-slate-800">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Article Summary / Content *</label>
+          <textarea id="startupPostArticleInput" required rows="3" placeholder="Brief summary of the news or article..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-200 focus:bg-white text-slate-800 resize-none"></textarea>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-bold text-slate-700">Upload Scrolling Image / Article Photo</label>
+            <span class="text-[10px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200">16:9 Ratio</span>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 border border-dashed border-slate-300 rounded-xl py-2 px-3 cursor-pointer transition-colors">
+              <i class="far fa-image text-purple-600 text-sm"></i>
+              <span class="text-xs font-semibold text-slate-700">Choose Image File (1200×675 px recommended)</span>
+              <input type="file" id="startupPostImageFileInput" accept="image/*" class="hidden">
+            </label>
+            <div id="startupPostImagePreviewWrap" class="hidden relative w-full aspect-[16/9] max-h-40 overflow-hidden rounded-xl border border-slate-200 bg-black">
+              <img id="startupPostImagePreview" src="" class="w-full h-full object-cover rounded-xl">
+              <span class="absolute bottom-2 left-2 bg-black/70 text-white text-[10px] font-semibold px-2 py-0.5 rounded border border-white/20">Converted to 16:9</span>
+              <button type="button" id="startupPostRemoveImageBtn" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center shadow-md hover:bg-red-600 transition-colors">✕</button>
+            </div>
+            <div class="text-[10px] text-slate-400 text-center font-medium">Or paste an Image URL:</div>
+            <input type="url" id="startupPostImageUrlInput" placeholder="https://..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-purple-200 text-slate-800">
+          </div>
+        </div>
+
+        <div class="flex gap-2 pt-1">
+          <button type="button" id="startupPostModalCancel" class="flex-1 py-2 rounded-xl text-slate-600 font-bold text-xs bg-slate-100 hover:bg-slate-200 transition-colors">Cancel</button>
+          <button type="submit" id="startupPostSubmitBtn" class="flex-1 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md transition-all">Publish Article</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="w-full max-w-[1100px] mx-auto px-0 md:px-3 pt-0 pb-2 md:pt-0.5 md:pb-6">
+    <div class="header-container bg-white rounded-[14px] sm:rounded-[16px] shadow-[0_2px_16px_rgba(0,0,0,0.03)] border border-slate-100 py-1.5 px-2.5 sm:py-2 sm:px-3.5 mb-1.5 sm:mb-2 flex flex-wrap items-center justify-between gap-y-1.5 gap-x-2">
       <!-- Logo and Subtitle -->
       <div class="flex-shrink-0">
-        <h1 style="font-weight: 800; font-size: 1.12rem; letter-spacing: normal; display: flex; align-items: center; font-family: 'Inter', sans-serif;" class="text-[#111827]">
-          Spread&nbsp;<span class="text-[#7C3AED]">One</span>
+        <h1 style="font-weight: 800; font-size: 1.05rem; letter-spacing: normal; display: flex; align-items: center; font-family: 'Inter', sans-serif;" class="text-[#111827]">
+          Spred&nbsp;<span class="text-[#7C3AED]">One</span>
         </h1>
-        <div class="text-[11px] md:text-[13px] text-slate-500 font-medium flex items-center gap-1 mt-0 tracking-normal">
+        <div class="text-[10px] md:text-[11.5px] text-slate-500 font-medium flex items-center gap-1 mt-0 tracking-normal">
           <span>Communities</span>
-          <span class="text-[6px] text-slate-300 mx-0.5">•</span>
+          <span class="text-[5px] text-slate-300 mx-0.5">•</span>
           <span>Jobs</span>
-          <span class="text-[6px] text-slate-300 mx-0.5">•</span>
+          <span class="text-[5px] text-slate-300 mx-0.5">•</span>
           <span>Startups</span>
         </div>
       </div>
 
       <!-- Search Bar -->
-      <div class="w-full md:flex-1 md:w-auto order-last md:order-none relative max-w-2xl md:mx-4 mt-0.5 md:mt-0">
-        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[13px]"></i>
-        <input type="text" id="searchInput" placeholder="Search..." class="w-full bg-white md:bg-slate-50/50 hover:bg-slate-50 border border-slate-100 rounded-full py-1.5 md:py-2.5 pl-9 pr-4 text-[16px] md:text-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.03)] outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-300 transition-all font-medium text-slate-700 placeholder-slate-400">
+      <div class="w-full md:flex-1 md:w-auto order-last md:order-none relative max-w-2xl md:mx-4 mt-0">
+        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[12px]"></i>
+        <input type="text" id="searchInput" placeholder="Search..." class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-100 rounded-full py-1 md:py-1.5 pl-8 pr-3 text-[15px] md:text-[13px] shadow-none outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-300 transition-all font-medium text-slate-700 placeholder-slate-400">
       </div>
 
       <!-- Right Actions -->
-      <div class="flex items-center gap-4 md:gap-5 flex-shrink-0">
+      <div class="flex items-center gap-3 md:gap-4 flex-shrink-0">
         <div class="relative" id="userMenuContainer">
           <button id="headerBellBtn" class="relative text-slate-700 hover:text-black transition-colors focus:outline-none flex items-center justify-center">
-            <i class="far fa-bell text-[1.5rem] md:text-[1.6rem]"></i>
-            <span id="headerBellCount" style="display:none;" class="absolute -top-1.5 -right-1.5 bg-[#ef4444] text-white text-[10px] sm:text-[11px] font-bold w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-2 border-[#f4f6fa] md:border-white">0</span>
+            <i class="far fa-bell text-[1.25rem] md:text-[1.35rem]"></i>
+            <span id="headerBellCount" style="display:none;" class="absolute -top-1 -right-1 bg-[#ef4444] text-white text-[9px] sm:text-[10px] font-bold w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center border-2 border-[#f4f6fa] md:border-white">0</span>
           </button>
         </div>
         <div class="relative">
-          <div id="headerAvatar" class="user-avatar-dynamic w-8 h-8 rounded-full shadow-sm cursor-pointer flex items-center justify-center font-bold text-white text-[14px]" style="background-color: #94a3b8;">?</div>
+          <div id="headerAvatar" class="user-avatar-dynamic w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-full shadow-sm cursor-pointer flex items-center justify-center font-bold text-white text-[12.5px]" style="background-color: #94a3b8;">?</div>
           <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.1)] border border-slate-100 py-1.5 z-50">
             <div class="px-4 py-2 text-xs text-slate-500 font-bold uppercase tracking-wider border-b border-slate-50/50 mb-1">Appearance</div>
             <button id="lightModeBtn" class="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 transition-colors font-medium">
@@ -2063,24 +2500,28 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     </div>
   </div>
 
-  <div id="filtersSection" class="bg-white rounded-[16px] shadow-[0_2px_12px_rgba(0,0,0,0.02)] border border-slate-100 py-1.5 px-2 mb-1.5 flex justify-between gap-1 overflow-hidden">
-    <button onclick="window.location.hash='home'" class="flex flex-col items-center justify-center py-1.5 px-1 sm:px-3 min-w-0 text-center hover:bg-slate-50 rounded-[12px] transition-colors flex-1">
-      <svg class="w-5 h-5 text-slate-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
-      <span class="text-[10px] sm:text-[11px] font-semibold text-slate-700 tracking-normal truncate w-full">For You</span>
+  <nav id="filtersSection" class="bg-white rounded-[14px] sm:rounded-[16px] shadow-[0_2px_12px_rgba(0,0,0,0.02)] border border-slate-100 py-1.5 sm:py-2 px-3 sm:px-8 mb-1.5 sm:mb-2 flex justify-center items-center gap-3 sm:gap-16 md:gap-20 lg:gap-24 overflow-x-auto">
+    <button onclick="window.location.hash='home'" class="flex flex-col items-center justify-center py-1 px-2.5 sm:px-6 min-w-0 text-center hover:bg-slate-50 rounded-[10px] transition-colors flex-initial">
+      <svg class="w-[18px] h-[18px] sm:w-[21px] sm:h-[21px] text-slate-800 mb-0.5" fill="none" stroke="currentColor" stroke-width="2.25" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+      <span class="text-[10.5px] sm:text-[12.5px] font-bold text-slate-800 tracking-normal truncate w-full">For You</span>
     </button>
-    <button onclick="gotoStartups('events')" class="flex flex-col items-center justify-center py-1.5 px-1 sm:px-3 min-w-0 text-center hover:bg-slate-50 rounded-[12px] transition-colors flex-1">
-      <svg class="w-5 h-5 text-slate-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-      <span class="text-[10px] sm:text-[11px] font-semibold text-slate-700 tracking-normal truncate w-full">Events</span>
+    <button onclick="gotoStartups('funding')" class="flex flex-col items-center justify-center py-1 px-2.5 sm:px-6 min-w-0 text-center hover:bg-slate-50 rounded-[10px] transition-colors flex-initial">
+      <svg class="w-[18px] h-[18px] sm:w-[21px] sm:h-[21px] text-slate-800 mb-0.5" fill="none" stroke="currentColor" stroke-width="2.25" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <span class="text-[10.5px] sm:text-[12.5px] font-bold text-slate-800 tracking-normal truncate w-full">Funding</span>
     </button>
-    <button onclick="gotoStartups('funding')" class="flex flex-col items-center justify-center py-1.5 px-1 sm:px-3 min-w-0 text-center hover:bg-slate-50 rounded-[12px] transition-colors flex-1">
-      <svg class="w-5 h-5 text-slate-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-      <span class="text-[10px] sm:text-[11px] font-semibold text-slate-700 tracking-normal truncate w-full">Funding</span>
+    <button onclick="gotoStartups('stories')" class="flex flex-col items-center justify-center py-1 px-2.5 sm:px-6 min-w-0 text-center hover:bg-slate-50 rounded-[10px] transition-colors flex-initial">
+      <svg class="w-[18px] h-[18px] sm:w-[21px] sm:h-[21px] text-slate-800 mb-0.5" fill="none" stroke="currentColor" stroke-width="2.25" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+      <span class="text-[10.5px] sm:text-[12.5px] font-bold text-slate-800 tracking-normal truncate w-full">Stories</span>
     </button>
-    <button onclick="gotoStartups('accelerators')" class="flex flex-col items-center justify-center py-1.5 px-1 sm:px-3 min-w-0 text-center hover:bg-slate-50 rounded-[12px] transition-colors flex-1">
-      <svg class="w-5 h-5 text-slate-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-      <span class="text-[10px] sm:text-[11px] font-semibold text-slate-700 tracking-normal truncate w-full">Accelerators</span>
+    <button onclick="gotoStartups('events')" class="flex flex-col items-center justify-center py-1 px-2.5 sm:px-6 min-w-0 text-center hover:bg-slate-50 rounded-[10px] transition-colors flex-initial">
+      <svg class="w-[18px] h-[18px] sm:w-[21px] sm:h-[21px] text-slate-800 mb-0.5" fill="none" stroke="currentColor" stroke-width="2.25" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      <span class="text-[10.5px] sm:text-[12.5px] font-bold text-slate-800 tracking-normal truncate w-full">Events</span>
     </button>
-  </div>
+    <button onclick="gotoStartups('accelerators')" class="flex flex-col items-center justify-center py-1 px-2.5 sm:px-6 min-w-0 text-center hover:bg-slate-50 rounded-[10px] transition-colors flex-initial">
+      <svg class="w-[18px] h-[18px] sm:w-[21px] sm:h-[21px] text-slate-800 mb-0.5" fill="none" stroke="currentColor" stroke-width="2.25" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+      <span class="text-[10.5px] sm:text-[12.5px] font-bold text-slate-800 tracking-normal truncate w-full">Accelerators</span>
+    </button>
+  </nav>
 
   <div id="newPostBanner" class="bg-white rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-slate-100 py-2.5 px-3 mb-2 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
     <div class="flex items-center gap-2 w-max">
@@ -2094,11 +2535,11 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 
   <div id="feedContainer"></div>
   
-  <div id="iframe-community" class="iframe-container" style="overflow-y: auto;">
+  <div id="iframe-community" class="iframe-container">
     <div class="community-page">
       <div class="community-top">
           <h1 class="community-title" style="font-weight: 800; font-size: 1.12rem; letter-spacing: normal; display: flex; align-items: center; font-family: 'Inter', sans-serif;">
-              <span class="spread-text">Spread</span>&nbsp;<span style="color: #7C3AED;">One</span>&nbsp;<span style="font-weight: 500; font-size: 0.84rem; color: #64748b;">Community</span>
+              <span class="spread-text">Spred</span>&nbsp;<span style="color: #7C3AED;">One</span>&nbsp;<span style="font-weight: 500; font-size: 0.84rem; color: #64748b;">Community</span>
           </h1>
           <button class="community-ask-btn" onclick="openCommunityModal()">Ask Question</button>
       </div>
@@ -2145,8 +2586,8 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         </div>
     </div>
   </div>
-  <div id="iframe-jobs" class="iframe-container" style="overflow-y: auto; background: #06080f;">
-    <div class="jobs-page-wrapper" style="position:relative; width:100%; height:100%; overflow-y:auto; overflow-x:hidden;">
+  <div id="iframe-jobs" class="iframe-container" style="background: #06080f;">
+    <div class="jobs-page-wrapper" style="position:relative; width:100%; min-height:100%; overflow:visible;">
 
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
@@ -2156,7 +2597,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
   <div class="hero fi d1">
     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px;">
         <div style="font-weight: 800; color: #ffffff; font-size: 1.12rem; letter-spacing: normal; font-family: 'Inter', sans-serif; display: flex; align-items: center;">
-            Spread&nbsp;<span style="color: #7C3AED;">One</span>
+            Spred&nbsp;<span style="color: #7C3AED;">One</span>
         </div>
         <div style="font-weight:700;font-size:12px;color:#fff;opacity:0.9;" class="find-job-txt">Find your dream job today</div>
         <button class="post-job-btn" onclick="openPostModal()">
@@ -2223,6 +2664,8 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       <div class="modal-head"><div><h2>Post a Job</h2><p>After review (within 24h) it goes live.</p></div><button class="modal-close" onclick="closePostModal()">Close</button></div>
       <div class="v-section">Company</div>
       <div class="v-grid"><div class="mfield"><label>Company *</label><input type="text" id="f_company" placeholder="TechCorp"></div><div class="mfield"><label>Industry *</label><select id="f_industry"><option>IT / Software</option><option>Banking</option><option>Healthcare</option><option>Other</option></select></div><div class="mfield"><label>Recruiter Email *</label><input type="email" id="f_email"></div><div class="mfield"><label>Website</label><input type="url" id="f_website"></div></div>
+      <div class="v-section">Recruiter Info</div>
+      <div class="v-grid"><div class="mfield"><label>Recruiter Name *</label><input type="text" id="f_recruiterName" placeholder="e.g. Siddharth Khan"></div><div class="mfield"><label>Recruiter Designation</label><input type="text" id="f_recruiterDesignation" placeholder="e.g. Talent Acquisition"></div></div>
       <div class="v-section">Job Details</div>
       <div class="v-grid"><div class="mfield full"><label>Job Title *</label><input type="text" id="f_title"></div><div class="mfield"><label>Job Type *</label><select id="f_jobType"><option>Full Time</option><option>Part Time</option><option>Remote</option><option>Hybrid</option><option>Internship</option></select></div><div class="mfield"><label>Work Mode</label><select id="f_workMode"><option>On-site</option><option>Remote</option><option>Hybrid</option></select></div><div class="mfield"><label>Location *</label><input type="text" id="f_location"></div><div class="mfield"><label>Role</label><input type="text" id="f_role"></div></div>
       <div class="v-section">Experience & Compensation</div>
@@ -2236,19 +2679,6 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       <div class="modal-footer"><button class="m-submit-btn" id="mSubmitBtn" onclick="handleModalSubmit()"><div class="m-submit-spin" id="mSpin"></div><span id="mLabel">Submit for Review</span></button><p class="modal-note">Pending approval before going live</p></div>
     </div>
     <div class="modal-success" id="modalSuccess"><div class="success-icon">✓</div><h3>Job Submitted!</h3><p>Your job is now pending review by founder.</p><button class="another-btn" onclick="resetModal()">Submit Another</button></div>
-  </div>
-</div>
-
-<!-- View Job Modal (JD + Apply Button) -->
-<div class="modal-overlay" id="viewModalOverlay">
-  <div class="modal" id="viewModal" style="max-width: 760px;">
-    <div class="modal-head">
-      <h2 id="viewJobTitle">Job Details</h2>
-      <button class="modal-close" onclick="closeViewModal()">Close</button>
-    </div>
-    <div id="viewJobContent">
-      <!-- dynamic content -->
-    </div>
   </div>
 </div>
 
@@ -2287,8 +2717,8 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     <header class="topbar">
       <div class="topbar-inner">
         <a class="brand" href="#" aria-label="Startups home" style="text-decoration: none;">
-          <h1 class="brand-title" style="font-weight: 800; font-size: 1.12rem; letter-spacing: normal; display: flex; align-items: center; font-family: 'Inter', sans-serif;">
-            <span class="spread-text">Spread</span>&nbsp;<span style="color: #7C3AED;">One</span>&nbsp;<span style="font-weight: 500; font-size: 0.84rem; color: #64748b; text-transform: capitalize;">Startup</span>
+          <h1 class="brand-title" style="font-weight: 800; font-size: 18px !important; line-height: 29.88px; letter-spacing: normal; display: flex; align-items: center; font-family: 'Inter', sans-serif;">
+            <span class="spread-text">Spred</span>&nbsp;<span style="color: #7C3AED;">One</span>&nbsp;<span style="font-weight: 500; font-size: 0.84rem; color: #64748b; text-transform: capitalize;">Startup</span>
           </h1>
         </a>
         <label class="search-wrap" aria-label="Search posts">
@@ -2344,43 +2774,15 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 
       <!-- Trending Story Interactive Carousel -->
       <div class="trending-carousel-container" id="trendingCarousel">
+        <button class="carousel-nav-btn carousel-prev-btn" id="carouselPrevBtn" type="button" aria-label="Previous slide" onclick="window.goToPrevSlide && window.goToPrevSlide()">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button class="carousel-nav-btn carousel-next-btn" id="carouselNextBtn" type="button" aria-label="Next slide" onclick="window.goToNextSlide && window.goToNextSlide()">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
         <div class="trending-slides-wrapper" id="trendingSlides">
-          <!-- Slide 1 -->
-          <div class="trending-slide active" data-slide="0">
-            <div class="slide-content-left">
-              <span class="trending-badge">TRENDING STORY</span>
-              <h2 class="slide-title">Indian VC Funding Hits</h2>
-              <div class="slide-accent-title">$2.8B in May 2026</div>
-              <p class="slide-desc">Strong momentum continues as early-stage startups attract highest investments across sectors.</p>
-              <button class="slide-cta-btn" type="button">
-                Read full story <i class="fa-solid fa-arrow-right"></i>
-              </button>
-            </div>
-            <div class="slide-graphic-right">
-              <div class="graphic-stat-badge">
-                <span class="stat-badge-num">$2.8B</span>
-                <span class="stat-badge-label">May 2026</span>
-              </div>
-              <div class="chart-visual-container">
-                <div class="chart-grid-lines"></div>
-                <div class="chart-bars-row">
-                  <div class="chart-bar-pillar" style="--height: 55%; --color-start: #3b82f6; --color-end: #1d4ed8;"></div>
-                  <div class="chart-bar-pillar" style="--height: 40%; --color-start: #a78bfa; --color-end: #7c3aed;"></div>
-                  <div class="chart-bar-pillar" style="--height: 85%; --color-start: #3b82f6; --color-end: #1d4ed8;"></div>
-                </div>
-                <svg class="chart-svg-line" viewBox="0 0 100 50" preserveAspectRatio="none">
-                  <path d="M 0,40 C 20,42 40,20 60,35 C 80,45 90,5 100,10" fill="none" stroke="url(#lineGrad)" stroke-width="3" filter="url(#glow)" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-dots-row">
-          <span class="carousel-dot active" data-index="0"></span>
-          <span class="carousel-dot" data-index="1"></span>
-          <span class="carousel-dot" data-index="2"></span>
-          <span class="carousel-dot" data-index="3"></span>
-          <span class="carousel-dot" data-index="4"></span>
+          <!-- Rendered dynamically by JS with exact 50% image and 50% text split -->
         </div>
       </div>
     
@@ -2416,6 +2818,71 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
   </div>
 </div>
 
+<!-- View Job Modal (JD + Apply Button) -->
+<div class="modal-overlay" id="viewModalOverlay">
+  <div class="modal" id="viewModal" style="max-width: 760px;">
+    <div class="modal-head">
+      <h2 id="viewJobTitle">Job Details</h2>
+      <button class="modal-close" onclick="closeViewModal()">Close</button>
+    </div>
+    <div id="viewJobContent">
+      <!-- dynamic content -->
+    </div>
+  </div>
+</div>
+
+<!-- Share Post Modal (Visible Link + Copy & Social Share) -->
+<div class="modal-overlay" id="shareModalOverlay" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 9999; align-items: center; justify-content: center;">
+  <div class="modal" id="shareModal" style="max-width: 480px; width: 92%; background: #ffffff; border-radius: 20px; padding: 20px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); border: 1px solid rgba(0, 0, 0, 0.08); text-align: left;">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9; margin-bottom: 16px;">
+      <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+        <i class="far fa-share-square" style="color: #7c3aed;"></i> Share Post
+      </h3>
+      <button onclick="closeShareModal()" style="border: none; background: #f8fafc; color: #64748b; font-size: 18px; font-weight: bold; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">×</button>
+    </div>
+    
+    <p style="font-size: 13px; color: #64748b; margin: 0 0 12px 0; font-weight: 500;">
+      Anyone with this link will be able to view this post:
+    </p>
+
+    <!-- Visible Link Input Field with Copy Button -->
+    <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+      <input type="text" id="shareLinkInput" readonly style="flex: 1; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px 12px; font-size: 13px; font-weight: 600; color: #1e293b; outline: none; box-shadow: inset 0 1px 2px rgba(0,0,0,0.03);">
+      <button id="copyShareLinkBtn" onclick="copyShareLinkAction()" style="background: #7c3aed; color: #ffffff; border: none; padding: 10px 18px; border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+        <i class="far fa-copy"></i> <span id="copyShareLinkText">Copy</span>
+      </button>
+    </div>
+
+    <!-- Quick Social Share Row -->
+    <div style="display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 14px;">
+      <a id="shareWhatsapp" href="#" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #25d366; font-size: 12px; font-weight: 600;">
+        <div style="width: 42px; height: 42px; border-radius: 50%; background: #e8fadf; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+          <i class="fab fa-whatsapp"></i>
+        </div>
+        WhatsApp
+      </a>
+      <a id="shareTwitter" href="#" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1da1f2; font-size: 12px; font-weight: 600;">
+        <div style="width: 42px; height: 42px; border-radius: 50%; background: #e8f5fd; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+          <i class="fab fa-twitter"></i>
+        </div>
+        Twitter / X
+      </a>
+      <a id="shareLinkedin" href="#" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #0a66c2; font-size: 12px; font-weight: 600;">
+        <div style="width: 42px; height: 42px; border-radius: 50%; background: #e8f2fc; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+          <i class="fab fa-linkedin-in"></i>
+        </div>
+        LinkedIn
+      </a>
+      <button onclick="triggerNativeShare()" style="background: transparent; border: none; display: flex; flex-direction: column; align-items: center; gap: 4px; color: #64748b; font-size: 12px; font-weight: 600; cursor: pointer;">
+        <div style="width: 42px; height: 42px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #475569;">
+          <i class="fas fa-ellipsis-h"></i>
+        </div>
+        More
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   let posts = [];
@@ -2445,9 +2912,14 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
   }
 
   const STORAGE_DEVICE_ID = 'spreadone_device_id';
-  const STORAGE_AUTHOR_NAME = 'spreadone_author_name';
-  const STORAGE_COMMENTER_NAME = 'spreadone_commenter_name';
+  const STORAGE_GLOBAL_USERNAME = 'spreadone_global_username';
   const POSTS_COLLECTION = 'home_posts';
+
+  // Clear old scattered name keys to start fresh
+  localStorage.removeItem('startup_reader_name');
+  localStorage.removeItem('community_saved_user_name');
+  localStorage.removeItem('spreadone_author_name');
+  localStorage.removeItem('spreadone_commenter_name');
 
   const firebaseConfig = {
     apiKey: "AIzaSyDZt0dJQCu0tW9OR9kyyliRPbP47R_z2kw",
@@ -2456,6 +2928,20 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
   };
   if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+
+  window.cleanMarkdown = function(text) {
+    if (!text || typeof text !== 'string') return '';
+    return text
+      .replace(/^\s*\*{2,}\s*$/gm, '') 
+      .replace(/\*{2,}/g, '') 
+      .replace(/#{2,}/g, '') 
+      .replace(/^#+\s+/gm, '') 
+      .replace(/-{3,}/g, '') 
+      .replace(/^\s*\*\s+/gm, '• ') 
+      .replace(/^\s*-\s+/gm, '• ') 
+      .replace(/(?:\r?\n){3,}/g, '\n\n') 
+      .trim();
+  };
 
   const avatarColors = [
     '#EF4444', '#F97316', '#F59E0B', '#10B981', '#14B8A6', '#3B82F6', '#6366F1', '#8B5CF6', '#EC4899', '#F43F5E',
@@ -2520,7 +3006,15 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
   function loadAllAlerts() {
     db.collection("home_posts").orderBy('timestamp', 'desc').limit(20).onSnapshot(s => {
       let temp = [];
-      s.forEach(d => { let data = d.data(); data.id = d.id; temp.push({ ...data, source: 'home', alertContent: data.content, alertName: data.authorName }); });
+      s.forEach(d => {
+        let data = d.data();
+        data.id = d.id;
+        let alertText = data.content;
+        if (data.content && data.content.includes('job-feed-post-card')) {
+          alertText = `We are hiring! New Job Post.`;
+        }
+        temp.push({ ...data, source: 'home', alertContent: alertText, alertName: data.authorName });
+      });
       updateAlerts('home', temp);
     });
     db.collection("community_posts").orderBy('createdAt', 'desc').limit(20).onSnapshot(s => {
@@ -2530,7 +3024,13 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     });
     db.collection("founder_job_portal_jobs_v1").orderBy('createdAt', 'desc').limit(20).onSnapshot(s => {
       let temp = [];
-      s.forEach(d => { let data = d.data(); data.id = d.id; temp.push({ ...data, source: 'jobs', alertContent: data.title + ' at ' + data.company, alertName: data.company, timestamp: data.createdAt }); });
+      s.forEach(d => {
+        let data = d.data();
+        data.id = d.id;
+        if (data.status === 'approved') {
+          temp.push({ ...data, source: 'jobs', alertContent: (data.title || 'Job') + ' at ' + (data.company || 'Company'), alertName: data.company || 'Company', timestamp: data.createdAt });
+        }
+      });
       updateAlerts('jobs', temp);
     });
     db.collection("startup_posts").onSnapshot(s => {
@@ -2630,7 +3130,11 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       const bannerText = document.getElementById('newPostBannerText');
       if (bannerText) {
           if (posts.length > 0) {
-              const firstLine = posts[0].content.split('\n')[0];
+              const rawContent = posts[0].content || posts[0].title || 'New Job Opportunity';
+              const tempDiv = document.createElement('div');
+              tempDiv.innerHTML = rawContent;
+              const strippedContent = (tempDiv.textContent || tempDiv.innerText || '').trim();
+              const firstLine = strippedContent.split('\n')[0].trim();
               bannerText.textContent = firstLine.substring(0, 60) + (firstLine.length > 60 ? '...' : '');
           } else {
               bannerText.textContent = 'Welcome! Start the conversation.';
@@ -2646,12 +3150,12 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
   }
   const DEVICE_ID = getDeviceId();
 
-  function getStoredAuthorName() { return localStorage.getItem(STORAGE_AUTHOR_NAME) || ''; }
+  function getStoredAuthorName() { return localStorage.getItem(STORAGE_GLOBAL_USERNAME) || ''; }
   function setStoredAuthorName(name) { 
-    if (name.trim() && !getStoredAuthorName()) localStorage.setItem(STORAGE_AUTHOR_NAME, name.trim()); 
+    if (name && name.trim()) localStorage.setItem(STORAGE_GLOBAL_USERNAME, name.trim()); 
   }
-  function getStoredCommenterName() { return localStorage.getItem(STORAGE_COMMENTER_NAME) || ''; }
-  function setStoredCommenterName(name) { if(name.trim() && !getStoredCommenterName()) localStorage.setItem(STORAGE_COMMENTER_NAME, name.trim()); }
+  function getStoredCommenterName() { return localStorage.getItem(STORAGE_GLOBAL_USERNAME) || ''; }
+  function setStoredCommenterName(name) { if(name && name.trim()) localStorage.setItem(STORAGE_GLOBAL_USERNAME, name.trim()); }
 
   let resolveNamePrompt = null;
   function requestName(callback) {
@@ -2711,7 +3215,8 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
   });
 
-  function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+  function escapeHtml(str){
+  str = String(str || ""); return String(str || "").replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
   function linkHashtags(text) { return text.replace(/#(\w+)/g, '<span class="hashtag">#$1</span>'); }
 
   window.gotoStartups = function(filter) {
@@ -2729,7 +3234,26 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     return `${Math.floor(hr/24)}d ago`;
   }
 
-  function formatContent(content, postId) {
+  function formatContent(content, postId, jobId) {
+    if (content.includes('job-feed-post-card') || content.includes('data-job-id') || (content.trim().startsWith('<div') && content.includes('hiring'))) {
+      let resolvedJobId = jobId;
+      if (!resolvedJobId) {
+        const titleMatch = content.match(/<h3[^>]*>([\s\S]*?)<\/h3>/);
+        const companyMatch = content.match(/<div class="text-\[14px\] font-semibold text-slate-600[^"]*">\s*<span[^>]*>([\s\S]*?)<\/span>/);
+        if (titleMatch && companyMatch) {
+          const title = titleMatch[1].trim();
+          const company = companyMatch[1].trim();
+          if (window._allJobs) {
+            const found = window._allJobs.find(j => j.title === title && j.company === company);
+            if (found) resolvedJobId = found.id;
+          }
+        }
+      }
+      if (resolvedJobId) {
+        content = content.replace(/\$\{jobId\}/g, resolvedJobId).replace(/\\\$\{jobId\}/g, resolvedJobId);
+      }
+      return content;
+    }
     let bodyHtml = linkHashtags(content);
     // Basic sanitization
     bodyHtml = bodyHtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
@@ -2756,6 +3280,206 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     const commentCount = post.comments?.length || 0;
     const hasAppreciated = post.appreciatedBy?.includes(DEVICE_ID);
     const heartClass = hasAppreciated ? 'fas fa-heart text-red-500' : 'far fa-heart';
+    
+    // Check if this post represents a job post
+    const isJobPost = !!(post.jobId || (post.content && (post.content.includes('job-feed-post-card') || post.content.includes('data-job-id') || post.content.includes('hiring'))));
+    
+    if (isJobPost) {
+      let resolvedJobId = post.jobId;
+      if (!resolvedJobId && post.content) {
+        const match = post.content.match(/openViewModalById\('([^']+)'\)/);
+        if (match) resolvedJobId = match[1];
+      }
+      
+      let job = null;
+      if (resolvedJobId && window._allJobs) {
+        job = window._allJobs.find(j => j.id === resolvedJobId);
+      }
+      
+      // Fallback parsing from post.content if job not found in window._allJobs yet
+      if (!job && post.content) {
+        const titleMatch = post.content.match(/<h3[^>]*>([\s\S]*?)<\/h3>/) || post.content.match(/job-title[^>]*>([\s\S]*?)<\/div>/);
+        const companyMatch = post.content.match(/text-\[14px\] font-semibold text-slate-600[^>]*>\s*<span[^>]*>([\s\S]*?)<\/span>/) || post.content.match(/detail-value[^>]*>([\s\S]*?)<\/span>/);
+        const descMatch = post.content.match(/text-\[13px\] text-slate-500[^>]*>([\s\S]*?)<\/div>/);
+        
+        const locMatch = post.content.match(/fa-map-marker-alt text-slate-400[^<]*<\/i>\s*<span[^>]*>([\s\S]*?)<\/span>/);
+        const typeMatch = post.content.match(/fa-briefcase text-slate-400[^<]*<\/i>\s*<span[^>]*>([\s\S]*?)<\/span>/);
+        const expMatch = post.content.match(/fa-graduation-cap text-slate-400[^<]*<\/i>\s*<span[^>]*>([\s\S]*?)<\/span>/);
+        const salMatch = post.content.match(/fa-wallet text-slate-400[^<]*<\/i>\s*<span[^>]*>([\s\S]*?)<\/span>/);
+        
+        if (titleMatch && companyMatch && window._allJobs) {
+          job = window._allJobs.find(j => j.title === titleMatch[1].trim() && j.company === companyMatch[1].trim());
+        }
+
+        if (!job) {
+          job = {
+            id: resolvedJobId || "",
+            title: titleMatch ? titleMatch[1].trim() : (post.title || "Hiring"),
+            company: companyMatch ? companyMatch[1].trim() : (post.authorName || "Company"),
+            location: locMatch ? locMatch[1].trim() : "Remote",
+            type: typeMatch ? typeMatch[1].trim() : "Full-time",
+            exp: expMatch ? expMatch[1].trim() : "Experience not specified",
+            salary: salMatch ? salMatch[1].trim() : "Salary not disclosed",
+            description: descMatch && !descMatch[1].includes("${escapeHtml") ? descMatch[1].trim() : ""
+          };
+        }
+      }
+      
+      if (job) {
+        // 1. Recruiter Logo, Recruiter Name, Recruiter Designation
+        const profileLogo = job.recruiterLogo || job.recruiter_logo || job.logo || job.logoUrl || job.companyLogo || job.company_logo || "";
+        const recruiterName = job.recruiterName || job.recruiter_name || job.recruiter || post.authorName || "Recruiter";
+        const designation = job.recruiterDesignation || job.recruiter_designation || job.designation || job.role || "Recruiter";
+        const avatarBg = getAvatarColor(recruiterName);
+        
+        // Generate subtitle with date and time
+        const subtitleParts = [];
+        if (job.company) subtitleParts.push(escapeHtml(job.company));
+        if (designation) subtitleParts.push(escapeHtml(designation));
+        
+        let jobTimeAgo = timeAgo;
+        if (job && (job.createdAt || job.approvedAt)) {
+          const rawTime = job.approvedAt || job.createdAt;
+          const parsed = rawTime && typeof rawTime.toDate === 'function' ? rawTime.toDate() : new Date(rawTime);
+          if (!isNaN(parsed.getTime())) {
+            jobTimeAgo = getTimeAgo(parsed);
+          }
+        }
+        if (jobTimeAgo) {
+          subtitleParts.push(`<span class="text-slate-400 font-normal whitespace-nowrap">${jobTimeAgo}</span>`);
+        }
+        const subtitleText = subtitleParts.join(' &bull; ');
+        
+        // Comments
+        let commentsHtml = '';
+        if (post.comments && post.comments.length) {
+          const recent = post.comments.slice(-3);
+          commentsHtml = `<div class="comment-list text-sm space-y-1">
+            ${recent.map(c => `<div class="flex gap-2"><span class="font-bold text-black text-[14px]">${escapeHtml(c.name)}</span><span class="text-[14px] text-slate-600 whitespace-pre-wrap break-words flex-1">${escapeHtml(c.text)}</span></div>`).join('')}
+            ${post.comments.length > 3 ? `<div class="text-[14px] text-blue-500 cursor-pointer font-medium mt-1 view-all-comments" data-post-id="${post.id}">View all comments</div>` : ''}
+          </div>`;
+        }
+        
+        // 2. Read More / Show Less Description Logic
+        const descText = window.cleanMarkdown(job.description || "");
+        let descHtml = "";
+        if (descText.length > 180 || (descText.match(/\n/g) || []).length > 3) {
+          const truncated = descText.substring(0, 180) + "...";
+          descHtml = `
+            <div class="post-content-text collapsed" data-post-id="${post.id}">
+              <span class="text-[#1e293b] text-[14px] sm:text-[15px] leading-relaxed mb-0 break-words whitespace-pre-wrap truncated-content">${escapeHtml(truncated)}</span>
+              <button class="read-more-btn">Read more</button>
+              <span class="text-[#1e293b] text-[14px] sm:text-[15px] leading-relaxed mb-0 break-words whitespace-pre-wrap full-content">${escapeHtml(descText)}</span>
+              <button class="read-less-btn">Show less</button>
+            </div>
+          `;
+        } else {
+          descHtml = `
+            <div class="post-content-text" data-post-id="${post.id}">
+              <div class="text-[#1e293b] text-[14px] sm:text-[15px] leading-relaxed mb-0 break-words whitespace-pre-wrap">${escapeHtml(descText)}</div>
+            </div>
+          `;
+        }
+        
+        return `<article class="post-card bg-white rounded-[16px] sm:rounded-[20px] mb-1.5 border border-slate-100 shadow-[0_4px_24px_rgba(0,0,0,0.03)] overflow-hidden" data-post-id="${post.id}">
+          <!-- Recruiter Header -->
+          <div class="flex items-center justify-between px-2.5 pt-2 sm:px-4 sm:pt-3.5 pb-1 sm:pb-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <div class="relative w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center">
+                ${profileLogo ? `<img src="${escapeHtml(profileLogo)}" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none';" referrerPolicy="no-referrer">` : ''}
+                <div class="w-full h-full rounded-full flex items-center justify-center text-white font-bold text-sm md:text-base leading-none" style="background-color: ${avatarBg};">${(recruiterName || '?').charAt(0).toUpperCase()}</div>
+              </div>
+              <div class="flex flex-col min-w-0 flex-1 pr-2">
+                <div class="font-bold text-[#111827] text-[13.5px] sm:text-[14.5px] flex items-center gap-1 leading-tight mb-0.5">
+                  <span class="break-words" style="display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden; padding-right: 4px;">${escapeHtml(recruiterName)}</span>
+                  <i class="fas fa-check-circle text-blue-600 text-[11px] sm:text-[12px] flex-shrink-0"></i>
+                </div>
+                <div class="text-[11px] sm:text-[11.5px] text-slate-500 font-medium leading-tight truncate">
+                  ${subtitleText}
+                </div>
+              </div>
+            </div>
+            <button class="text-slate-400 hover:text-slate-600 p-1.5 transition-colors flex-shrink-0 -mt-1"><i class="fas fa-ellipsis-v text-sm"></i></button>
+          </div>
+          
+          <!-- Post Body / Content -->
+          <div class="post-content px-2.5 sm:px-4 pt-1 pb-3">
+            <div class="mb-3">
+              <h3 class="text-[17px] sm:text-[18px] font-bold text-slate-800 leading-snug mb-0.5">${escapeHtml(job.title)}</h3>
+              <div class="text-[14px] font-semibold text-slate-600 flex items-center gap-1.5 flex-wrap">
+                <span>${escapeHtml(job.company)}</span>
+              </div>
+            </div>
+            <div class="text-slate-700 text-[14.5px] sm:text-[15px] leading-relaxed mb-3">
+              ${(function(){
+                const msgs = [
+                  "We're hiring! Join our growing team.",
+                  "We're expanding our team and looking for talented people.",
+                  "Exciting career opportunity! Apply today.",
+                  "Join our team and build your future with us.",
+                  "We're looking for passionate professionals.",
+                  "Your next career opportunity starts here."
+                ];
+                let hash = 0;
+                const idStr = String(post.id || "");
+                for (let i = 0; i < idStr.length; i++) hash = idStr.charCodeAt(i) + ((hash << 5) - hash);
+                return msgs[Math.abs(hash) % msgs.length];
+              })()}
+            </div>
+            
+            <!-- Metadata Row -->
+            <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] sm:text-[13px] text-slate-500 font-medium py-2 px-3 bg-slate-50 rounded-xl border border-slate-100/70 mb-3.5 w-max max-w-full">
+              <span class="flex items-center gap-1"><i class="fas fa-map-marker-alt text-slate-400"></i> ${escapeHtml(job.location)}</span>
+              <span class="text-slate-300">&bull;</span>
+              <span class="flex items-center gap-1"><i class="fas fa-briefcase text-slate-400"></i> ${escapeHtml(job.type)}</span>
+              <span class="text-slate-300">&bull;</span>
+              <span class="flex items-center gap-1"><i class="fas fa-graduation-cap text-slate-400"></i> ${escapeHtml(job.exp)}</span>
+              <span class="text-slate-300">&bull;</span>
+              <span class="flex items-center gap-1 text-[#7C3AED] font-semibold"><i class="fas fa-wallet text-[#7C3AED]/70"></i> ${escapeHtml(job.salary)}</span>
+            </div>
+            
+            <!-- Job Description -->
+            <div class="text-slate-700 text-[13.5px] sm:text-[14px] leading-relaxed mb-4">
+              <div class="font-semibold text-slate-800 mb-1">Job Description:</div>
+              ${descHtml}
+            </div>
+            
+            <!-- View and Apply Glassmorphism Button -->
+            <button onclick="event.stopPropagation(); window.openViewModalById('${escapeHtml(job.id)}')" class="w-full btn-glass-purple py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer text-sm font-semibold">
+              <i class="fas fa-paper-plane text-xs"></i> View & Apply
+            </button>
+          </div>
+          
+          ${post.imageUrl ? `<img src="${post.imageUrl}" class="w-full h-auto block cursor-zoom-in post-image-zoomable hover:opacity-95 transition-all" loading="lazy">` : ''}
+          
+          <!-- Footer interactions (Appreciate, Comment, Share) -->
+          <div class="flex items-center justify-between px-2.5 sm:px-4 border-t border-slate-50/50 py-1 bg-slate-50/20">
+            <button class="appreciate-btn flex items-center gap-1.5 text-slate-500 font-medium text-[12.5px] sm:text-[13.5px] hover:bg-slate-50 px-2.5 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+              <i class="${heartClass} text-[13px] sm:text-[14px]"></i> <span>Appreciate</span>
+              <span class="appreciate-count text-[12.5px] sm:text-[13.5px] font-bold text-center ${post.appreciations > 0 ? 'text-slate-500' : 'hidden'}">${post.appreciations > 0 ? post.appreciations : ''}</span>
+            </button>
+            <button class="comment-trigger-btn flex items-center gap-1.5 text-slate-500 font-medium text-[12.5px] sm:text-[13.5px] hover:bg-slate-50 px-2.5 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+              <i class="far fa-comment text-[13px] sm:text-[14px]"></i> <span>Comment</span>
+              <span class="comment-badge text-[12.5px] sm:text-[13.5px] font-bold text-center ${commentCount > 0 ? 'text-slate-500' : 'hidden'}">${commentCount > 0 ? commentCount : ''}</span>
+            </button>
+            <button class="share-btn flex items-center gap-1.5 text-slate-500 font-medium text-[12.5px] sm:text-[13.5px] hover:bg-slate-50 px-2.5 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+              <i class="far fa-share-square text-[13px] sm:text-[14px]"></i> <span>Share</span>
+            </button>
+          </div>
+          
+          <div class="comments-section ${openCommentPostIds.has(post.id) ? '' : 'hidden'} mt-1 mb-1 px-2.5 sm:px-4" id="comments-${post.id}">
+            <div>
+              <div class="comment-items-container">${commentsHtml}</div>
+              <div class="mt-1.5 flex gap-2 pb-2">
+                <input type="text" id="commentText-${post.id}" placeholder="Write a comment..." class="flex-1 text-[15px] md:text-[13px] border border-slate-200 focus:ring-0 rounded-full px-3.5 py-1 bg-white shadow-sm font-medium">
+                <button class="submit-comment-btn bg-[#111827] text-white font-semibold text-[12.5px] px-3.5 py-1 rounded-full shadow-md" data-post-id="${post.id}">Post</button>
+              </div>
+            </div>
+          </div>
+        </article>`;
+      }
+    }
+
     const avatarBg = getAvatarColor(post.authorName);
     
     let commentsHtml = '';
@@ -2793,7 +3517,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       </div>
 
       <div class="post-content px-2.5 sm:px-4 pt-0.5 pb-1">
-        ${formatContent(post.content, post.id)}
+        ${formatContent(post.content, post.id, post.jobId)}
       </div>
 
       ${post.imageUrl ? `<img src="${post.imageUrl}" class="w-full h-auto block cursor-zoom-in post-image-zoomable hover:opacity-95 transition-all" loading="lazy">` : ''}
@@ -2825,22 +3549,22 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
   }
 
   function renderAlerts() {
-    if(!allAlerts.length) return `<div class="bg-white rounded-xl p-5 text-center text-slate-500">No recent activity.</div>`;
+    if(!allAlerts.length) return `<div class="bg-white rounded-[14px] sm:rounded-[16px] p-5 text-center text-slate-500 border border-slate-100 shadow-[0_2px_16px_rgba(0,0,0,0.03)]">No recent activity.</div>`;
     return allAlerts.map(p => `
-      <div class="alert-item flex items-start flex-col" data-alert-source="${p.source}" data-alert-id="${p.id}">
+      <div class="alert-item bg-white rounded-[14px] sm:rounded-[16px] shadow-[0_2px_16px_rgba(0,0,0,0.03)] border border-slate-100 p-3 sm:p-3.5 mb-2 flex items-start flex-col cursor-pointer hover:bg-slate-50/80 transition-all" data-alert-source="${p.source}" data-alert-id="${p.id}">
         <div class="w-full flex justify-between items-center mb-1">
           <div>
-            <span class="font-semibold text-sm mr-1">${escapeHtml(p.alertName || 'Unknown')}</span>
-            <span class="text-[0.675rem] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">${escapeHtml(p.source)}</span>
+            <span class="font-bold text-slate-800 text-[13.5px] sm:text-[14px] mr-1.5">${escapeHtml(p.alertName || 'Unknown')}</span>
+            <span class="text-[0.65rem] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${escapeHtml(p.source)}</span>
           </div>
-          <span class="text-[0.7rem] text-slate-400">${getTimeAgo(new Date(p.timestamp))}</span>
+          <span class="text-[0.7rem] font-medium text-slate-400">${getTimeAgo(new Date(p.timestamp))}</span>
         </div>
-        <p class="text-sm text-slate-700 leading-snug">${escapeHtml((p.alertContent || '').substring(0,90))}${p.alertContent?.length>90?'…':''}</p>
+        <p class="text-[13px] sm:text-[13.5px] text-slate-600 leading-snug">${escapeHtml((p.alertContent || '').substring(0,90))}${p.alertContent?.length>90?'…':''}</p>
       </div>
     `).join('');
   }
 
-  function showHomeOrAlerts(hash) {
+  function showHomeOrAlerts(hash, isPostRoute = false, targetPostId = null) {
     const feedContainer = document.getElementById('feedContainer');
     const postCreator = document.getElementById('postCreationCard');
     const filtersSection = document.getElementById('filtersSection');
@@ -2848,7 +3572,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     
     feedContainer.style.display = 'block';
     
-    if (hash === 'home') {
+    if (hash === 'home' && !isPostRoute) {
       postCreator.classList.remove('hidden-creator');
       if (filtersSection) filtersSection.style.display = 'flex';
       if (newPostBanner) newPostBanner.style.display = 'flex';
@@ -2859,7 +3583,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
     
     if (hash === 'alerts') {
-      feedContainer.innerHTML = `<div class="px-[3%]"><h3 class="text-sm font-semibold mb-2 flex items-center gap-1.5"><i class="fas fa-bell text-slate-400"></i> Recent activity</h3>${renderAlerts()}</div>`;
+      feedContainer.innerHTML = `<div class="w-full mb-3"><h3 class="text-sm font-bold text-slate-800 mb-2.5 px-1 flex items-center justify-start text-left gap-1.5"><i class="fas fa-bell text-slate-400"></i> Recent activity</h3>${renderAlerts()}</div>`;
       document.querySelectorAll('.alert-item').forEach(el => el.addEventListener('click', (e) => {
         const id = el.getAttribute('data-alert-id');
         const source = el.getAttribute('data-alert-source');
@@ -2890,6 +3614,19 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
     
     let filtered = posts;
+    if (isPostRoute && targetPostId) {
+      filtered = posts.filter(p => p.id === targetPostId);
+      if (filtered.length) {
+        feedContainer.innerHTML = `<div class="mb-3 px-1"><button onclick="window.location.hash='home'" class="text-slate-600 font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 px-3 py-1.5 rounded-full transition-colors"><i class="fas fa-arrow-left"></i> Back to feed</button></div>` + filtered.map(p => generatePostHTML(p)).join('');
+        attachEventListeners();
+        window.scrollTo(0, 0);
+        return;
+      } else {
+        feedContainer.innerHTML = `<div class="mb-3 px-1"><button onclick="window.location.hash='home'" class="text-slate-600 font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 px-3 py-1.5 rounded-full transition-colors"><i class="fas fa-arrow-left"></i> Back to feed</button></div><div class="bg-white rounded-xl p-5 text-center text-slate-500">Post not found.</div>`;
+        return;
+      }
+    }
+    
     if (currentSearchQuery.trim()) {
       const q = currentSearchQuery.trim().toLowerCase();
       filtered = filtered.filter(p => p.content.toLowerCase().includes(q) || p.authorName.toLowerCase().includes(q));
@@ -2903,9 +3640,26 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
   }
 
   function handleRouting() {
-    const hash = window.location.hash.replace('#', '') || 'home';
+    let hash = window.location.hash.replace('#', '') || 'home';
     const validNavs = ['home', 'community', 'jobs', 'startups', 'alerts'];
-    if (!validNavs.includes(hash)) return;
+    let isPostRoute = false;
+    let targetPostId = null;
+    let specificTargetId = null;
+
+    if (hash.startsWith('community-')) {
+      specificTargetId = hash;
+      hash = 'community';
+    } else if (hash.startsWith('job-')) {
+      specificTargetId = hash;
+      hash = 'jobs';
+    } else if (hash.startsWith('startup-')) {
+      specificTargetId = hash;
+      hash = 'startups';
+    } else if (!validNavs.includes(hash)) {
+      isPostRoute = true;
+      targetPostId = hash;
+      hash = 'home';
+    }
 
     if (hash === 'alerts') {
       lastSeenAlerts = Date.now();
@@ -2940,12 +3694,50 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     if (headerContainer) headerContainer.style.display = 'none';
 
     if (hash === 'home' || hash === 'alerts') {
+      document.body.classList.remove('iframe-active');
+      document.body.style.overflow = '';
       if (headerContainer) headerContainer.style.display = 'flex';
-      showHomeOrAlerts(hash);
+      showHomeOrAlerts(hash, isPostRoute, targetPostId);
     } else {
-      if (hash === 'community') iframeCommunity.classList.add('active');
-      else if (hash === 'jobs') iframeJobs.classList.add('active');
-      else if (hash === 'startups') iframeStartups.classList.add('active');
+      document.body.classList.add('iframe-active');
+      document.body.style.overflow = 'hidden';
+      if (hash === 'community') {
+        iframeCommunity.classList.add('active');
+        if (specificTargetId) {
+          const commId = specificTargetId.replace('community-', '');
+          setTimeout(() => {
+            const el = iframeCommunity.querySelector(`[data-id="${commId}"]`);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              el.style.boxShadow = '0 0 0 3px #8b5cf6';
+              setTimeout(() => { el.style.boxShadow = ''; }, 2000);
+            }
+          }, 350);
+        }
+      } else if (hash === 'jobs') {
+        iframeJobs.classList.add('active');
+        if (specificTargetId) {
+          const jobId = specificTargetId.replace('job-', '');
+          setTimeout(() => {
+            if (typeof window.openViewModalById === 'function') {
+              window.openViewModalById(jobId);
+            }
+          }, 400);
+        }
+      } else if (hash === 'startups') {
+        iframeStartups.classList.add('active');
+        if (specificTargetId) {
+          const startupId = specificTargetId.replace('startup-', '');
+          setTimeout(() => {
+            const el = document.querySelector(`#adminPosts [data-id="${startupId}"]`);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              el.style.boxShadow = '0 0 0 3px #8b5cf6';
+              setTimeout(() => { el.style.boxShadow = ''; }, 2000);
+            }
+          }, 400);
+        }
+      }
     }
 
     const nav = document.querySelector('.bottom-nav');
@@ -2954,10 +3746,15 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     setTimeout(() => {
       lastActiveScrollY = getActiveScrollY();
     }, 10);
+    
+  }
+
+  window.renderFeed = function() {
+    handleRouting();
   }
 
   function renderFeed() {
-    handleRouting();
+    window.renderFeed();
   }
 
   function attachEventListeners() {
@@ -3045,10 +3842,11 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     });
   }
 
-  function handleShare(e) {
+  async function handleShare(e) {
     const postId = e.currentTarget.getAttribute('data-post-id');
     const post = posts.find(p => p.id === postId);
-    if (post) navigator.clipboard.writeText(`"${post.content.substring(0,100)}" — ${post.authorName} on Spread One`).then(()=>alert('Copied!'));
+    if (!post) return;
+    window.openShareModal(postId, post.title || post.content || '');
   }
 
   function handleComment(e) {
@@ -3286,6 +4084,33 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 
     lightBtn.addEventListener('click', () => setTheme('light'));
     darkBtn.addEventListener('click', () => setTheme('dark'));
+
+    function handleSpredUserSave() {
+      const input = document.getElementById('spredUsernameInput');
+      if (!input) return;
+      const newName = input.value.trim();
+      if (newName) {
+        setStoredAuthorName(newName);
+        setStoredCommenterName(newName);
+        localStorage.setItem('community_saved_user_name', newName);
+        updateUserAvatars(newName);
+        if (typeof showToast === 'function') showToast('Profile name updated to ' + newName);
+        if (resolveNamePrompt) resolveNamePrompt(newName);
+      }
+    }
+
+    const saveNameBtn = document.getElementById('saveSpredUsernameBtn');
+    if (saveNameBtn) saveNameBtn.addEventListener('click', handleSpredUserSave);
+
+    const spredInput = document.getElementById('spredUsernameInput');
+    if (spredInput) {
+      spredInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') handleSpredUserSave();
+      });
+      // Pre-fill if name already stored
+      const stored = getStoredAuthorName() || getStoredCommenterName() || localStorage.getItem('community_saved_user_name');
+      if (stored && stored !== '?') spredInput.value = stored;
+    }
   }
 
   function initSearch() {
@@ -3391,7 +4216,219 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
   });
 
+  function syncJobsToHomeFeed() {
+    db.collection("founder_job_portal_jobs_v1")
+      .where("status", "==", "approved")
+      .onSnapshot(async s => {
+        const approvedJobIds = new Set(s.docs.map(d => d.id));
+
+        // Clean up orphaned home posts for jobs that were deleted or are no longer approved
+        try {
+          const postsRef = db.collection("home_posts");
+          const postsSnap = await postsRef.get();
+          postsSnap.forEach(async postDoc => {
+            const pData = postDoc.data() || {};
+            const pJobId = pData.jobId;
+            const pContent = pData.content || "";
+            const isJobPost = Boolean(pJobId || pContent.includes("job-feed-post-card") || pContent.includes("openViewModalById"));
+            if (isJobPost) {
+              let effectiveJobId = pJobId;
+              if (!effectiveJobId && pContent) {
+                const match = pContent.match(/openViewModalById\([^\x27]*\x27([^\x27]+)\x27/);
+                if (match) effectiveJobId = match[1];
+              }
+              if (!effectiveJobId || !approvedJobIds.has(effectiveJobId)) {
+                try {
+                  await postsRef.doc(postDoc.id).delete();
+                  console.log("Deleted orphaned home post for job:", postDoc.id, effectiveJobId);
+                } catch (e) {
+                  console.warn("Failed to delete orphaned job home post:", e);
+                }
+              }
+            }
+          });
+        } catch (err) {
+          console.warn("Error cleaning up orphaned job home posts:", err);
+        }
+
+        s.forEach(async d => {
+          const job = d.data();
+          const jobId = d.id;
+          
+          try {
+            const postsRef = db.collection("home_posts");
+            const existingPostSnap = await postsRef.where("jobId", "==", jobId).get();
+            
+            let needsUpdate = false;
+            let existingDocId = null;
+            if (!existingPostSnap.empty) {
+                const existingData = existingPostSnap.docs[0].data();
+                if (!existingData.timestamp || !existingData.content) {
+                    needsUpdate = true;
+                    existingDocId = existingPostSnap.docs[0].id;
+                }
+            }
+            if (existingPostSnap.empty || needsUpdate) {
+              const rec = window._getDeductedRecruiterInfo ? window._getDeductedRecruiterInfo(job) : { name: job.recruiterName || job.recruiter || job.company || "Recruiter", designation: "Recruiter" };
+              const rName = rec.name;
+              const rDesignation = rec.designation || "Recruiter";
+              const content = `<div class="job-feed-post-card p-4 rounded-xl border border-slate-100 bg-slate-50/50 shadow-sm">
+  <div class="mb-3">
+    <h3 class="text-[18px] font-bold text-slate-800 leading-snug mb-0.5">${escapeHtml(job.title)}</h3>
+    <div class="text-[14px] font-semibold text-slate-600 flex items-center gap-1.5 flex-wrap">
+                <span>${escapeHtml(job.company)}</span>
+              </div>
+  </div>
+  <div class="text-slate-700 text-[14px] leading-relaxed mb-3">
+    ${(function(){
+      const msgs = [
+        "We're hiring! Join our growing team.",
+        "We're expanding our team and looking for talented people.",
+        "Exciting career opportunity! Apply today.",
+        "Join our team and build your future with us.",
+        "We're looking for passionate professionals.",
+        "Your next career opportunity starts here."
+      ];
+      let hash = 0;
+      const idStr = String(jobId || "");
+      for (let i = 0; i < idStr.length; i++) hash = idStr.charCodeAt(i) + ((hash << 5) - hash);
+      return msgs[Math.abs(hash) % msgs.length];
+    })()}
+  </div>
+  
+  <div class="grid grid-cols-2 gap-2 text-sm text-slate-600 bg-white p-3 rounded-lg border border-slate-50 mb-3 shadow-inner" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+    <div class="flex items-center gap-1.5" style="display: flex; align-items: center; gap: 6px;"><i class="fas fa-map-marker-alt text-slate-400" style="width: 16px;"></i> <span class="truncate">${escapeHtml(job.location)}</span></div>
+    <div class="flex items-center gap-1.5" style="display: flex; align-items: center; gap: 6px;"><i class="fas fa-briefcase text-slate-400" style="width: 16px;"></i> <span>${escapeHtml(job.jobType || job.type || 'Full Time')}</span></div>
+    <div class="flex items-center gap-1.5" style="display: flex; align-items: center; gap: 6px;"><i class="fas fa-graduation-cap text-slate-400" style="width: 16px;"></i> <span>${escapeHtml(job.experience || job.exp || 'Not specified')}</span></div>
+    <div class="flex items-center gap-1.5" style="display: flex; align-items: center; gap: 6px;"><i class="fas fa-wallet text-slate-400" style="width: 16px;"></i> <span class="truncate" style="color: #2563eb; font-weight: 600;">${escapeHtml(job.salary || 'Not disclosed')}</span></div>
+  </div>
+  
+  ${job.description ? '<div class="text-[13px] text-slate-500 leading-relaxed mb-3 line-clamp-3 whitespace-pre-wrap">' + escapeHtml(window.cleanMarkdown(job.description)) + '</div>' : ''}
+  
+  <button onclick="event.stopPropagation(); window.location.hash='jobs'; setTimeout(() => { if (window.openViewModalById) window.openViewModalById('${jobId}'); }, 200);" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm text-sm" style="background: #1b4fff; color: white; border: none; border-radius: 12px; padding: 10px; font-weight: 600; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;"><i class="fas fa-eye"></i> View on apply</button>
+</div>`;
+
+              const newPost = {
+                authorName: rName,
+                authorTitle: `${job.company || 'Company'} &bull; ${rDesignation}`,
+                content: content,
+                timestamp: (job.approvedAt && typeof job.approvedAt.toDate === 'function' ? job.approvedAt.toDate().toISOString() : typeof job.approvedAt === 'string' ? job.approvedAt : null) || (job.createdAt && typeof job.createdAt.toDate === 'function' ? job.createdAt.toDate().toISOString() : typeof job.createdAt === 'string' ? job.createdAt : null) || new Date().toISOString(),
+                appreciations: 0,
+                appreciatedBy: [],
+                comments: [],
+                jobId: jobId
+              };
+              
+              if (needsUpdate) {
+                await postsRef.doc(existingDocId).update(newPost);
+              } else {
+                await postsRef.add(newPost);
+              }
+            }
+          } catch (err) {
+            console.error("Error checking/creating synced home post:", err);
+          }
+        });
+      }, err => {
+        console.warn("syncJobsToHomeFeed onSnapshot error:", err);
+      });
+  }
+
+  window.shareJobPostLink = async function(jobId) {
+    try {
+      const postsSnap = await db.collection("home_posts").where("jobId", "==", jobId).get();
+      if (!postsSnap.empty) {
+        const postDoc = postsSnap.docs[0];
+        const postUrl = window.location.origin + window.location.pathname + '#' + postDoc.id;
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: "Hiring: Job Post",
+              url: postUrl
+            });
+            if (window.showJobsToast) window.showJobsToast("Job link shared!", "success");
+          } catch (e) {
+            console.warn(e);
+          }
+        } else {
+          await navigator.clipboard.writeText(postUrl);
+          if (window.showJobsToast) window.showJobsToast("Job share link copied to clipboard!", "success");
+        }
+      } else {
+        if (window.showJobsToast) window.showJobsToast("Post is being synchronized. Please wait...", "success");
+        // Force sync on-demand as fallback
+        const jobDoc = await db.collection("founder_job_portal_jobs_v1").doc(jobId).get();
+        if (jobDoc.exists) {
+          const job = jobDoc.data();
+          if (job.status === "approved") {
+            const rec = window._getDeductedRecruiterInfo ? window._getDeductedRecruiterInfo(job) : { name: job.recruiterName || job.recruiter || job.company || "Recruiter", designation: "Recruiter" };
+            const rName = rec.name;
+            const rDesignation = rec.designation || "Recruiter";
+            const content = `<div class="job-feed-post-card p-4 rounded-xl border border-slate-100 bg-slate-50/50 shadow-sm">
+  <div class="mb-3">
+    <h3 class="text-[18px] font-bold text-slate-800 leading-snug mb-0.5">${escapeHtml(job.title)}</h3>
+    <div class="text-[14px] font-semibold text-slate-600 flex items-center gap-1.5 flex-wrap">
+                <span>${escapeHtml(job.company)}</span>
+              </div>
+  </div>
+  <div class="text-slate-700 text-[14px] leading-relaxed mb-3">
+    ${(function(){
+      const msgs = [
+        "We're hiring! Join our growing team.",
+        "We're expanding our team and looking for talented people.",
+        "Exciting career opportunity! Apply today.",
+        "Join our team and build your future with us.",
+        "We're looking for passionate professionals.",
+        "Your next career opportunity starts here."
+      ];
+      let hash = 0;
+      const idStr = String(jobId || "");
+      for (let i = 0; i < idStr.length; i++) hash = idStr.charCodeAt(i) + ((hash << 5) - hash);
+      return msgs[Math.abs(hash) % msgs.length];
+    })()}
+  </div>
+  
+  <div class="grid grid-cols-2 gap-2 text-sm text-slate-600 bg-white p-3 rounded-lg border border-slate-50 mb-3 shadow-inner" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+    <div class="flex items-center gap-1.5" style="display: flex; align-items: center; gap: 6px;"><i class="fas fa-map-marker-alt text-slate-400" style="width: 16px;"></i> <span class="truncate">${escapeHtml(job.location)}</span></div>
+    <div class="flex items-center gap-1.5" style="display: flex; align-items: center; gap: 6px;"><i class="fas fa-briefcase text-slate-400" style="width: 16px;"></i> <span>${escapeHtml(job.jobType || job.type || 'Full Time')}</span></div>
+    <div class="flex items-center gap-1.5" style="display: flex; align-items: center; gap: 6px;"><i class="fas fa-graduation-cap text-slate-400" style="width: 16px;"></i> <span>${escapeHtml(job.experience || job.exp || 'Not specified')}</span></div>
+    <div class="flex items-center gap-1.5" style="display: flex; align-items: center; gap: 6px;"><i class="fas fa-wallet text-slate-400" style="width: 16px;"></i> <span class="truncate" style="color: #2563eb; font-weight: 600;">${escapeHtml(job.salary || 'Not disclosed')}</span></div>
+  </div>
+  
+  ${job.description ? '<div class="text-[13px] text-slate-500 leading-relaxed mb-3 line-clamp-3 whitespace-pre-wrap">' + escapeHtml(window.cleanMarkdown(job.description)) + '</div>' : ''}
+  
+  <button onclick="event.stopPropagation(); window.location.hash='jobs'; setTimeout(() => { if (window.openViewModalById) window.openViewModalById('${jobId}'); }, 200);" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm text-sm" style="background: #1b4fff; color: white; border: none; border-radius: 12px; padding: 10px; font-weight: 600; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;"><i class="fas fa-eye"></i> View on apply</button>
+</div>`;
+
+            const newPost = {
+              authorName: rName,
+              authorTitle: `${job.company || 'Company'} &bull; ${rDesignation}`,
+              content: content,
+              timestamp: (job.approvedAt && typeof job.approvedAt.toDate === 'function' ? job.approvedAt.toDate().toISOString() : typeof job.approvedAt === 'string' ? job.approvedAt : null) || (job.createdAt && typeof job.createdAt.toDate === 'function' ? job.createdAt.toDate().toISOString() : typeof job.createdAt === 'string' ? job.createdAt : null) || new Date().toISOString(),
+              appreciations: 0,
+              appreciatedBy: [],
+              comments: [],
+              jobId: jobId
+            };
+            const addedDoc = await db.collection("home_posts").add(newPost);
+            const postUrl = window.location.origin + window.location.pathname + '#' + addedDoc.id;
+            await navigator.clipboard.writeText(postUrl);
+            if (window.showJobsToast) window.showJobsToast("Job share link copied to clipboard!", "success");
+          } else {
+            if (window.showJobsToast) window.showJobsToast("Job is not approved yet", "error");
+          }
+        } else {
+          if (window.showJobsToast) window.showJobsToast("Job not found", "error");
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      if (window.showJobsToast) window.showJobsToast("Error sharing job", "error");
+    }
+  };
+
   loadPosts();
+  syncJobsToHomeFeed();
   loadAllAlerts();
   initPostCreator();
   initTheme();
@@ -3402,7 +4439,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 // --- COMMUNITY PAGE LOGIC ---
 (function() {
     const db = firebase.firestore();
-    const COMMUNITY_USER_NAME_KEY = "community_saved_user_name";
+    const COMMUNITY_USER_NAME_KEY = "spreadone_global_username";
     let discussions = [];
     let openReplyForms = {};
     let openReplies = {};
@@ -3410,7 +4447,8 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 
     function getSavedCommunityName() { return localStorage.getItem(COMMUNITY_USER_NAME_KEY) || ""; }
     function saveCommunityName(name) { if(name.trim() !== "") localStorage.setItem(COMMUNITY_USER_NAME_KEY, name.trim()); }
-    function escapeHtml(str) {
+    function escapeHtml(str){
+  str = String(str || "");
         if(!str) return "";
         return str.replace(/[&<>]/g, function(m) {
             if(m === '&') return '&amp;';
@@ -3523,9 +4561,9 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
                     <div class="comment-name">${escapeHtml(c.name)}</div>
                     <div class="comment-text">${escapeHtml(c.text)}</div>
                     <div class="comment-actions">
-                        <button class="comment-reply-btn" onclick="toggleReplyForm('comment-${c.id}')">↩ Reply</button>
+                        <button class="comment-reply-btn" onclick="toggleReplyForm('comment-${c.id}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline; vertical-align:-1px; margin-right:3px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Reply</button>
                         <span class="comment-helpful ${isHelpfulMarked}" onclick="markCommentHelpful('${discussionId}', '${c.id}')">
-                            👍 Helpful <span class="helpful-badge">${helpful}</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline; vertical-align:-1px; margin-right:3px;"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> Helpful <span class="helpful-badge">${helpful}</span>
                         </span>
                     </div>
                     <div class="reply-form ${openReplyForms[`comment-${c.id}`] ? 'active' : ''}" id="comment-${c.id}">
@@ -3575,10 +4613,17 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
                     <div class="read-more-btn" onclick="toggleReadMore('${d.id}',this)">Read More</div>
                     <div class="community-actions">
                         <div class="community-action ${isHelpfulMarked}" onclick="markPostHelpful('${d.id}')">
-                            👍 Helpful <span class="helpful-count" id="helpful-${d.id}">${postHelpful}</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline; vertical-align:-2px; margin-right:4px;"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> Helpful <span class="helpful-count" id="helpful-${d.id}">${postHelpful}</span>
                         </div>
-                        <div class="community-action" onclick="toggleReplyForm('main-${d.id}')">💬 Reply</div>
-                        <div class="community-action" onclick="toggleReplies('${repliesContainerId}')">${isRepliesOpen ? 'Hide' : totalReplies} Replies</div>
+                        <div class="community-action" onclick="toggleReplyForm('main-${d.id}')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline; vertical-align:-2px; margin-right:4px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Reply
+                        </div>
+                        <div class="community-action" onclick="toggleReplies('${repliesContainerId}')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline; vertical-align:-2px; margin-right:4px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> ${isRepliesOpen ? 'Hide' : totalReplies} Replies
+                        </div>
+                        <div class="community-action" onclick="openShareModal('community-${d.id}', '${escapeHtml(d.question)}')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline; vertical-align:-2px; margin-right:4px;"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share
+                        </div>
                     </div>
                     <div class="reply-form ${openReplyForms[`main-${d.id}`] ? 'active' : ''}" id="main-${d.id}">
                         ${savedNameInputHtml()}
@@ -3810,8 +4855,10 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     return snap.docs
       .map(d => ({ id: d.id, ...d.data() }))
       .sort((a, b) => {
-        const ad = a.approvedAt && a.approvedAt.toDate ? a.approvedAt.toDate() : new Date(0);
-        const bd = b.approvedAt && b.approvedAt.toDate ? b.approvedAt.toDate() : new Date(0);
+        const aTime = a.approvedAt || a.createdAt;
+        const bTime = b.approvedAt || b.createdAt;
+        const ad = aTime && typeof aTime.toDate === 'function' ? aTime.toDate() : (aTime ? new Date(aTime) : new Date(0));
+        const bd = bTime && typeof bTime.toDate === 'function' ? bTime.toDate() : (bTime ? new Date(bTime) : new Date(0));
         return bd - ad;
       });
   };
@@ -3824,6 +4871,87 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     });
   };
 
+  window._getDeductedRecruiterInfo = function(job) {
+    if (!job) return { name: "Siddharth Khan", designation: "Founder & Recruiter" };
+    
+    let name = job.recruiterName || job.recruiter_name || job.recruiter || job.postedBy || "";
+    let designation = job.recruiterDesignation || job.recruiter_designation || job.designation || "";
+    
+    const email = String(job.email || "").toLowerCase().trim();
+    const applyLink = String(job.applyLink || "").toLowerCase().trim();
+    const company = String(job.company || "").toLowerCase().trim();
+    const isFounder = job.postedByFounder === true || job.postedByFounder === "true" || job.postedByFounder === "True";
+    
+    // Try to find in applyLink
+    if (!name) {
+      if (applyLink.includes("r=himani")) {
+        name = "Himani Dareddy";
+        designation = designation || "Talent Acquisition Specialist";
+      } else if (applyLink.includes("r=siddik") || applyLink.includes("r=siddharth")) {
+        name = "Siddharth Khan";
+        designation = designation || "Founder & Recruiter";
+      } else if (applyLink.includes("r=sufiya")) {
+        name = "Sufiya";
+        designation = designation || "Technical Recruiter";
+      }
+    }
+    
+    // Try to find in email
+    if (!name) {
+      if (email.includes("siddik") || email.includes("siddharth")) {
+        name = "Siddharth Khan";
+        designation = designation || "Founder & Recruiter";
+      } else if (email.includes("himani")) {
+        name = "Himani Dareddy";
+        designation = designation || "Talent Acquisition Specialist";
+      } else if (email.includes("sufiya")) {
+        name = "Sufiya";
+        designation = designation || "Technical Recruiter";
+      }
+    }
+    
+    // Try isFounder flag
+    if (!name && isFounder) {
+      name = "Siddharth Khan";
+      designation = designation || "Founder & Recruiter";
+    }
+    
+    // Try company matching
+    if (!name) {
+      if (company.includes("nxtwave") || company.includes("nxt wave")) {
+        name = "Siddharth Khan";
+        designation = designation || "Recruiter";
+      }
+    }
+
+    // Fallback to email username or 'Recruiter'
+    if (!name) {
+      if (email && email.includes("@")) {
+        const username = email.split("@")[0];
+        if (username === "hr" || username === "jobs" || username === "careers") {
+          name = "Siddharth Khan";
+          designation = designation || "Talent Partner";
+        } else {
+          name = username.charAt(0).toUpperCase() + username.slice(1);
+          designation = designation || "Recruiter";
+        }
+      } else {
+        name = "Siddharth Khan";
+        designation = designation || "Founder & Recruiter";
+      }
+    }
+
+    if (name.toLowerCase().includes("siddik") || name.toLowerCase().includes("siddharth")) {
+      name = "Siddharth Khan";
+    }
+    
+    if (!designation) {
+      designation = "Recruiter";
+    }
+    
+    return { name, designation };
+  };
+
 })();
 
 // --- JOBS JS ---
@@ -3832,6 +4960,39 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 let allJobs = [];      // full job objects array
 let activeChip = '';
 
+function getAvatarColorLocal(name) {
+  const avatarColors = [
+    '#EF4444', '#F97316', '#F59E0B', '#10B981', '#14B8A6', '#3B82F6', '#6366F1', '#8B5CF6', '#EC4899', '#F43F5E',
+    '#E11D48', '#D97706', '#65A30D', '#0EA5E9', '#7C3AED', '#DB2777', '#4F46E5', '#0284C7', '#059669', '#DC2626'
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = ((hash << 5) - hash) + name.charCodeAt(i);
+    hash |= 0;
+  }
+  return avatarColors[Math.abs(hash) % avatarColors.length];
+}
+
+function getShortTimeAgo(timestamp) {
+  if (!timestamp) return 'recently';
+  let date;
+  if (timestamp && typeof timestamp.toDate === 'function') {
+    date = timestamp.toDate();
+  } else if (timestamp && timestamp.seconds) {
+    date = new Date(timestamp.seconds * 1000);
+  } else {
+    date = new Date(timestamp);
+  }
+  if (isNaN(date.getTime())) return 'recently';
+  
+  const sec = Math.floor((new Date() - date)/1000);
+  if(sec < 60) return 'just now';
+  const min = Math.floor(sec/60); if(min < 60) return `${min}m ago`;
+  const hr = Math.floor(min/60); if(hr < 24) return `${hr}h ago`;
+  const days = Math.floor(hr/24); if(days < 30) return `${days}d ago`;
+  return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
 function showToast(msg, type='success'){
   const t = document.getElementById('jobsToast');
   document.getElementById('jobsToastMsg').textContent = msg;
@@ -3839,33 +5000,44 @@ function showToast(msg, type='success'){
   t.className = `toast ${type} show`;
   setTimeout(()=>t.classList.remove('show'), 3500);
 }
+window.showJobsToast = showToast;
 
 // LOAD jobs with full data
 async function loadJobs(){
   try{
     const jobs = await window._loadApprovedJobs();
-    allJobs = jobs.map(job => ({
-      id: job.id,
-      title: job.title || 'Untitled Role',
-      company: job.company || 'Company',
-      location: job.location || 'Not specified',
-      salary: job.salary || 'Not disclosed',
-      exp: job.experience || '',
-      type: job.jobType || '',
-      role: job.role || '',
-      applyLink: job.applyLink || '',
-      skills: job.skills || '',
-      description: job.description || '',
-      perks: job.perks || '',
-      qualification: job.qualification || '',
-      lastDate: job.lastDate || '',
-      openings: job.openings || '',
-      workMode: job.workMode || '',
-      industry: job.industry || '',
-      raw: Object.values(job).join(' ').toLowerCase(),
-    }));
+    allJobs = jobs.map(job => {
+      const rec = window._getDeductedRecruiterInfo(job);
+      return {
+        id: job.id,
+        title: String(job.title || 'Untitled Role'),
+        company: String(job.company || 'Company'),
+        location: String(job.location || 'Not specified'),
+        salary: String(job.salary || 'Not disclosed'),
+        exp: String(job.experience || ''),
+        type: String(job.jobType || ''),
+        role: String(job.role || ''),
+        applyLink: String(job.applyLink || ''),
+        skills: String(job.skills || ''),
+        description: window.cleanMarkdown(String(job.description || '')),
+        perks: String(job.perks || ''),
+        qualification: String(job.qualification || ''),
+        lastDate: String(job.lastDate || ''),
+        openings: String(job.openings || ''),
+        workMode: String(job.workMode || ''),
+        industry: String(job.industry || ''),
+        email: String(job.email || ''),
+        recruiterName: String(rec.name),
+        recruiterDesignation: String(rec.designation),
+        recruiterLogo: String(job.recruiterLogo || job.recruiter_logo || job.logo || job.logoUrl || job.companyLogo || job.company_logo || ''),
+        createdAt: job.createdAt || job.approvedAt || '',
+        raw: Object.values(job).map(v => String(v)).join(' ').toLowerCase(),
+      };
+    });
+    window._allJobs = allJobs;
     document.getElementById('heroCount').textContent = allJobs.length;
     renderJobs(allJobs);
+    if (typeof window.renderFeed === 'function') window.renderFeed();
   }catch(e){
     console.error(e);
     document.getElementById('job-list').innerHTML = `<div class="empty-state">⚠️ Failed to load jobs. Check Firestore rules.</div>`;
@@ -3882,10 +5054,53 @@ window.openViewModal = function(job){
   const container = document.getElementById('viewJobContent');
   document.getElementById('viewJobTitle').innerHTML = `${escapeHtml(job.title)} <span style="font-size:12px; font-weight:normal; color:#60a5fa;">${escapeHtml(job.company)}</span>`;
   
-  const applyLinkValid = job.applyLink && job.applyLink.trim() !== '' && (job.applyLink.startsWith('http') || job.applyLink.startsWith('mailto:'));
-  const applyUrl = job.applyLink && (job.applyLink.startsWith('http') || job.applyLink.startsWith('mailto:')) ? job.applyLink : (job.applyLink && !job.applyLink.startsWith('http') ? `https://${job.applyLink}` : '#');
+  const emailVal = String(job.email || "").trim();
+  const applyLinkStr = String(job.applyLink || "").trim();
   
+  let applyUrl = '#';
+  let applyLabel = '✨ Apply Now';
+  let hasValidLink = false;
+  
+  if (applyLinkStr) {
+    if (applyLinkStr.startsWith('http://') || applyLinkStr.startsWith('https://')) {
+      applyUrl = applyLinkStr;
+      hasValidLink = true;
+    } else if (applyLinkStr.includes('@')) {
+      applyUrl = applyLinkStr.startsWith('mailto:') ? applyLinkStr : `mailto:${applyLinkStr}`;
+      applyLabel = '📧 Apply via Email';
+      hasValidLink = true;
+    } else {
+      applyUrl = `https://${applyLinkStr}`;
+      hasValidLink = true;
+    }
+  } else if (emailVal) {
+    applyUrl = `mailto:${emailVal}`;
+    applyLabel = '📧 Apply via Email';
+    hasValidLink = true;
+  }
+  
+  const recruiterName = job.recruiterName || "Recruiter";
+  const designation = job.recruiterDesignation || "";
+  const avatarBg = getAvatarColorLocal(recruiterName);
+  const timeAgo = getShortTimeAgo(job.createdAt);
+
   container.innerHTML = `
+    <!-- Recruiter profile in touch view modal -->
+    <div class="flex items-center gap-3 bg-white/5 border border-white/10 p-3 sm:p-3.5 rounded-xl mb-4">
+      <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base leading-none flex-shrink-0" style="background-color: ${avatarBg};">
+        ${(recruiterName || '?').charAt(0).toUpperCase()}
+      </div>
+      <div class="flex flex-col min-w-0 flex-1">
+        <div class="font-bold text-white text-[13.5px] sm:text-[14px] flex items-center gap-1 leading-tight mb-0.5">
+          <span>${escapeHtml(recruiterName)}</span>
+          <i class="fas fa-check-circle text-blue-400 text-[11px] flex-shrink-0"></i>
+        </div>
+        <div class="text-[11px] sm:text-[11.5px] text-white font-medium leading-tight truncate">
+          ${escapeHtml(job.company)} &bull; ${designation ? escapeHtml(designation) : 'Recruiter'} &bull; <span class="text-white/80 font-normal">${timeAgo}</span>
+        </div>
+      </div>
+    </div>
+
     <div class="v-section">Job Overview</div>
     <div class="v-grid">
       <div class="v-grid-item"><span class="v-grid-label">Location</span><span class="v-grid-value">${escapeHtml(job.location)}</span></div>
@@ -3902,34 +5117,30 @@ window.openViewModal = function(job){
     <div class="jd-text" style="margin-bottom:8px;">${escapeHtml(job.skills || 'Not specified')}</div>
     
     <div class="v-section">Job Description</div>
-    <div class="jd-text">${escapeHtml(job.description || 'No description provided.').replace(/\n/g, '<br>')}</div>
+    <div class="jd-text">${escapeHtml(window.cleanMarkdown(job.description || 'No description provided.')).replace(/\n/g, '<br>')}</div>
     
     ${job.qualification ? `<div class="v-section">Qualifications</div><div class="jd-text">${escapeHtml(job.qualification)}</div>` : ''}
     ${job.perks ? `<div class="v-section">Perks & Benefits</div><div class="jd-text">${escapeHtml(job.perks)}</div>` : ''}
     
     <div class="v-section">How to Apply</div>
-    ${applyLinkValid ? 
-      `<button class="apply-btn-modal" id="modalApplyBtn">✨ Apply Now <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>` : 
-      `<div class="missing-link-msg">⚠️ No direct apply link provided by employer. You can still email your resume mentioning job title.</div>
-       <button class="apply-btn-modal" id="modalApplyBtn" style="background:#334155;">📧 Request Info / Contact</button>`
-    }
+    <div style="display: flex; gap: 10px; margin-top: 18px; width: 100%;">
+      ${hasValidLink ? 
+        `<a href="${applyUrl}" target="_blank" rel="noopener noreferrer" class="apply-btn-modal" id="modalApplyBtn" style="margin-top: 0; flex: 2; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; color: white;">
+          ${applyLabel} 
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+         </a>` : 
+        `<div style="flex: 2; width: 100%;">
+           <div class="missing-link-msg" style="margin-top: 0; margin-bottom: 8px;">⚠️ No direct apply link or contact email provided by employer.</div>
+           <button class="apply-btn-modal" style="background:#334155; margin-top: 0; cursor: not-allowed;" disabled>No apply option available</button>
+         </div>`
+      }
+      <button class="apply-btn-modal" onclick="event.stopPropagation(); window.shareJobPostLink('${job.id}')" style="margin-top: 0; background: #334155; flex: 1; min-width: 100px; display: flex; align-items: center; justify-content: center; gap: 6px;" title="Share this job on homepage">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share
+      </button>
+    </div>
   `;
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
-  
-  // attach apply event after rendering
-  const applyBtn = document.getElementById('modalApplyBtn');
-  if(applyBtn){
-    applyBtn.onclick = () => {
-      if(applyLinkValid && job.applyLink && job.applyLink.trim()){
-        window.open(job.applyLink, '_blank', 'noopener');
-        showToast('Redirecting to application page...', 'success');
-      } else {
-        // no link: suggest copy recruiter email? Actually we don't have recruiter email in view, but can fallback.
-        showToast('No application link provided. Please contact the company directly via the job portal.', 'error');
-      }
-    };
-  }
 }
 
 window.closeViewModal = function(){
@@ -3937,7 +5148,87 @@ window.closeViewModal = function(){
   document.body.style.overflow = '';
 }
 
+let currentShareUrl = '';
+
+window.openShareModal = function(postId, title) {
+  const overlay = document.getElementById('shareModalOverlay');
+  const input = document.getElementById('shareLinkInput');
+  const copyText = document.getElementById('copyShareLinkText');
+  const copyBtn = document.getElementById('copyShareLinkBtn');
+  if (!overlay || !input) return;
+
+  const baseUrl = location.origin + location.pathname;
+  currentShareUrl = `${baseUrl}#${postId}`;
+  input.value = currentShareUrl;
+
+  if (copyText) copyText.textContent = 'Copy';
+  if (copyBtn) copyBtn.style.background = '#7c3aed';
+
+  const encodedUrl = encodeURIComponent(currentShareUrl);
+  const encodedTitle = encodeURIComponent(title || 'Check out this post on Spred One!');
+
+  const wa = document.getElementById('shareWhatsapp');
+  if (wa) wa.href = `https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`;
+
+  const tw = document.getElementById('shareTwitter');
+  if (tw) tw.href = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`;
+
+  const li = document.getElementById('shareLinkedin');
+  if (li) li.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+
+  overlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeShareModal = function() {
+  const overlay = document.getElementById('shareModalOverlay');
+  if (overlay) overlay.style.display = 'none';
+  document.body.style.overflow = '';
+};
+
+window.copyShareLinkAction = async function() {
+  const input = document.getElementById('shareLinkInput');
+  const copyText = document.getElementById('copyShareLinkText');
+  const copyBtn = document.getElementById('copyShareLinkBtn');
+
+  if (!input || !input.value) return;
+
+  try {
+    await navigator.clipboard.writeText(input.value);
+    if (copyText) copyText.textContent = 'Copied!';
+    if (copyBtn) copyBtn.style.background = '#10b981';
+  } catch (err) {
+    input.select();
+    document.execCommand('copy');
+    if (copyText) copyText.textContent = 'Copied!';
+    if (copyBtn) copyBtn.style.background = '#10b981';
+  }
+};
+
+window.triggerNativeShare = async function() {
+  if (navigator.share && currentShareUrl) {
+    try {
+      await navigator.share({
+        title: 'Spred One Post',
+        url: currentShareUrl
+      });
+    } catch (err) {
+      console.log('Share canceled:', err);
+    }
+  } else {
+    window.copyShareLinkAction();
+  }
+};
+
+document.addEventListener('click', function(e) {
+  const shareOverlay = document.getElementById('shareModalOverlay');
+  if (shareOverlay && e.target === shareOverlay) {
+    window.closeShareModal();
+  }
+});
+
 function escapeHtml(str){
+  str = String(str || "");
   if(!str) return '';
   return str.replace(/[&<>]/g, function(m){
     if(m === '&') return '&amp;';
@@ -3949,6 +5240,47 @@ function escapeHtml(str){
   });
 }
 
+window.openViewModalById = async function(jobId){
+  let job = allJobs.find(j => j.id === jobId);
+  if(!job && jobId) {
+    try {
+      const doc = await firebase.firestore().collection('founder_job_portal_jobs_v1').doc(jobId).get();
+      if (doc.exists) {
+        const d = doc.data();
+        const rec = window._getDeductedRecruiterInfo(d);
+        job = {
+          id: doc.id,
+          title: String(d.title || 'Untitled Role'),
+          company: String(d.company || 'Company'),
+          location: String(d.location || 'Not specified'),
+          salary: String(d.salary || 'Not disclosed'),
+          exp: String(d.experience || d.exp || ''),
+          type: String(d.jobType || d.type || ''),
+          role: String(d.role || ''),
+          applyLink: String(d.applyLink || ''),
+          skills: String(d.skills || ''),
+          description: window.cleanMarkdown(String(d.description || '')),
+          perks: String(d.perks || ''),
+          qualification: String(d.qualification || ''),
+          lastDate: String(d.lastDate || ''),
+          openings: String(d.openings || ''),
+          workMode: String(d.workMode || ''),
+          industry: String(d.industry || ''),
+          email: String(d.email || ''),
+          recruiterName: String(rec.name),
+          recruiterDesignation: String(rec.designation),
+          recruiterLogo: String(d.recruiterLogo || d.recruiter_logo || d.logo || d.logoUrl || d.companyLogo || d.company_logo || ''),
+          createdAt: d.createdAt || d.approvedAt || ''
+        };
+      }
+    } catch(e) {
+      console.error("Error loading job details:", e);
+    }
+  }
+  if(job) openViewModal(job);
+  else showToast('Job details missing', 'error');
+};
+
 function renderJobs(jobs){
   document.getElementById('resultCount').textContent = jobs.length;
   if(!jobs.length){
@@ -3956,45 +5288,61 @@ function renderJobs(jobs){
     return;
   }
   const container = document.getElementById('job-list');
-  container.innerHTML = jobs.map((j, idx) => `
-    <div class="job-card" data-job-id="${j.id}" style="animation-delay:${Math.min(idx,14)*25}ms">
-      ${idx<5 ? '<span class="new-tag">New</span>' : ''}
-      <div class="job-title">${escapeHtml(j.title)}</div>
-      <div class="detail-list">
-        <div class="detail-row"><span class="detail-label">Company</span><span class="detail-value">${escapeHtml(j.company)}</span></div>
-        <div class="detail-row"><span class="detail-label">Location</span><span class="detail-value">${escapeHtml(j.location)}</span></div>
-        <div class="detail-row"><span class="detail-label">Experience</span><span class="detail-value">${escapeHtml(j.exp)}</span></div>
-        <div class="detail-row"><span class="detail-label">Salary</span><span class="detail-value salary-val">${escapeHtml(j.salary)}</span></div>
-        <div class="detail-row"><span class="detail-label">Job Type</span><span class="detail-value">${escapeHtml(j.type)}</span></div>
+  container.innerHTML = jobs.map((j, idx) => {
+    const recruiterName = j.recruiterName || "Recruiter";
+    const designation = j.recruiterDesignation || "";
+    const timeAgo = getShortTimeAgo(j.createdAt);
+    const descText = window.cleanMarkdown(j.description || "No description provided.");
+    
+    return `
+      <div class="job-card flex flex-col justify-between" onclick="window.openViewModalById('${j.id}')" style="animation-delay:${Math.min(idx,14)*25}ms; cursor: pointer; min-height: 250px; padding: 16px 16px 14px;">
+        <div>
+          <!-- Recruiter Info Header (Avatar/Logo removed as requested) -->
+          <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-2.5">
+            <div class="flex flex-col min-w-0 flex-1">
+              <span class="font-semibold text-white text-[13.5px] truncate leading-tight">${escapeHtml(recruiterName)}</span>
+              <span class="text-[11.5px] text-white/90 font-medium truncate leading-normal mt-0.5">
+                ${escapeHtml(j.company)} &bull; ${designation ? escapeHtml(designation) : 'Recruiter'}
+              </span>
+            </div>
+            <span class="text-[11px] text-white/80 font-medium whitespace-nowrap ml-2 flex-shrink-0">${timeAgo}</span>
+          </div>
+
+          <!-- Job Title -->
+          <div class="job-title-custom text-[16.5px] font-semibold tracking-tight text-white mb-2 leading-snug">${escapeHtml(j.title)}</div>
+          
+          <!-- Job Description Snippet (truncated) -->
+          <p class="text-white/95 text-[13.5px] leading-relaxed mb-3.5" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;">
+            ${escapeHtml(descText)}
+          </p>
+
+          <!-- Key Metadata Chips -->
+          <div class="flex flex-col gap-2 text-[12px] text-white font-medium mb-3">
+            <!-- Row 1: Location, Experience, Full-time/Job type -->
+            <div class="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+              <span class="flex items-center gap-1.5 bg-white/10 px-2.5 py-1 rounded-md"><i class="fas fa-map-marker-alt text-slate-200 text-[10.5px]"></i> ${escapeHtml(j.location)}</span>
+              <span class="flex items-center gap-1.5 bg-white/10 px-2.5 py-1 rounded-md"><i class="fas fa-briefcase text-slate-200 text-[10.5px]"></i> ${escapeHtml(j.exp)}</span>
+              <span class="flex items-center gap-1.5 bg-white/10 px-2.5 py-1 rounded-md"><i class="fas fa-clock text-slate-200 text-[10.5px]"></i> ${escapeHtml(j.type)}</span>
+            </div>
+            <!-- Row 2: Salary below -->
+            <div class="flex items-center">
+              <span class="flex items-center gap-1.5 bg-blue-500/15 border border-blue-500/20 px-2.5 py-1 rounded-md text-blue-300 font-semibold text-[12.5px]"><i class="fas fa-wallet text-blue-400 text-[10.5px]"></i> ${escapeHtml(j.salary)}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer-custom flex justify-between items-center border-t border-white/10 pt-2.5 mt-2">
+          <span class="text-[11px] text-slate-400 font-medium">
+            ${idx < 5 ? '<span class="px-2 py-0.5 bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 rounded font-bold uppercase text-[8.5px] tracking-wide">New</span>' : ''}
+          </span>
+          <button class="apply-link-trigger-custom text-[12.5px] font-bold text-blue-400 flex items-center gap-1.5 bg-blue-500/10 hover:bg-blue-500/20 px-3 py-1.5 rounded-lg transition-all" type="button" style="pointer-events: none;">
+            View details
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-3.5 h-3.5"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+          </button>
+        </div>
       </div>
-      <div class="card-footer">
-        <button class="apply-link-trigger" data-job-id="${j.id}">
-          View Job & Apply
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-      </div>
-    </div>
-  `).join('');
-  
-  // attach event listeners to "View Job & Apply" buttons
-  document.querySelectorAll('.apply-link-trigger').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const jobId = btn.getAttribute('data-job-id');
-      const job = allJobs.find(j => j.id === jobId);
-      if(job) openViewModal(job);
-      else showToast('Job details missing', 'error');
-    });
-  });
-  // Optional: click on card background also opens same modal
-  document.querySelectorAll('.job-card').forEach(card => {
-    card.addEventListener('click', (e) => {
-      if(e.target.classList.contains('apply-link-trigger') || e.target.closest('.apply-link-trigger')) return;
-      const jobId = card.getAttribute('data-job-id');
-      const job = allJobs.find(j => j.id === jobId);
-      if(job) openViewModal(job);
-    });
-  });
+    `;
+  }).join('');
 }
 
 window.runSearch = function(){
@@ -4036,7 +5384,7 @@ if(descEl){
   descEl.addEventListener('input',()=>{ document.getElementById('f_descCount').textContent = `${descEl.value.length}/2000`; });
 }
 function validateModal(){ 
-  const reqFields = ['f_company','f_email','f_title','f_jobType','f_location','f_experience','f_skills','f_desc'];
+  const reqFields = ['f_company','f_email','f_title','f_jobType','f_location','f_experience','f_skills','f_desc', 'f_recruiterName'];
   for(let id of reqFields){
     const val = document.getElementById(id).value.trim();
     if(!val){ showToast(`${id.replace('f_','')} is required`,'error'); return false; }
@@ -4060,6 +5408,8 @@ window.handleModalSubmit = async function(){
   const data = {
     company:document.getElementById('f_company').value.trim(), industry:document.getElementById('f_industry').value,
     email:document.getElementById('f_email').value.trim(), website:document.getElementById('f_website').value.trim(),
+    recruiterName:document.getElementById('f_recruiterName').value.trim(),
+    recruiterDesignation:document.getElementById('f_recruiterDesignation').value.trim(),
     title:document.getElementById('f_title').value.trim(), jobType:document.getElementById('f_jobType').value,
     workMode:document.getElementById('f_workMode').value, location:document.getElementById('f_location').value.trim(),
     role:document.getElementById('f_role').value.trim(), experience:document.getElementById('f_experience').value,
@@ -4120,6 +5470,13 @@ if (document.readyState === 'loading') {
   let allPosts = [];
   let currentUserId = null;
 
+  
+    
+
+  
+  // Data migration for old timestamps
+  
+
   function getUserId() {
     let id = localStorage.getItem("startup_user_id");
     if (!id) {
@@ -4136,6 +5493,7 @@ if (document.readyState === 'loading') {
   const toast = document.getElementById("startupToast");
 
   function escapeHtml(value = "") {
+    value = String(value || "");
     return value.replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[character]));
   }
 
@@ -4158,7 +5516,9 @@ if (document.readyState === 'loading') {
     if (!value) return "Recently";
     const date = value.toDate ? value.toDate() : new Date(value);
     if (isNaN(date.getTime())) return "Recently";
-    return date.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+    const dateStr = date.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+    const timeStr = date.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit", hour12: true });
+    return `${dateStr}, ${timeStr}`;
   }
 
   async function getLikeCount(postId) {
@@ -4197,36 +5557,57 @@ if (document.readyState === 'loading') {
       const likeSpans = card.querySelectorAll(`.like-count-${id}`);
       likeSpans.forEach(span => span.textContent = count);
       const likeBtn = card.querySelector(`.like-btn-${id}`);
-      if (likeBtn && liked) likeBtn.classList.add("active");
+      if (likeBtn) {
+        if (liked) {
+          likeBtn.classList.add("active");
+          const heartIcon = likeBtn.querySelector("i");
+          if (heartIcon) heartIcon.className = "fas fa-heart text-red-500";
+        } else {
+          likeBtn.classList.remove("active");
+          const heartIcon = likeBtn.querySelector("i");
+          if (heartIcon) heartIcon.className = "far fa-heart";
+        }
+      }
     }
+  }
+
+  function getPostImageUrl(post) {
+    let coverUrl = post.imageUrl || post.photo || post.photoUrl || post.image || post.coverUrl || 
+                   post.mediaUrl || post.picture || post.img || post.banner || post.bannerUrl || 
+                   post.thumbnail || post.thumbnailUrl || post.attachment || post.fileUrl || post.src;
+    
+    if (!coverUrl && Array.isArray(post.images) && post.images.length > 0) {
+      coverUrl = post.images[0];
+    }
+    if (!coverUrl && Array.isArray(post.photos) && post.photos.length > 0) {
+      coverUrl = post.photos[0];
+    }
+    if (!coverUrl && post.article) {
+      const imgMatch = String(post.article).match(/<img[^>]+src=["']([^"']+)["']/i);
+      if (imgMatch && imgMatch[1]) {
+        coverUrl = imgMatch[1];
+      }
+    }
+    return (coverUrl && String(coverUrl).trim()) ? String(coverUrl).trim() : null;
   }
 
   function postMarkup(post, id) {
     const category = post.category || "general";
     const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1);
     
-    let coverUrl = "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80";
-    if (category === 'funding') {
-      coverUrl = "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80";
-    } else if (category === 'stories') {
-      coverUrl = "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80";
-    } else if (category === 'events') {
-      coverUrl = "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80";
-    } else if (category === 'accelerators') {
-      coverUrl = "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80";
-    }
+    const coverUrl = getPostImageUrl(post);
     
     return `<article class="post-card" data-id="${escapeHtml(id)}" data-category="${escapeHtml(category)}" data-search="${escapeHtml(`${post.title} ${post.article} ${post.sourceName}`.toLowerCase())}">
-      <div class="post-cover-img-wrap">
-        <img class="post-cover-img" src="${coverUrl}" alt="${escapeHtml(categoryLabel)} Graphic" loading="lazy">
-      </div>
+      ${coverUrl ? `<div class="post-cover-img-wrap cursor-pointer">
+        <img class="post-cover-img post-image-zoomable" src="${escapeHtml(coverUrl)}" alt="${escapeHtml(categoryLabel)} Graphic" loading="lazy" onerror="this.onerror=null;this.parentElement.remove();">
+      </div>` : ''}
+
       <div class="post-main">
         <header class="post-head">
           <span class="avatar" style="--avatar:#8b5cf6">SP</span>
           <div class="post-author">
             <div class="author-line">
-              <span class="author-name">Spread</span>
-              <span class="verified"><svg class="icon" style="width:13px;height:13px;stroke:#10b981;fill:#10b981;"><use href="#i-check"></use></svg></span>
+              <span class="author-name">Spred One</span>
             </div>
             <div class="post-meta">
               <span>${formatTime(post.createdAt)}</span>
@@ -4243,42 +5624,32 @@ if (document.readyState === 'loading') {
         <p class="post-copy">${escapeHtml(post.article)}</p>
         
         <div class="source-row">
-          <span>Brief summary by Spread.</span>
+          <span>Brief summary by Spred One.</span>
           <a class="source-link" href="${escapeHtml(safeSourceUrl(post.sourceUrl))}" target="_blank" rel="noopener noreferrer">
-            Source: ${escapeHtml(post.sourceName)} <svg class="icon"><use href="#i-link"></use></svg>
+            Source: ${escapeHtml(post.sourceName)} <i class="fas fa-external-link-alt"></i>
           </a>
         </div>
 
         <div class="post-stats-row-container">
-          <div class="post-footer-left">
-            <div class="face-pile">
-              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="user" class="pile-avatar">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="user" class="pile-avatar" style="margin-left: -8px;">
-              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="user" class="pile-avatar" style="margin-left: -8px;">
-            </div>
-            <span class="appreciation-text-span">
-              <strong class="like-count-${id}">0</strong> appreciations
-            </span>
-          </div>
-          
-          <div class="post-footer-right-actions">
-            <!-- Like (Appreciate) -->
-            <button class="post-action-icon-only like-btn-${id} like-btn" data-id="${id}" type="button" aria-label="Like post">
-              <svg class="icon"><use href="#i-heart"></use></svg>
+            <!-- Appreciate -->
+            <button class="post-action-icon-only like-btn-${id} like-btn" data-id="${id}" type="button" aria-label="Appreciate post">
+              <i class="far fa-heart" style="font-size: 14px;"></i>
+              <span>Appreciate</span>
               <span class="btn-stat-count like-count-${id}">0</span>
             </button>
             
             <!-- Comment -->
             <button class="post-action-icon-only toggle-comments-btn" data-id="${id}" type="button" aria-label="Comment post">
-              <svg class="icon"><use href="#i-comment"></use></svg>
+              <i class="far fa-comment" style="font-size: 14px;"></i>
+              <span>Comment</span>
               <span class="btn-stat-count comment-count-${id}">0</span>
             </button>
             
             <!-- Share -->
-            <button class="post-action-icon-only share-btn" data-id="${id}" type="button" aria-label="Share post">
-              <i class="fa-regular fa-bookmark"></i>
+            <button class="post-action-icon-only share-btn" data-id="${id}" data-title="${escapeHtml(post.title || '')}" type="button" aria-label="Share post">
+              <i class="far fa-share-square" style="font-size: 14px;"></i>
+              <span>Share</span>
             </button>
-          </div>
         </div>
       </div>
       <div class="comments-section" id="comments-${id}"></div>
@@ -4302,59 +5673,53 @@ if (document.readyState === 'loading') {
     const section = document.getElementById(`comments-${postId}`);
     if (!section) return;
     const comments = await getComments(postId);
-    const savedName = localStorage.getItem("startup_reader_name");
+    const savedName = localStorage.getItem("spreadone_global_username") || "";
     let nameHtml = '';
     if (!savedName) {
       nameHtml = `
-        <div class="name-input">
-          <input type="text" id="name-${postId}" placeholder="Your name" class="comment-input">
-          <button class="post-comment-btn" data-save-name="${postId}">Save</button>
+        <div style="margin-bottom: 4px;">
+          <input type="text" id="name-${postId}" placeholder="Your name" style="width: 100%; padding: 6px 10px; border: 1px solid rgba(125,125,125,0.2); border-radius: 6px; background: transparent; font-size: 12px; outline: none; color: inherit;">
         </div>
       `;
     }
     const commentsHtml = comments.length ? comments.map(c => `
-      <div class="comment-item">
-        <div class="comment-name">${escapeHtml(c.name)}</div>
-        <div class="comment-text">${escapeHtml(c.text)}</div>
+      <div style="padding: 6px 10px; border-bottom: 1px solid rgba(125,125,125,0.1); display: flex; align-items: baseline; gap: 8px; font-size: 13px;">
+        <span style="font-weight: 700; opacity: 0.9; white-space: nowrap;">${escapeHtml(c.name)}:</span>
+        <span style="opacity: 0.85; word-break: break-word; flex: 1;">${escapeHtml(c.text)}</span>
       </div>
-    `).join('') : '<div class="comment-item">No comments yet. Start the conversation.</div>';
+    `).join('') : '<div style="padding: 8px 10px; font-size: 12px; opacity: 0.5; text-align: center;">No comments yet.</div>';
+    
     section.innerHTML = `
-      <div class="comment-list">${commentsHtml}</div>
-      <div class="comment-form-inline">
-        ${nameHtml}
-        <textarea id="comment-text-${postId}" class="comment-input" rows="2" placeholder="Write a comment..."></textarea>
-        <button class="post-comment-btn" data-submit="${postId}">Post comment</button>
+      <div style="border-top: 1px solid rgba(125,125,125,0.15); padding: 4px 8px 8px 8px; margin-top: 4px;">
+        <div style="display: flex; flex-direction: column; max-height: 220px; overflow-y: auto;">${commentsHtml}</div>
+        <div style="margin-top: 6px; display: flex; flex-direction: column; gap: 4px;">
+          ${nameHtml}
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <input type="text" id="comment-text-${postId}" placeholder="Write a comment..." style="flex: 1; padding: 7px 10px; border: 1px solid rgba(125,125,125,0.25); border-radius: 6px; background: transparent; font-size: 12px; outline: none; color: inherit;">
+            <button data-submit="${postId}" style="border: none; padding: 7px 14px; border-radius: 6px; background: #7c3aed; color: white; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;">Post</button>
+          </div>
+        </div>
       </div>
     `;
-    if (!savedName) {
-      const saveBtn = section.querySelector(`[data-save-name="${postId}"]`);
-      if (saveBtn) saveBtn.onclick = () => {
-        const nameInput = document.getElementById(`name-${postId}`);
-        if (nameInput.value.trim()) {
-          localStorage.setItem("startup_reader_name", nameInput.value.trim());
-          loadCommentsIntoSection(postId);
-          showToast("Name saved");
-        } else showToast("Please enter a name");
-      };
-    }
+
     const submitBtn = section.querySelector(`[data-submit="${postId}"]`);
     if (submitBtn) submitBtn.onclick = async () => {
-      let name = localStorage.getItem("startup_reader_name");
+      let name = localStorage.getItem("spreadone_global_username");
       if (!name) {
         const nameInput = document.getElementById(`name-${postId}`);
         if (nameInput && nameInput.value.trim()) {
           name = nameInput.value.trim();
-          localStorage.setItem("startup_reader_name", name);
+          localStorage.setItem("spreadone_global_username", name);
         } else {
           showToast("Please enter your name first");
           return;
         }
       }
       const textarea = document.getElementById(`comment-text-${postId}`);
-      const text = textarea.value.trim();
+      const text = textarea ? textarea.value.trim() : "";
       if (!text) { showToast("Write something"); return; }
       await addComment(postId, name, text);
-      textarea.value = "";
+      if (textarea) textarea.value = "";
       await loadCommentsIntoSection(postId);
       updateCommentCounts();
       showToast("Comment posted");
@@ -4412,11 +5777,205 @@ if (document.readyState === 'loading') {
       await updateCommentCounts();
       applyFilters();
       updateNotifications();
+      renderStartupCarousel(allPosts);
     } catch (err) {
       console.error(err);
       feedStatus.textContent = "Error loading feed";
       showToast("Failed to load posts");
     }
+  }
+
+  // --- STARTUP HERO SCROLLING CAROUSEL ENGINE ---
+  let carouselIndex = 0;
+  let carouselTimer = null;
+  let carouselProgressInterval = null;
+  const SCROLL_DURATION_MS = 12000; // 12 seconds per scroll (meets 10-15s requirement)
+
+  const DEFAULT_CAROUSEL_SLIDES = [
+    {
+      title: "Indian VC Funding Hits $2.8B in May 2026",
+      category: "funding",
+      article: "Strong momentum continues as early-stage startups attract highest investments across AI, fintech, and clean energy.",
+      sourceName: "Venture Intelligence",
+      sourceUrl: "https://example.com",
+      imageUrl: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      title: "Applications Open for T-Hub Founder Cohort",
+      category: "accelerators",
+      article: "Six months of hands-on operator office hours, investor intros, customer pilots, and founder peer networks.",
+      sourceName: "T-Hub Hyderabad",
+      sourceUrl: "https://t-hub.co",
+      imageUrl: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      title: "DeepTech Climate Startup Secures $12M Series A",
+      category: "funding",
+      article: "Building scalable carbon-capture membranes for industrial manufacturing units across South Asia.",
+      sourceName: "Economic Times",
+      sourceUrl: "https://example.com",
+      imageUrl: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      title: "SaaS Founder Playbook: Scaling From 0 to $1M ARR",
+      category: "stories",
+      article: "Insights on product positioning, outbound sales execution, and early customer retention strategies.",
+      sourceName: "Spred One Editorial",
+      sourceUrl: "https://example.com",
+      imageUrl: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      title: "Global Founder Recruiter Summit 2026 Announced",
+      category: "events",
+      article: "Connecting top technical talent, startup co-founders, and venture recruiters across major tech hubs.",
+      sourceName: "Founder Recruiter CRM",
+      sourceUrl: "https://example.com",
+      imageUrl: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80"
+    }
+  ];
+
+  function renderStartupCarousel(posts) {
+    const slidesContainer = document.getElementById("trendingSlides");
+    if (!slidesContainer) return;
+
+    let slidesData = [];
+    if (Array.isArray(posts) && posts.length > 0) {
+      // Use actual posts loaded from the spreadsheet feed
+      slidesData = posts.map(p => ({
+        title: p.title || "Startup Story",
+        category: p.category || "general",
+        article: p.article || "",
+        sourceName: p.sourceName || "Spred One",
+        sourceUrl: p.sourceUrl || "#",
+        imageUrl: getPostImageUrl(p)
+      }));
+    }
+
+    // Fallback to default slides ONLY if spreadsheet has no posts loaded yet
+    if (slidesData.length === 0) {
+      slidesData = [...DEFAULT_CAROUSEL_SLIDES];
+    }
+
+    let slidesHtml = "";
+    slidesData.forEach((slide, idx) => {
+      const hasImg = Boolean(slide.imageUrl);
+      const imgUrl = slide.imageUrl || DEFAULT_CAROUSEL_SLIDES[idx % DEFAULT_CAROUSEL_SLIDES.length].imageUrl;
+      const articleText = slide.article ? String(slide.article).trim() : '';
+      
+      slidesHtml += `
+        <div class="trending-slide ${idx === 0 ? 'active' : ''}" data-slide="${idx}">
+          <div class="slide-bg-container">
+            <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(slide.title)}" loading="lazy" class="slide-bg-img ${hasImg ? 'has-image' : 'no-image'}" onerror="this.src='${DEFAULT_CAROUSEL_SLIDES[0].imageUrl}';this.className='slide-bg-img no-image';">
+            <div class="slide-bg-overlay"></div>
+          </div>
+          <div class="slide-content-center">
+            <h2 class="slide-title">${escapeHtml(slide.title)}</h2>
+            ${articleText ? `<p class="slide-desc">${escapeHtml(articleText)}</p>` : ''}
+            <a href="${escapeHtml(safeSourceUrl(slide.sourceUrl))}" target="_blank" rel="noopener noreferrer" class="slide-cta-btn">
+              Read full story <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      `;
+    });
+
+    slidesContainer.innerHTML = slidesHtml;
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const carouselWrap = document.getElementById("trendingCarousel");
+    if (carouselWrap && !carouselWrap.dataset.swipeBound) {
+      carouselWrap.dataset.swipeBound = "true";
+      carouselWrap.addEventListener("touchstart", (e) => {
+        if (e.changedTouches && e.changedTouches[0]) {
+          touchStartX = e.changedTouches[0].screenX;
+        }
+        pauseCarouselScroll();
+      }, { passive: true });
+
+      carouselWrap.addEventListener("touchend", (e) => {
+        if (e.changedTouches && e.changedTouches[0]) {
+          touchEndX = e.changedTouches[0].screenX;
+          const diffX = touchEndX - touchStartX;
+          if (Math.abs(diffX) > 30) {
+            if (diffX < 0) {
+              goToCarouselSlide(carouselIndex + 1);
+            } else {
+              goToCarouselSlide(carouselIndex - 1);
+            }
+          }
+        }
+        resumeCarouselScroll();
+      }, { passive: true });
+
+      carouselWrap.onmouseenter = pauseCarouselScroll;
+      carouselWrap.onmouseleave = resumeCarouselScroll;
+    }
+
+    goToCarouselSlide(0);
+  }
+
+  function goToCarouselSlide(index) {
+    const slides = document.querySelectorAll("#trendingSlides .trending-slide");
+    if (!slides || slides.length === 0) return;
+    carouselIndex = (index + slides.length) % slides.length;
+
+    slides.forEach((slide, idx) => {
+      if (idx === carouselIndex) {
+        slide.classList.add("active");
+      } else {
+        slide.classList.remove("active");
+      }
+    });
+
+    resetCarouselProgressTimer();
+  }
+
+  window.goToPrevSlide = function() {
+    goToCarouselSlide(carouselIndex - 1);
+  };
+
+  window.goToNextSlide = function() {
+    goToCarouselSlide(carouselIndex + 1);
+  };
+
+  function resetCarouselProgressTimer() {
+    clearInterval(carouselTimer);
+    clearInterval(carouselProgressInterval);
+
+    const progressBar = document.getElementById("carouselProgressBar");
+    if (!progressBar) return;
+
+    const slides = document.querySelectorAll("#trendingSlides .trending-slide");
+    if (!slides || slides.length <= 1) {
+      progressBar.style.width = "100%";
+      return;
+    }
+
+    let startTime = Date.now();
+    progressBar.style.width = "0%";
+
+    carouselProgressInterval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const pct = Math.min(100, (elapsed / SCROLL_DURATION_MS) * 100);
+      progressBar.style.width = pct + "%";
+      if (pct >= 100) {
+        clearInterval(carouselProgressInterval);
+      }
+    }, 100);
+
+    carouselTimer = setInterval(() => {
+      goToCarouselSlide(carouselIndex + 1);
+    }, SCROLL_DURATION_MS);
+  }
+
+  function pauseCarouselScroll() {
+    clearInterval(carouselTimer);
+    clearInterval(carouselProgressInterval);
+  }
+
+  function resumeCarouselScroll() {
+    resetCarouselProgressTimer();
   }
 
   async function attachInteractions() {
@@ -4430,12 +5989,13 @@ if (document.readyState === 'loading') {
         const newCount = await getLikeCount(postId);
         const countSpans = document.querySelectorAll(`.like-count-${postId}`);
         countSpans.forEach(span => span.textContent = newCount);
+        const heartIcon = btn.querySelector("i");
         if (liked) {
           btn.classList.add("active");
-          showToast("Appreciation added");
+          if (heartIcon) heartIcon.className = "fas fa-heart text-red-500";
         } else {
           btn.classList.remove("active");
-          showToast("Appreciation removed");
+          if (heartIcon) heartIcon.className = "far fa-heart";
         }
       });
     });
@@ -4449,9 +6009,10 @@ if (document.readyState === 'loading') {
     document.querySelectorAll("#adminPosts .share-btn").forEach(btn => {
       if (btn.dataset.boundShare) return;
       btn.dataset.boundShare = "true";
-      btn.addEventListener("click", async () => {
-        try { await navigator.clipboard.writeText(location.href.split("#")[0] + "#" + btn.dataset.id); showToast("Post link copied."); }
-        catch { showToast("Post is ready to share."); }
+      btn.addEventListener("click", () => {
+        const postId = btn.dataset.id;
+        const postTitle = btn.dataset.title || '';
+        window.openShareModal(postId, postTitle);
       });
     });
 
@@ -4563,6 +6124,128 @@ if (document.readyState === 'loading') {
       notifPanel.classList.remove("open");
     }
   });
+
+  // --- STARTUP ARTICLE ADMIN POST MODAL HANDLERS ---
+  const startupPostModal = document.getElementById("startupPostModal");
+  const openStartupPostModalBtn = document.getElementById("openStartupPostModalBtn");
+  const startupPostModalClose = document.getElementById("startupPostModalClose");
+  const startupPostModalCancel = document.getElementById("startupPostModalCancel");
+  const startupPostForm = document.getElementById("startupPostForm");
+  const startupPostImageFileInput = document.getElementById("startupPostImageFileInput");
+  const startupPostImagePreviewWrap = document.getElementById("startupPostImagePreviewWrap");
+  const startupPostImagePreview = document.getElementById("startupPostImagePreview");
+  const startupPostRemoveImageBtn = document.getElementById("startupPostRemoveImageBtn");
+  const startupPostImageUrlInput = document.getElementById("startupPostImageUrlInput");
+
+  let uploadedImageData = null;
+
+  function openStartupModal() {
+    if (!startupPostModal) return;
+    startupPostModal.style.display = "flex";
+    startupPostModal.classList.remove("hidden");
+  }
+
+  function closeStartupModal() {
+    if (!startupPostModal) return;
+    startupPostModal.classList.add("hidden");
+    startupPostModal.style.display = "none";
+    if (startupPostForm) startupPostForm.reset();
+    uploadedImageData = null;
+    if (startupPostImagePreviewWrap) startupPostImagePreviewWrap.classList.add("hidden");
+  }
+
+  if (openStartupPostModalBtn) openStartupPostModalBtn.addEventListener("click", openStartupModal);
+  if (startupPostModalClose) startupPostModalClose.addEventListener("click", closeStartupModal);
+  if (startupPostModalCancel) startupPostModalCancel.addEventListener("click", closeStartupModal);
+
+  if (startupPostImageFileInput) {
+    startupPostImageFileInput.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file && file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = 1200;
+            canvas.height = 675;
+            const ctx = canvas.getContext("2d");
+            
+            const targetRatio = 16 / 9;
+            const srcRatio = img.width / img.height;
+            let sx = 0, sy = 0, sw = img.width, sh = img.height;
+            
+            if (srcRatio > targetRatio) {
+              sw = img.height * targetRatio;
+              sx = (img.width - sw) / 2;
+            } else {
+              sh = img.width / targetRatio;
+              sy = (img.height - sh) / 2;
+            }
+            
+            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, 1200, 675);
+            uploadedImageData = canvas.toDataURL("image/jpeg", 0.9);
+            if (startupPostImagePreview) startupPostImagePreview.src = uploadedImageData;
+            if (startupPostImagePreviewWrap) startupPostImagePreviewWrap.classList.remove("hidden");
+            if (startupPostImageUrlInput) startupPostImageUrlInput.value = "";
+          };
+          img.src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  if (startupPostRemoveImageBtn) {
+    startupPostRemoveImageBtn.addEventListener("click", () => {
+      uploadedImageData = null;
+      if (startupPostImageFileInput) startupPostImageFileInput.value = "";
+      if (startupPostImagePreviewWrap) startupPostImagePreviewWrap.classList.add("hidden");
+    });
+  }
+
+  if (startupPostForm) {
+    startupPostForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const title = document.getElementById("startupPostTitleInput").value.trim();
+      const category = document.getElementById("startupPostCategoryInput").value;
+      const sourceName = document.getElementById("startupPostSourceNameInput").value.trim() || "Spred Startup";
+      const sourceUrl = document.getElementById("startupPostSourceUrlInput").value.trim() || "#";
+      const article = document.getElementById("startupPostArticleInput").value.trim();
+      const customUrl = startupPostImageUrlInput ? startupPostImageUrlInput.value.trim() : "";
+      const finalImage = uploadedImageData || customUrl || null;
+
+      if (!title || !article) {
+        showToast("Please fill in required fields", true);
+        return;
+      }
+
+      const submitBtn = document.getElementById("startupPostSubmitBtn");
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Publishing..."; }
+
+      try {
+        const newPost = {
+          title,
+          category,
+          sourceName,
+          sourceUrl,
+          article,
+          imageUrl: finalImage,
+          photo: finalImage,
+          createdAt: new Date().toISOString()
+        };
+        await db.collection(POSTS_COLLECTION).add(newPost);
+        showToast("Article published successfully!");
+        closeStartupModal();
+        await loadPosts();
+      } catch (err) {
+        console.error("Error publishing startup post:", err);
+        showToast("Failed to publish article", true);
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Publish Article"; }
+      }
+    });
+  }
 
   async function seedSamplePosts() {
     const snapshot = await db.collection(POSTS_COLLECTION).limit(1).get();
