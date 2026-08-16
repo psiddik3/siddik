@@ -27,6 +27,7 @@
   
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #f4f6fa; }
     body { background: #f4f6fa; padding-bottom: max(85px, calc(85px + env(safe-area-inset-bottom))); -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
     input, textarea, select, [contenteditable] { -webkit-user-select: text; user-select: text; }
     
@@ -50,9 +51,9 @@
     html.dark input, html.dark [contenteditable] { color: #f8fafc !important; }
     html.dark .shadow-\[0_4px_24px_rgba\(0\,0\,0\,0\.03\)\] { box-shadow: none !important; }
     html.dark .iframe-container { background: #0d0d0d; }
-    html.dark .bottom-nav { background: rgba(13, 13, 13, 0.95); border-color: #262626; border-top: 1px solid #262626; }
-    html.dark .bottom-nav .nav-item { color: #f5f5f5; }
-    html.dark .bottom-nav .nav-item.active { color: #0095f6; }
+    /* html.dark .bottom-nav overridden by global glassmorphism */
+    /* html.dark .bottom-nav .nav-item overridden */
+    /* html.dark active item overridden */
     html.dark .alert-item { background: #0d0d0d; border-color: #262626; }
     html.dark .alert-item:hover { border-color: #383838; }
     html.dark .post-card, html.dark #postCreationCard, html.dark .header-container, html.dark #filtersSection, html.dark #userDropdown { border: 1px solid #262626 !important; }
@@ -115,7 +116,7 @@
       position: fixed; 
       bottom: 0; 
       left: 0; 
-      right: 0; 
+      width: 100vw; 
       display: flex; 
       justify-content: center; 
       z-index: 1000; 
@@ -124,20 +125,21 @@
       padding-bottom: max(0.8rem, env(safe-area-inset-bottom)); 
     }
     .bottom-nav { 
-      background: rgba(0, 0, 0, 0.7); 
-      backdrop-filter: blur(40px); 
-      -webkit-backdrop-filter: blur(40px);
-      border-radius: 2rem; 
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3); 
+      background: rgba(18, 22, 33, 0.65); 
+      backdrop-filter: blur(28px) saturate(120%); 
+      -webkit-backdrop-filter: blur(28px) saturate(120%);
+      border-radius: 40px; 
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05); 
       display: flex; 
       flex-wrap: nowrap; 
-      justify-content: center; 
-      gap: 1.25rem; 
-      padding: 0.35rem 1rem; 
+      justify-content: space-between; 
+      gap: 0.25rem; 
+      padding: 0.31rem 0.4rem; 
       pointer-events: auto; 
-      width: 800px; 
-      max-width: 94%; 
+      width: 100%; 
+      max-width: 500px; 
       margin-bottom: 0; 
       overflow-x: auto;
       scrollbar-width: none;
@@ -149,52 +151,45 @@
     }
     .bottom-nav::-webkit-scrollbar { display: none; }
     .nav-item { 
-      flex: 1 1 auto;
+      flex: 1 1 0px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      font-size: 0.75rem; 
-      font-weight: 600; 
-      padding: 0.3rem 0.4rem; 
-      border-radius: 1.5rem; 
-      transition: all 0.2s; 
-      color: rgba(255,255,255,0.7); 
+      font-size: 0.65rem; 
+      font-weight: 700; 
+      padding: 0.40rem 0.1rem; 
+      border-radius: 30px; 
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
+      color: #ffffff; 
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
       white-space: nowrap; 
       cursor: pointer; 
-      background: none; 
+      background: transparent; 
       border: none;
-      gap: 0.15rem;
+      gap: 0.25rem;
+      min-width: 0;
     }
-    .nav-item i { font-size: 1.25rem; transition: transform 0.2s; }
+    .nav-item i { font-size: 1.35rem; transition: color 0.2s, transform 0.2s; color: rgba(255, 255, 255, 0.55); text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
     .nav-item:hover i { transform: scale(1.1); }
-    .nav-item.active { color: white; }
-    .nav-item.active i { color: white; }
+    .nav-item.active { 
+      color: #ffffff; 
+      background: rgba(255, 255, 255, 0.12); 
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    .nav-item.active i { color: #ffffff; }
     
     @media (max-width: 500px) { 
-      .nav-item { font-size: 0.68rem; padding: 0.18rem 0.2rem; } 
+      .nav-item { font-size: 0.65rem; padding: 0.31rem 0; } 
       .nav-item i { font-size: 1.08rem; margin-bottom: 1px; }
-      .bottom-nav { padding: 0.24rem 1.6rem; width: max-content; max-width: 98%; gap: 1.3rem; } 
+      .bottom-nav { padding: 0.31rem 0.5rem; width: 100%; max-width: 96%; gap: 0.2rem; margin: 0 auto; } 
       .bottom-nav-fixed { padding-bottom: max(0.45rem, env(safe-area-inset-bottom)); }
       
-      #filtersSection {
-        padding-top: 0.25rem !important;
-        padding-bottom: 0.25rem !important;
-        margin-bottom: 0.35rem !important;
-      }
-      #filtersSection button {
-        padding-top: 0.25rem !important;
-        padding-bottom: 0.25rem !important;
-      }
-      #filtersSection button svg {
-        width: 1.1rem !important;
-        height: 1.1rem !important;
-        margin-bottom: 0.15rem !important;
-      }
-      #filtersSection button span {
-        font-size: 9px !important;
-      }
+      
+      
+      
+      
     }
     .comment-list { max-height: 200px; overflow-y: auto; }
     .hashtag { cursor: pointer; color: #059669; font-weight: 500; }
@@ -216,7 +211,7 @@
     .iframe-container {
       display: none;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0; left: 0; right: 0; height: 100dvh;
       z-index: 50;
       background: #f4f6fa;
       -webkit-overflow-scrolling: touch;
@@ -237,7 +232,7 @@
     html.iframe-active,
     body.iframe-active {
       overflow: hidden !important;
-      height: 100vh !important;
+      height: 100dvh !important;
     }
     iframe {
       width: 100%;
@@ -245,7 +240,7 @@
       border: none;
       display: block;
     }
-    #feedContainer { display: block; padding-bottom: max(80px, calc(80px + env(safe-area-inset-bottom))); position: relative; z-index: 10; }
+    #feedContainer { display: block; position: relative; z-index: 10; }
     [contenteditable]:empty::before { content: attr(data-placeholder); color: #94a3b8; pointer-events: none; display: block; }
     
     /* Community CSS */
@@ -255,7 +250,7 @@
     .spread-text { color: #111827; }
     .community-ask-btn { border: none; padding: 8px 12px; border-radius: 12px; background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
     .community-search-wrap { position: relative; }
-    .community-search { width: 100%; margin-bottom: 6px; padding: 11px; border: none; outline: none; border-radius: 14px; background: white; font-size: 13px; border: 1px solid rgba(0, 0, 0, 0.06); }
+    .community-search { width: 100%; margin-bottom: 2px; padding: 11px; border: none; outline: none; border-radius: 14px; background: white; font-size: 13px; border: 1px solid rgba(0, 0, 0, 0.06); }
     .search-suggestions { position: absolute; top: 48px; left: 0; right: 0; background: white; border-radius: 14px; overflow: hidden; z-index: 999; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); display: none; }
     .search-item { padding: 10px 12px; font-size: 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); cursor: pointer; }
     .community-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
@@ -263,8 +258,8 @@
     .community-chip { padding: 6px 12px; border-radius: 999px; background: white; font-size: 12px; font-weight: 700; white-space: nowrap; border: 1px solid rgba(0, 0, 0, 0.06); cursor: pointer; flex: none; }
     .community-chip.active { background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; }
     .community-feed { display: flex; flex-direction: column; gap: 2px; width: 100%; padding-bottom: calc(120px + env(safe-area-inset-bottom)); }
-    .community-card { width: 100%; background: white; padding: 10px 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); border-radius: 14px; margin-bottom: 4px; }
-    .community-header { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+    .community-card { width: 100%; background: white; padding: 10px 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); border-radius: 14px; margin-bottom: 2px; }
+    .community-header { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 2px; }
     .community-name { font-size: 12px; font-weight: 700; color: #111827; }
     .community-dot { width: 4px; height: 4px; border-radius: 50%; background: #d1d5db; }
     .community-time { font-size: 11px; color: #9ca3af; }
@@ -272,7 +267,7 @@
     .community-question { font-size: 14px; line-height: 1.45; color: #111827; margin-bottom: 2px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .community-question.expanded { -webkit-line-clamp: unset; overflow: visible; }
     .read-more-btn { font-size: 11px; font-weight: 700; color: #6B7280; cursor: pointer; display: inline-block; margin-bottom: 2px; }
-    .community-actions { display: flex; gap: 16px; margin-top: 2px; margin-bottom: 6px; flex-wrap: wrap; }
+    .community-actions { display: flex; gap: 16px; margin-top: 2px; margin-bottom: 2px; flex-wrap: wrap; }
     .community-action { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: #6b7280; cursor: pointer; }
     .community-action.marked-helpful { color: #8b5cf6; cursor: pointer; }
     .helpful-count { background: #f3f4f6; padding: 2px 6px; border-radius: 20px; font-size: 11px; font-weight: 700; color: #4b5563; }
@@ -280,7 +275,7 @@
     .comment-helpful.marked-helpful { color: #8b5cf6; cursor: pointer; }
     .reply-form { display: none; margin-top: 6px; }
     .reply-form.active { display: block; }
-    .reply-input, .reply-text { width: 100%; padding: 8px 10px; border: none; outline: none; border-radius: 10px; background: #f5f5f5; font-size: 12px; margin-bottom: 5px; border: 1px solid rgba(0, 0, 0, 0.06); font-family: 'Roboto', sans-serif; }
+    .reply-input, .reply-text { width: 100%; padding: 8px 10px; border: none; outline: none; border-radius: 10px; background: #f5f5f5; font-size: 12px; margin-bottom: 5px; border: 1px solid rgba(0, 0, 0, 0.06); font-family: 'Inter', sans-serif; }
     .reply-text { height: 60px; resize: none; }
     .reply-submit { border: none; padding: 8px 12px; border-radius: 10px; background: #8b5cf6; color: white; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s ease; }
     .reply-submit:hover { background: #7c3aed; }
@@ -302,8 +297,8 @@
     .community-modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); display: none; align-items: center; justify-content: center; padding: 10px; z-index: 9999; }
     .community-modal-box { width: 100%; max-width: 500px; background: white; padding: 18px; border-radius: 24px; }
     .community-modal-title { font-size: 18px; font-weight: 800; margin-bottom: 14px; }
-    .community-field { margin-bottom: 6px; }
-    .community-field input, .community-field select { width: 100%; padding: 10px; border: none; outline: none; border-radius: 14px; background: #f5f5f5; border: 1px solid rgba(0, 0, 0, 0.06); font-family: 'Roboto', sans-serif; font-size: 12px; }
+    .community-field { margin-bottom: 2px; }
+    .community-field input, .community-field select { width: 100%; padding: 10px; border: none; outline: none; border-radius: 14px; background: #f5f5f5; border: 1px solid rgba(0, 0, 0, 0.06); font-family: 'Inter', sans-serif; font-size: 12px; }
     .community-submit { width: 100%; border: none; padding: 10px; border-radius: 14px; background: linear-gradient(135deg, #D4AF37, #b8860b); color: white; font-size: 13px; font-weight: 700; cursor: pointer; }
     
     html.dark .community-page { background: #0d0d0d; }
@@ -337,6 +332,82 @@
     html.dark .helpful-badge { background: #262626; color: #a8a8a8; }
     html.dark .reply-scroll-btn { background: #121212; color: #f5f5f5; border-color: #262626; }
     
+    /* Unified Dark Mode Background */
+    html.dark, html.dark body, html.dark .community-page, html.dark .jobs-page-wrapper, html.dark :is(#startup-community-feed, .startup-feed-wrapper) {
+      background-color: #0d0d0d !important;
+    }
+    html.dark .post-card, html.dark .job-card, html.dark .community-card, html.dark header.topbar, html.dark .category-nav, html.dark .filter-inner, html.dark .search-glass, html.dark .community-modal-box, html.dark .modal {
+      background-color: #121212 !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Standardized Rounded Cards & Consistent Spacing matching Post Creator */
+    .post-card, .job-card, .community-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 16px !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
+      margin-bottom: 3px !important;
+      padding: 14px 14px 4px 14px !important;
+    }
+    .post-main {
+      padding: 0 !important;
+    }
+    div:nth-of-type(4) > div#feedContainer:nth-of-type(4) > article:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1),
+    article.post-card > div:nth-of-type(1) {
+      width: 100% !important;
+      max-width: 100%;
+      box-sizing: border-box;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    .post-cover-img-wrap {
+      margin-top: 12px !important;
+      margin-bottom: 3px !important;
+      padding: 0 !important;
+      border-radius: 0 !important;
+      overflow: hidden;
+    }
+    html.dark .post-card, html.dark .job-card, html.dark .community-card {
+      background: #121212 !important;
+      border: 1px solid #262626 !important;
+      box-shadow: none !important;
+    }
+
+    /* Mobile Responsive Padding & Spacing */
+    @media (max-width: 640px) {
+      .post-card, .job-card, .community-card {
+        padding: 12px 12px 3px 12px !important;
+        margin-bottom: 3px !important;
+        border-radius: 14px !important;
+      }
+      .post-main {
+        padding: 0 !important;
+      }
+      .post-content, .community-header, .community-question {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+    }
+
+
+
+    div:nth-of-type(4) > div#iframe-community:nth-of-type(5) > div:nth-of-type(1) > div:nth-of-type(1) {
+      background-color: #ffffff;
+    }
+    html.dark div:nth-of-type(4) > div#iframe-community:nth-of-type(5) > div:nth-of-type(1) > div:nth-of-type(1) {
+      background-color: #0d0d0d;
+    }
+    div:nth-of-type(4) > div#iframe-startups:nth-of-type(7) > div:is(#startup-community-feed, .startup-feed-wrapper):nth-of-type(1) > main#publicView:nth-of-type(1) > nav:nth-of-type(1) {
+      background-color: #ffffff !important;
+      color: #111827 !important;
+    }
+    html.dark div:nth-of-type(4) > div#iframe-startups:nth-of-type(7) > div:is(#startup-community-feed, .startup-feed-wrapper):nth-of-type(1) > main#publicView:nth-of-type(1) > nav:nth-of-type(1) {
+      background-color: #0d0d0d !important;
+      color: #ffffff !important;
+    }
+    
     @media (max-width: 500px) {
         .community-title { font-size: 20px; }
         .community-search { font-size: 12.5px; padding: 10px; }
@@ -351,7 +422,7 @@
 /* --- JOBS CSS --- */
 
 *{box-sizing:border-box;margin:0;padding:0;}
-.jobs-page-wrapper{min-height:100%;font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color:#fff;}
+.jobs-page-wrapper{min-height:100dvh;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color:#fff;}
 .jobs-page-wrapper{
   -webkit-user-select: none; user-select: none;
   background:#06080f;
@@ -373,7 +444,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 .top-nav{display:flex;align-items:center;justify-content:space-between;padding:10px 4px 6px;margin-bottom:4px;}
 .nav-logo{font-size:15px;font-weight:700;color:#fff;display:flex;align-items:center;gap:7px;}
 .nav-logo-dot{width:8px;height:8px;border-radius:50%;background:#1b4fff;display:inline-block;}
-.post-job-btn{background:#1b4fff;color:#fff;border:none;border-radius:9px;padding:8px 18px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;transition:background .18s,transform .1s;display:flex;align-items:center;gap:6px;}
+.post-job-btn{background:#1b4fff;color:#fff;border:none;border-radius:9px;padding:8px 18px;font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;transition:background .18s,transform .1s;display:flex;align-items:center;gap:6px;}
 .post-job-btn:hover{background:#1440e0;}
 .post-job-btn:active{transform:scale(0.97);}
 .post-job-btn svg{width:13px;height:13px;}
@@ -385,9 +456,9 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 .search-glass{background:rgba(255,255,255,0.10);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.20);border-radius:14px;padding:7px;max-width:800px;margin:0 auto;display:flex;gap:6px;flex-wrap:wrap;}
 .s-field{flex:1;min-width:155px;display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.95);border-radius:9px;padding:9px 12px;}
 .s-field svg{width:14px;height:14px;color:#1b4fff;flex-shrink:0;}
-.s-field input,.s-field select{border:none;outline:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:#0f172a;background:transparent;width:100%;font-weight:500;}
+.s-field input,.s-field select{border:none;outline:none;font-family:'Inter',sans-serif;font-size:13px;color:#0f172a;background:transparent;width:100%;font-weight:500;}
 .s-field input::placeholder{color:#94a3b8;}
-.search-btn{background:#1b4fff;color:#fff;border:none;border-radius:9px;padding:9px 22px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .18s,transform .1s;}
+.search-btn{background:#1b4fff;color:#fff;border:none;border-radius:9px;padding:9px 22px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .18s,transform .1s;}
 .search-btn:hover{background:#1440e0;}
 .search-btn:active{transform:scale(0.97);}
 .stats-row{display:flex;justify-content:center;gap:30px;margin-top:18px;flex-wrap:wrap;}
@@ -397,7 +468,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 .filter-bar{width:100%;padding:0 0 10px;}
 .filter-inner{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:12px;padding:9px 13px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
 .filter-label{font-size:10px;font-weight:600;color:rgba(255,255,255,0.9);text-transform:uppercase;letter-spacing:.07em;}
-.f-chip{background:rgba(255,255,255,0.08);color:#ffffff;border:1px solid rgba(255,255,255,0.14);border-radius:100px;padding:4px 11px;font-size:11.5px;font-weight:500;cursor:pointer;transition:background .13s,color .13s;font-family:'Plus Jakarta Sans',sans-serif;}
+.f-chip{background:rgba(255,255,255,0.08);color:#ffffff;border:1px solid rgba(255,255,255,0.14);border-radius:100px;padding:4px 11px;font-size:11.5px;font-weight:500;cursor:pointer;transition:background .13s,color .13s;font-family:'Inter',sans-serif;}
 .f-chip:hover{background:rgba(255,255,255,0.14);color:#fff;}
 .f-chip.active{background:#1b4fff;color:#fff;border-color:#1b4fff;}
 .result-meta{margin-left:auto;font-size:11px;color:rgba(255,255,255,0.9);white-space:nowrap;font-weight:500;}
@@ -428,7 +499,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 .modal-overlay{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.80);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:16px;}
 .modal-overlay.open{display:flex;}
 .modal{background:#0a0f1e;border:1px solid rgba(255,255,255,0.14);border-radius:22px;width:100%;max-width:720px;max-height:85vh;overflow-y:auto;padding:22px 24px 110px;animation:fadeUp .28s ease;position:relative;scrollbar-width:thin;margin-top:-10vh;}
-.mfield{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;font-family:'Plus Jakarta Sans',sans-serif;}
+.mfield{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;font-family:'Inter',sans-serif;}
 .mfield label{font-size:11px;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:.05em;}
 .mfield input,.mfield select,.mfield textarea{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:10px 12px;color:#fff;font-size:13px;font-family:inherit;outline:none;transition:border-color 0.15s,background 0.15s;}
 .mfield input::placeholder,.mfield textarea::placeholder{color:rgba(255,255,255,0.25);}
@@ -474,7 +545,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 
 /* --- STARTUP CSS --- */
 
-    #startup-community-feed {
+    :is(#startup-community-feed, .startup-feed-wrapper) {
       --bg-dark: #060608;
       --card-dark: #111113;
       --border-dark: rgba(255, 255, 255, 0.04);
@@ -491,21 +562,21 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       color: var(--text-primary);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       overflow-x: hidden;
-      min-height: 100vh;
+      min-height: 100dvh;
     }
     
-    #startup-community-feed * {
+    :is(#startup-community-feed, .startup-feed-wrapper) * {
       box-sizing: border-box;
     }
 
-    #startup-community-feed button, 
-    #startup-community-feed input, 
-    #startup-community-feed select, 
-    #startup-community-feed textarea {
+    :is(#startup-community-feed, .startup-feed-wrapper) button, 
+    :is(#startup-community-feed, .startup-feed-wrapper) input, 
+    :is(#startup-community-feed, .startup-feed-wrapper) select, 
+    :is(#startup-community-feed, .startup-feed-wrapper) textarea {
       font-family: inherit;
     }
     
-    #startup-community-feed .icon {
+    :is(#startup-community-feed, .startup-feed-wrapper) .icon {
       width: 19px;
       height: 19px;
       flex: 0 0 auto;
@@ -517,7 +588,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
 
     /* --- TOPBAR / HEADER --- */
-    #startup-community-feed .topbar {
+    :is(#startup-community-feed, .startup-feed-wrapper) .topbar {
       position: sticky;
       z-index: 50;
       top: 0;
@@ -527,7 +598,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       padding: 12px 0;
     }
 
-    #startup-community-feed .topbar-inner {
+    :is(#startup-community-feed, .startup-feed-wrapper) .topbar-inner {
       width: 100%;
       max-width: 680px;
       margin: 0 auto;
@@ -539,7 +610,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       flex-wrap: wrap;
     }
 
-    #startup-community-feed .brand-title {
+    :is(#startup-community-feed, .startup-feed-wrapper) .brand-title {
       font-size: 18px;
       font-weight: 900;
       letter-spacing: -0.5px;
@@ -549,14 +620,14 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       margin: 0;
     }
 
-    #startup-community-feed .spread-bold {
+    :is(#startup-community-feed, .startup-feed-wrapper) .spread-bold {
       font-weight: 900;
       background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    #startup-community-feed .startup-sub {
+    :is(#startup-community-feed, .startup-feed-wrapper) .startup-sub {
       font-size: 11px;
       font-weight: 600;
       color: var(--purple-light);
@@ -567,14 +638,14 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       text-transform: lowercase;
     }
 
-    #startup-community-feed .top-actions {
+    :is(#startup-community-feed, .startup-feed-wrapper) .top-actions {
       display: flex;
       align-items: center;
       gap: 12px;
       position: relative;
     }
 
-    #startup-community-feed .icon-btn {
+    :is(#startup-community-feed, .startup-feed-wrapper) .icon-btn {
       position: relative;
       width: 38px;
       height: 38px;
@@ -588,12 +659,12 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       transition: all 0.2s ease;
     }
 
-    #startup-community-feed .icon-btn:hover {
+    :is(#startup-community-feed, .startup-feed-wrapper) .icon-btn:hover {
       background: rgba(255, 255, 255, 0.08);
       border-color: rgba(255, 255, 255, 0.15);
     }
 
-    #startup-community-feed .notification-dot {
+    :is(#startup-community-feed, .startup-feed-wrapper) .notification-dot {
       position: absolute;
       right: 2px;
       top: 2px;
@@ -611,11 +682,11 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
     }
 
-    #startup-community-feed .notification-dot.read {
+    :is(#startup-community-feed, .startup-feed-wrapper) .notification-dot.read {
       display: none;
     }
 
-    #startup-community-feed .user-avatar-wrap {
+    :is(#startup-community-feed, .startup-feed-wrapper) .user-avatar-wrap {
       width: 36px;
       height: 36px;
       border-radius: 50%;
@@ -623,19 +694,19 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       border: 1.5px solid rgba(255, 255, 255, 0.12);
     }
 
-    #startup-community-feed .user-avatar-img {
+    :is(#startup-community-feed, .startup-feed-wrapper) .user-avatar-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
     /* --- SEARCH --- */
-    #startup-community-feed .search-wrap {
+    :is(#startup-community-feed, .startup-feed-wrapper) .search-wrap {
       position: relative;
       width: 100%;
     }
 
-    #startup-community-feed .search-wrap .icon {
+    :is(#startup-community-feed, .startup-feed-wrapper) .search-wrap .icon {
       position: absolute;
       left: 14px;
       top: 50%;
@@ -646,7 +717,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       pointer-events: none;
     }
 
-    #startup-community-feed .search {
+    :is(#startup-community-feed, .startup-feed-wrapper) .search {
       width: 100%;
       height: 36px;
       border: 1.5px solid rgba(255, 255, 255, 0.05);
@@ -658,18 +729,18 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       transition: all 0.2s ease;
     }
 
-    #startup-community-feed .search::placeholder {
+    :is(#startup-community-feed, .startup-feed-wrapper) .search::placeholder {
       color: #4b5563;
     }
 
-    #startup-community-feed .search:focus {
+    :is(#startup-community-feed, .startup-feed-wrapper) .search:focus {
       border-color: var(--purple-primary);
       background: #15151a;
       box-shadow: 0 0 12px rgba(139, 92, 246, 0.15);
       outline: none;
     }
 
-    #startup-community-feed .search-key {
+    :is(#startup-community-feed, .startup-feed-wrapper) .search-key {
       position: absolute;
       right: 14px;
       top: 50%;
@@ -683,14 +754,14 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
 
     /* --- PAGE SHELL & LAYOUT --- */
-    #startup-community-feed .page-shell {
+    :is(#startup-community-feed, .startup-feed-wrapper) .page-shell {
       width: 100%;
       max-width: 1084px;
       margin: 0 auto;
       padding: 8px 0.5% 140px;
     }
     /* --- CATEGORY NAVIGATION --- */
-    #startup-community-feed .category-nav {
+    .category-nav {
       display: flex;
       justify-content: center !important;
       gap: 32px !important;
@@ -698,7 +769,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       max-width: 100%;
       overflow-x: auto;
       padding: 0 16px !important;
-      margin: 0 auto 10px auto;
+      margin: 0 auto 3px auto;
       border: none !important;
       background-color: #ffffff !important;
       height: 52px !important;
@@ -706,11 +777,11 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
-    #startup-community-feed .category-nav::-webkit-scrollbar {
+    .category-nav::-webkit-scrollbar {
       display: none;
     }
 
-    #startup-community-feed .category-btn {
+    .category-btn {
       flex: 0 0 auto !important;
       width: auto !important;
       display: flex;
@@ -729,13 +800,13 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       min-width: 0;
     }
 
-    #startup-community-feed .category-btn .category-icon {
+    .category-btn .category-icon {
       font-size: 18px;
       color: #64748b;
       transition: all 0.25s ease;
     }
 
-    #startup-community-feed .category-btn .category-label {
+    .category-btn .category-label {
       font-size: 12px;
       letter-spacing: -0.2px;
       font-weight: 700;
@@ -748,35 +819,24 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       width: auto;
     }
 
-    #startup-community-feed .category-btn.active {
+    .category-btn.active {
       color: #6d28d9;
     }
 
-    #startup-community-feed .category-btn.active .category-icon {
+    .category-btn.active .category-icon {
       color: #7c3aed;
     }
 
-    #startup-community-feed .category-btn.active::after {
-      content: '';
-      position: absolute;
-      bottom: 2px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 24px;
-      height: 2.5px;
-      background-color: #7c3aed;
-      border-radius: 99px;
-      box-shadow: 0 0 8px rgba(124, 58, 237, 0.4);
-    }
+    
 
     /* --- TRENDING HERO CAROUSEL (Full-Bleed Blurred Background Image & Centered Overlay) --- */
     div#trendingCarousel,
-    #startup-community-feed .trending-carousel-container {
+    :is(#startup-community-feed, .startup-feed-wrapper) .trending-carousel-container {
       background: #090814;
       border: 1px solid rgba(139, 92, 246, 0.3);
       border-radius: 18px;
       padding: 0 !important;
-      margin-bottom: 20px;
+      margin-bottom: 2px;
       position: relative;
       overflow: hidden;
       box-shadow: 0 16px 38px -6px rgba(0, 0, 0, 0.55), 0 0 28px rgba(124, 58, 237, 0.18);
@@ -798,11 +858,11 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       z-index: 2;
     }
 
-    #startup-community-feed .carousel-progress-track {
+    :is(#startup-community-feed, .startup-feed-wrapper) .carousel-progress-track {
       display: none !important;
     }
 
-    #startup-community-feed .carousel-progress-bar {
+    :is(#startup-community-feed, .startup-feed-wrapper) .carousel-progress-bar {
       display: none !important;
     }
 
@@ -815,8 +875,8 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     .candidate-pic, 
     .profile-avatar, 
     .recruiter-avatar, 
-    #startup-community-feed .avatar,
-    #startup-community-feed .user-avatar-img {
+    :is(#startup-community-feed, .startup-feed-wrapper) .avatar,
+    :is(#startup-community-feed, .startup-feed-wrapper) .user-avatar-img {
       border-radius: 50% !important;
       aspect-ratio: 1 / 1 !important;
       object-fit: cover !important;
@@ -824,7 +884,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
 
     /* Transparent Left & Right Scrolling Nav Buttons */
-    #startup-community-feed .carousel-nav-btn {
+    :is(#startup-community-feed, .startup-feed-wrapper) .carousel-nav-btn {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
@@ -846,26 +906,26 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
     }
 
-    #startup-community-feed .carousel-nav-btn:hover {
+    :is(#startup-community-feed, .startup-feed-wrapper) .carousel-nav-btn:hover {
       background: rgba(124, 58, 237, 0.7);
       border-color: rgba(255, 255, 255, 0.6);
       transform: translateY(-50%) scale(1.12);
       box-shadow: 0 6px 20px rgba(124, 58, 237, 0.6);
     }
 
-    #startup-community-feed .carousel-nav-btn:active {
+    :is(#startup-community-feed, .startup-feed-wrapper) .carousel-nav-btn:active {
       transform: translateY(-50%) scale(0.95);
     }
 
-    #startup-community-feed .carousel-prev-btn {
+    :is(#startup-community-feed, .startup-feed-wrapper) .carousel-prev-btn {
       left: 16px;
     }
 
-    #startup-community-feed .carousel-next-btn {
+    :is(#startup-community-feed, .startup-feed-wrapper) .carousel-next-btn {
       right: 16px;
     }
 
-    #startup-community-feed .trending-slides-wrapper {
+    :is(#startup-community-feed, .startup-feed-wrapper) .trending-slides-wrapper {
       position: relative;
       width: 100%;
       height: 100%;
@@ -873,7 +933,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       padding: 0;
     }
 
-    #startup-community-feed .trending-slide {
+    :is(#startup-community-feed, .startup-feed-wrapper) .trending-slide {
       display: none;
       position: absolute;
       inset: 0;
@@ -893,12 +953,12 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       to { opacity: 1; transform: scale(1); }
     }
 
-    #startup-community-feed .trending-slide.active {
+    :is(#startup-community-feed, .startup-feed-wrapper) .trending-slide.active {
       display: flex;
     }
 
     /* Full-bleed Landscape Background Image Container with 15% Blur */
-    #startup-community-feed .slide-bg-container {
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-bg-container {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -908,7 +968,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       background: #090814;
     }
 
-    #startup-community-feed .slide-bg-img {
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-bg-img {
       width: 1084px;
       max-width: 100%;
       height: 100%;
@@ -918,22 +978,22 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       display: block;
     }
 
-    #startup-community-feed .slide-bg-img.has-image {
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-bg-img.has-image {
       filter: blur(3px) brightness(0.72) saturate(1.15); /* Subtle ambient blur so landscape image remains clear & bright */
       transform: scale(1.05);
     }
 
-    #startup-community-feed .slide-bg-img.no-image {
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-bg-img.no-image {
       filter: blur(18px) brightness(0.35); /* Darker blur for fallback without custom image */
       transform: scale(1.12);
     }
 
-    #startup-community-feed .trending-slide:hover .slide-bg-img.has-image {
+    :is(#startup-community-feed, .startup-feed-wrapper) .trending-slide:hover .slide-bg-img.has-image {
       transform: scale(1.08);
       filter: blur(2px) brightness(0.78) saturate(1.2);
     }
 
-    #startup-community-feed .slide-bg-overlay {
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-bg-overlay {
       position: absolute;
       inset: 0;
       background: radial-gradient(circle at center, rgba(13, 12, 32, 0.38) 0%, rgba(9, 8, 20, 0.8) 100%);
@@ -942,7 +1002,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
 
     /* Centered Text Overlay in Middle of Slide (Without Inner Card Box) */
-    #startup-community-feed .slide-content-center {
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-content-center {
       position: relative;
       z-index: 5;
       max-width: 820px;
@@ -961,8 +1021,8 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       box-shadow: none;
     }
 
-    #startup-community-feed .slide-title,
-    #startup-community-feed .slide-content-center h2 {
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-title,
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-content-center h2 {
       font-size: 1.65rem;
       font-weight: 800;
       color: #ffffff !important;
@@ -978,8 +1038,8 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       max-width: 720px;
     }
 
-    #startup-community-feed .slide-desc,
-    #startup-community-feed .slide-content-center p {
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-desc,
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-content-center p {
       font-size: 14.5px;
       color: #ffffff !important; /* Pure white text */
       line-height: 1.6;
@@ -993,7 +1053,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       overflow-wrap: break-word;
     }
 
-    #startup-community-feed .slide-cta-btn {
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-cta-btn {
       background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
       border: 1px solid rgba(196, 181, 253, 0.5);
       color: #ffffff !important;
@@ -1011,30 +1071,30 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       text-decoration: none;
     }
 
-    #startup-community-feed .slide-cta-btn:hover {
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-cta-btn:hover {
       background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
       border-color: rgba(221, 214, 254, 0.8);
       transform: translateY(-2px) scale(1.02);
       box-shadow: 0 8px 25px rgba(124, 58, 237, 0.65);
     }
 
-    #startup-community-feed .slide-cta-btn i {
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-cta-btn i {
       font-size: 10px;
       transition: transform 0.25s ease;
     }
 
-    #startup-community-feed .slide-cta-btn:hover i {
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-cta-btn:hover i {
       transform: translateX(4px);
     }
 
-    #startup-community-feed .slide-graphic-right {
+    :is(#startup-community-feed, .startup-feed-wrapper) .slide-graphic-right {
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    #startup-community-feed .graphic-stat-badge {
+    :is(#startup-community-feed, .startup-feed-wrapper) .graphic-stat-badge {
       position: absolute;
       top: -10px;
       right: -5px;
@@ -1050,20 +1110,20 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
 
-    #startup-community-feed .stat-badge-num {
+    :is(#startup-community-feed, .startup-feed-wrapper) .stat-badge-num {
       font-size: 13px;
       font-weight: 800;
       color: #ffffff;
       line-height: 1;
     }
 
-    #startup-community-feed .stat-badge-label {
+    :is(#startup-community-feed, .startup-feed-wrapper) .stat-badge-label {
       font-size: 8px;
       color: var(--text-muted);
       margin-top: 2px;
     }
 
-    #startup-community-feed .chart-visual-container {
+    :is(#startup-community-feed, .startup-feed-wrapper) .chart-visual-container {
       width: 100px;
       height: 90px;
       position: relative;
@@ -1076,7 +1136,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       overflow: hidden;
     }
 
-    #startup-community-feed .chart-grid-lines {
+    :is(#startup-community-feed, .startup-feed-wrapper) .chart-grid-lines {
       position: absolute;
       inset: 0;
       background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
@@ -1085,7 +1145,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       pointer-events: none;
     }
 
-    #startup-community-feed .chart-bars-row {
+    :is(#startup-community-feed, .startup-feed-wrapper) .chart-bars-row {
       display: flex;
       align-items: flex-end;
       justify-content: space-around;
@@ -1094,7 +1154,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       z-index: 1;
     }
 
-    #startup-community-feed .chart-bar-pillar {
+    :is(#startup-community-feed, .startup-feed-wrapper) .chart-bar-pillar {
       width: 14px;
       height: var(--height);
       background: linear-gradient(to top, var(--color-end), var(--color-start));
@@ -1103,7 +1163,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
     }
 
-    #startup-community-feed .chart-svg-line {
+    :is(#startup-community-feed, .startup-feed-wrapper) .chart-svg-line {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -1112,7 +1172,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       pointer-events: none;
     }
 
-    #startup-community-feed .carousel-footer-row {
+    :is(#startup-community-feed, .startup-feed-wrapper) .carousel-footer-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1121,14 +1181,14 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       border-top: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    #startup-community-feed .carousel-dots-row {
+    :is(#startup-community-feed, .startup-feed-wrapper) .carousel-dots-row {
       display: flex;
       align-items: center;
       gap: 8px;
       margin-top: 0;
     }
 
-    #startup-community-feed .carousel-dot {
+    :is(#startup-community-feed, .startup-feed-wrapper) .carousel-dot {
       width: 8px;
       height: 8px;
       border-radius: 99px;
@@ -1137,13 +1197,13 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       transition: all 0.25s ease;
     }
 
-    #startup-community-feed .carousel-dot.active {
+    :is(#startup-community-feed, .startup-feed-wrapper) .carousel-dot.active {
       width: 24px;
       background: #7C3AED;
       box-shadow: 0 0 10px rgba(124, 58, 237, 0.8);
     }
 
-    #startup-community-feed .carousel-slide-counter {
+    :is(#startup-community-feed, .startup-feed-wrapper) .carousel-slide-counter {
       font-size: 11px;
       font-weight: 800;
       color: #a78bfa;
@@ -1155,14 +1215,14 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
 
     /* --- FEED TOOLS & SORT dropdown --- */
-    #startup-community-feed .feed-tools {
+    :is(#startup-community-feed, .startup-feed-wrapper) .feed-tools {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 16px;
     }
 
-    #startup-community-feed .latest-updates-title {
+    :is(#startup-community-feed, .startup-feed-wrapper) .latest-updates-title {
       font-size: 1.1rem;
       font-weight: 800;
       color: #ffffff;
@@ -1170,14 +1230,14 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       letter-spacing: -0.3px;
     }
 
-    #startup-community-feed .sort-dropdown-wrap {
+    :is(#startup-community-feed, .startup-feed-wrapper) .sort-dropdown-wrap {
       position: relative;
       display: inline-flex;
       align-items: center;
     }
 
-    #startup-community-feed .sort-select option { background: #111113; color: #ffffff; }
-    #startup-community-feed .sort-select {
+    :is(#startup-community-feed, .startup-feed-wrapper) .sort-select option { background: #111113; color: #ffffff; }
+    :is(#startup-community-feed, .startup-feed-wrapper) .sort-select {
       appearance: none;
       -webkit-appearance: none;
       background: rgba(255, 255, 255, 0.04);
@@ -1192,12 +1252,12 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       transition: all 0.2s ease;
     }
 
-    #startup-community-feed .sort-select:focus {
+    :is(#startup-community-feed, .startup-feed-wrapper) .sort-select:focus {
       border-color: var(--purple-primary);
       box-shadow: 0 0 8px rgba(139, 92, 246, 0.2);
     }
 
-    #startup-community-feed .sort-select-icon {
+    :is(#startup-community-feed, .startup-feed-wrapper) .sort-select-icon {
       position: absolute;
       right: 10px;
       pointer-events: none;
@@ -1206,67 +1266,66 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     }
 
     /* --- POST CARDS --- */
-    #startup-community-feed .post-card,
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-card,
     .post-card {
       background: var(--card-dark);
       border: 1px solid var(--border-dark);
       border-radius: 0;
       overflow: hidden;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
       animation: reveal 0.3s ease-out;
       transition: border-color 0.2s ease;
       transform: none !important;
     }
 
-    #startup-community-feed .post-card:hover,
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-card:hover,
     .post-card:hover {
       transform: none !important;
     }
 
-    #startup-community-feed .post-card.hidden {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-card.hidden {
       display: none;
     }
 
-    #startup-community-feed .post-cover-img-wrap {
-      width: 100%;
-      max-height: 280px;
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-cover-img-wrap {
+      max-height: none;
       overflow: hidden;
       position: relative;
     }
 
-    #startup-community-feed .post-cover-img-wrap::after {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-cover-img-wrap::after {
       display: none !important;
     }
 
-    #startup-community-feed .post-cover-img {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-cover-img {
       width: 100%;
-      height: 100%;
-      max-height: 280px;
-      object-fit: cover;
+      height: auto;
+      max-height: none;
+      object-fit: contain;
       display: block;
       transform: none !important;
     }
 
-    #startup-community-feed .post-card:hover .post-cover-img,
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-card:hover .post-cover-img,
     .post-image-zoomable:hover {
       transform: none !important;
     }
 
-    #startup-community-feed .post-main {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-main {
       padding: 8px 10px 2px 10px;
     }
 
-    #startup-community-feed .post-head {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-head {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
+      gap: 8px;
+      margin-bottom: 2px;
     }
 
-    #startup-community-feed .avatar {
-      width: 38px;
-      height: 38px;
+    :is(#startup-community-feed, .startup-feed-wrapper) .avatar {
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       aspect-ratio: 1 / 1;
       flex-shrink: 0;
@@ -1275,37 +1334,37 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       color: #ffffff;
       display: grid;
       place-items: center;
-      font-size: 11px;
+      font-size: 14px;
       font-weight: 900;
       letter-spacing: 0.5px;
       box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
     }
 
-    #startup-community-feed .post-author {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-author {
       flex: 1;
       min-width: 0;
     }
 
-    #startup-community-feed .author-line {
+    :is(#startup-community-feed, .startup-feed-wrapper) .author-line {
       display: flex;
       align-items: center;
       gap: 5px;
     }
 
-    #startup-community-feed .author-name {
+    :is(#startup-community-feed, .startup-feed-wrapper) .author-name {
       font-size: 13.5px;
       font-weight: 800;
       color: #ffffff;
     }
 
-    #startup-community-feed .verified {
+    :is(#startup-community-feed, .startup-feed-wrapper) .verified {
       color: #10b981;
       display: inline-flex;
       align-items: center;
       font-size: 13px;
     }
 
-    #startup-community-feed .post-meta {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-meta {
       font-size: 10px;
       color: var(--text-muted);
       display: flex;
@@ -1314,13 +1373,13 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       margin-top: 2px;
     }
 
-    #startup-community-feed .category-badge-meta {
-      color: var(--purple-light);
+    .category-badge-meta {
+      color: #ffffff;
       font-weight: 700;
       text-transform: capitalize;
     }
 
-    #startup-community-feed .more-btn {
+    :is(#startup-community-feed, .startup-feed-wrapper) .more-btn {
       width: 32px;
       height: 32px;
       border-radius: 50%;
@@ -1334,29 +1393,29 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       transition: all 0.2s ease;
     }
 
-    #startup-community-feed .more-btn:hover {
+    :is(#startup-community-feed, .startup-feed-wrapper) .more-btn:hover {
       background: rgba(255, 255, 255, 0.04);
       color: #ffffff;
     }
 
-    #startup-community-feed .post-title {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-title {
       font-size: 1.15rem;
       font-weight: 800;
       line-height: 1.35;
       color: #ffffff;
-      margin: 10px 0 6px;
+      margin: 4px 0 4px;
       letter-spacing: -0.2px;
     }
 
-    #startup-community-feed .post-copy {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-copy {
       font-size: 13px;
       color: var(--text-secondary);
       line-height: 1.6;
-      margin: 0 0 6px;
+      margin: 0 0 4px;
       white-space: pre-wrap;
     }
 
-    #startup-community-feed .source-row { border-top: 1px solid rgba(255, 255, 255, 0.04); padding-top: 4px; margin-top: 3px;
+    :is(#startup-community-feed, .startup-feed-wrapper) .source-row { border-top: 1px solid rgba(255, 255, 255, 0.04); padding-top: 4px; margin-top: 2px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1364,8 +1423,8 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       color: var(--text-muted);
     }
 
-    #startup-community-feed .source-link {
-      color: #a78bfa;
+    :is(#startup-community-feed, .startup-feed-wrapper) .source-link {
+      color: #ffffff;
       text-decoration: none;
       font-weight: 700;
       display: inline-flex;
@@ -1374,22 +1433,22 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       transition: all 0.2s ease;
     }
 
-    #startup-community-feed .source-link:hover {
+    :is(#startup-community-feed, .startup-feed-wrapper) .source-link:hover {
       color: #c4b5fd;
       text-decoration: underline;
     }
 
-    #startup-community-feed .source-link i {
+    :is(#startup-community-feed, .startup-feed-wrapper) .source-link i {
       font-size: 9px;
       transition: transform 0.2s ease;
     }
 
-    #startup-community-feed .source-link:hover i {
+    :is(#startup-community-feed, .startup-feed-wrapper) .source-link:hover i {
       transform: translate(1px, -1px);
     }
 
     /* --- STATS & FOOTER ACTIONS --- */
-    #startup-community-feed .post-stats-row-container { 
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-stats-row-container { 
       border-top: 1px solid rgba(255, 255, 255, 0.08); 
       padding: 3px 0 0 0; 
       margin-top: 6px;
@@ -1402,7 +1461,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     .appreciate-btn,
     .comment-trigger-btn,
     .share-btn,
-    #startup-community-feed .post-action-icon-only {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-action-icon-only {
       background: transparent;
       border: none;
       color: #9ca3af;
@@ -1419,40 +1478,40 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       flex: 1 1 0% !important;
     }
 
-    #startup-community-feed .post-action-icon-only:hover {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-action-icon-only:hover {
       background: rgba(255, 255, 255, 0.08);
       color: #ffffff;
     }
 
-    #startup-community-feed .post-action-icon-only.active {
-      color: #ef4444; /* Bright red active state for heart */
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-action-icon-only.active {
+      color: inherit;
     }
 
-    #startup-community-feed .post-action-icon-only.active i,
-    #startup-community-feed .post-action-icon-only.active svg {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-action-icon-only.active i,
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-action-icon-only.active svg {
       color: #ef4444 !important;
       fill: #ef4444 !important;
     }
 
-    #startup-community-feed .btn-stat-count {
+    :is(#startup-community-feed, .startup-feed-wrapper) .btn-stat-count {
       font-size: 12.5px;
       font-weight: 700;
-      color: #a78bfa;
+      color: #ffffff;
       margin-left: 2px;
     }
 
     @media (min-width: 641px) {
       /* Desktop specific refinement for Appreciate/Comment/Share buttons on startup page */
-      #startup-community-feed .post-stats-row-container { 
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-stats-row-container { 
         padding: 4px 0 2px 0 !important; 
         margin-top: 4px !important;
         margin-bottom: 0 !important;
       }
 
-      #startup-community-feed .appreciate-btn,
-      #startup-community-feed .comment-trigger-btn,
-      #startup-community-feed .share-btn,
-      #startup-community-feed .post-action-icon-only {
+      :is(#startup-community-feed, .startup-feed-wrapper) .appreciate-btn,
+      :is(#startup-community-feed, .startup-feed-wrapper) .comment-trigger-btn,
+      :is(#startup-community-feed, .startup-feed-wrapper) .share-btn,
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-action-icon-only {
         font-size: 13.5px !important;
         line-height: 20.25px !important;
         font-weight: 500 !important;
@@ -1460,37 +1519,37 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         gap: 6px !important;
       }
 
-      #startup-community-feed .appreciate-btn span,
-      #startup-community-feed .comment-trigger-btn span,
-      #startup-community-feed .share-btn span,
-      #startup-community-feed .post-action-icon-only span {
+      :is(#startup-community-feed, .startup-feed-wrapper) .appreciate-btn span,
+      :is(#startup-community-feed, .startup-feed-wrapper) .comment-trigger-btn span,
+      :is(#startup-community-feed, .startup-feed-wrapper) .share-btn span,
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-action-icon-only span {
         font-size: 13.5px !important;
         line-height: 20.25px !important;
       }
 
-      #startup-community-feed .appreciate-btn i,
-      #startup-community-feed .comment-trigger-btn i,
-      #startup-community-feed .share-btn i,
-      #startup-community-feed .post-action-icon-only i,
-      #startup-community-feed .post-action-icon-only svg {
+      :is(#startup-community-feed, .startup-feed-wrapper) .appreciate-btn i,
+      :is(#startup-community-feed, .startup-feed-wrapper) .comment-trigger-btn i,
+      :is(#startup-community-feed, .startup-feed-wrapper) .share-btn i,
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-action-icon-only i,
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-action-icon-only svg {
         font-size: 14px !important;
       }
 
-      #startup-community-feed .btn-stat-count,
-      #startup-community-feed .appreciate-count,
-      #startup-community-feed .comment-badge {
+      :is(#startup-community-feed, .startup-feed-wrapper) .btn-stat-count,
+      :is(#startup-community-feed, .startup-feed-wrapper) .appreciate-count,
+      :is(#startup-community-feed, .startup-feed-wrapper) .comment-badge {
         font-size: 13.5px !important;
         line-height: 20.25px !important;
         margin-left: 2px !important;
       }
 
-      #startup-community-feed .post-main {
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-main {
         padding-bottom: 4px !important;
       }
     }
 
     /* --- NOTIFICATION PANEL --- */
-    #startup-community-feed .notifications {
+    :is(#startup-community-feed, .startup-feed-wrapper) .notifications {
       position: absolute;
       right: 0;
       top: 48px;
@@ -1504,26 +1563,26 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       z-index: 100;
     }
 
-    #startup-community-feed .notifications.open {
+    :is(#startup-community-feed, .startup-feed-wrapper) .notifications.open {
       display: block;
       animation: reveal 0.2s ease-out;
     }
 
-    #startup-community-feed .notifications-head {
+    :is(#startup-community-feed, .startup-feed-wrapper) .notifications-head {
       padding: 8px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      margin-bottom: 6px;
+      margin-bottom: 2px;
     }
 
-    #startup-community-feed .notifications-head strong {
+    :is(#startup-community-feed, .startup-feed-wrapper) .notifications-head strong {
       font-size: 12.5px;
       color: #ffffff;
     }
 
-    #startup-community-feed .mark-read {
+    :is(#startup-community-feed, .startup-feed-wrapper) .mark-read {
       border: none;
       background: transparent;
       color: var(--purple-light);
@@ -1532,74 +1591,74 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       font-weight: 700;
     }
 
-    #startup-community-feed .notification-item {
+    :is(#startup-community-feed, .startup-feed-wrapper) .notification-item {
       padding: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.03);
       font-size: 11px;
       color: var(--text-secondary);
     }
 
-    #startup-community-feed .notification-item:last-child {
+    :is(#startup-community-feed, .startup-feed-wrapper) .notification-item:last-child {
       border-bottom: none;
     }
 
-    #startup-community-feed .notification-title {
+    :is(#startup-community-feed, .startup-feed-wrapper) .notification-title {
       font-weight: 600;
       color: #ffffff;
       line-height: 1.4;
     }
 
-    #startup-community-feed .notification-time {
+    :is(#startup-community-feed, .startup-feed-wrapper) .notification-time {
       font-size: 9px;
       color: var(--text-muted);
       margin-top: 4px;
     }
 
     /* --- COMMENTS SECTION --- */
-    #startup-community-feed .comments-section {
+    :is(#startup-community-feed, .startup-feed-wrapper) .comments-section {
       display: none;
       background: #0b0b0d;
       border-top: 1px solid rgba(255,255,255,0.03);
       padding: 16px;
     }
 
-    #startup-community-feed .comments-section.open {
+    :is(#startup-community-feed, .startup-feed-wrapper) .comments-section.open {
       display: block;
     }
 
-    #startup-community-feed .comment-list {
+    :is(#startup-community-feed, .startup-feed-wrapper) .comment-list {
       margin-bottom: 14px;
       max-height: 240px;
       overflow-y: auto;
     }
 
-    #startup-community-feed .comment-item {
+    :is(#startup-community-feed, .startup-feed-wrapper) .comment-item {
       padding: 8px 0;
       border-bottom: 1px solid rgba(255,255,255,0.03);
       font-size: 11.5px;
     }
 
-    #startup-community-feed .comment-item:last-child {
+    :is(#startup-community-feed, .startup-feed-wrapper) .comment-item:last-child {
       border-bottom: none;
     }
 
-    #startup-community-feed .comment-name {
+    :is(#startup-community-feed, .startup-feed-wrapper) .comment-name {
       font-weight: 700;
       color: #ffffff;
     }
 
-    #startup-community-feed .comment-text {
+    :is(#startup-community-feed, .startup-feed-wrapper) .comment-text {
       color: var(--text-secondary);
       margin-top: 3px;
     }
 
-    #startup-community-feed .comment-form-inline {
+    :is(#startup-community-feed, .startup-feed-wrapper) .comment-form-inline {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
-    #startup-community-feed .comment-input {
+    :is(#startup-community-feed, .startup-feed-wrapper) .comment-input {
       width: 100%;
       border: 1.5px solid rgba(255, 255, 255, 0.05);
       border-radius: 12px;
@@ -1611,17 +1670,17 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       outline: none;
     }
 
-    #startup-community-feed .comment-input:focus {
+    :is(#startup-community-feed, .startup-feed-wrapper) .comment-input:focus {
       border-color: var(--purple-primary);
     }
 
-    #startup-community-feed .name-input {
+    :is(#startup-community-feed, .startup-feed-wrapper) .name-input {
       display: flex;
       gap: 8px;
       align-items: center;
     }
 
-    #startup-community-feed .name-input input {
+    :is(#startup-community-feed, .startup-feed-wrapper) .name-input input {
       flex: 1;
       border: 1.5px solid rgba(255, 255, 255, 0.05);
       border-radius: 12px;
@@ -1632,11 +1691,11 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       outline: none;
     }
 
-    #startup-community-feed .name-input input:focus {
+    :is(#startup-community-feed, .startup-feed-wrapper) .name-input input:focus {
       border-color: var(--purple-primary);
     }
 
-    #startup-community-feed .post-comment-btn {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-comment-btn {
       background: var(--purple-primary);
       color: #ffffff;
       border: none;
@@ -1649,12 +1708,12 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       transition: background 0.2s ease;
     }
 
-    #startup-community-feed .post-comment-btn:hover {
+    :is(#startup-community-feed, .startup-feed-wrapper) .post-comment-btn:hover {
       background: #7c3aed;
     }
 
     /* --- FEED EMPTY --- */
-    #startup-community-feed .feed-empty {
+    :is(#startup-community-feed, .startup-feed-wrapper) .feed-empty {
       display: none;
       border: 1px dashed rgba(255, 255, 255, 0.08);
       border-radius: 18px;
@@ -1664,15 +1723,15 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       text-align: center;
     }
 
-    #startup-community-feed .feed-empty strong {
+    :is(#startup-community-feed, .startup-feed-wrapper) .feed-empty strong {
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 2px;
       color: #ffffff;
       font-size: 15px;
     }
 
     /* --- TOAST --- */
-    #startup-community-feed .toast {
+    :is(#startup-community-feed, .startup-feed-wrapper) .toast {
       position: fixed;
       z-index: 1000;
       left: 50%;
@@ -1694,12 +1753,12 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       transition: all 0.2s ease;
     }
 
-    #startup-community-feed .toast.show {
+    :is(#startup-community-feed, .startup-feed-wrapper) .toast.show {
       opacity: 1;
       transform: translate(-50%, 0);
     }
 
-    #startup-community-feed .owner-note {
+    :is(#startup-community-feed, .startup-feed-wrapper) .owner-note {
       margin: 32px auto 0;
       color: var(--text-muted);
       font-size: 9px;
@@ -1716,38 +1775,38 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 
     /* --- MOBILE & DESKTOP COMPATIBILITY OVERRIDES --- */
     @media (max-width: 760px) {
-      #startup-community-feed .topbar {
+      :is(#startup-community-feed, .startup-feed-wrapper) .topbar {
         padding: 2px 0;
       }
-      #startup-community-feed .topbar-inner {
+      :is(#startup-community-feed, .startup-feed-wrapper) .topbar-inner {
         padding: 0.5px 0.5%;
         flex-direction: row;
         gap: 6px;
       }
-      #startup-community-feed .search-wrap {
+      :is(#startup-community-feed, .startup-feed-wrapper) .search-wrap {
         order: 3;
         width: 100%;
         margin-top: 1px;
       }
-      #startup-community-feed .page-shell {
+      :is(#startup-community-feed, .startup-feed-wrapper) .page-shell {
         padding-top: 1px;
       }
 
       /* Hero Carousel Mobile Optimization */
       div#trendingCarousel,
-      #startup-community-feed .trending-carousel-container {
+      :is(#startup-community-feed, .startup-feed-wrapper) .trending-carousel-container {
         height: 240px !important;
         margin-bottom: 12px;
         border-radius: 14px;
       }
 
-      #startup-community-feed .slide-bg-img {
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-bg-img {
         width: 100% !important;
         height: 100% !important;
         object-fit: cover !important;
       }
 
-      #startup-community-feed .slide-content-center {
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-content-center {
         padding: 10px 42px !important;
         gap: 6px !important;
         width: 100% !important;
@@ -1757,8 +1816,8 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         box-sizing: border-box !important;
       }
 
-      #startup-community-feed .slide-title,
-      #startup-community-feed .slide-content-center h2 {
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-title,
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-content-center h2 {
         font-size: 1.15rem !important;
         line-height: 1.3 !important;
         max-width: 100% !important;
@@ -1768,8 +1827,8 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         overflow: hidden;
       }
 
-      #startup-community-feed .slide-desc,
-      #startup-community-feed .slide-content-center p {
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-desc,
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-content-center p {
         font-size: 12px !important;
         line-height: 1.45 !important;
         max-width: 100% !important;
@@ -1779,14 +1838,14 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         overflow: hidden;
       }
 
-      #startup-community-feed .slide-cta-btn {
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-cta-btn {
         padding: 8px 18px !important;
         font-size: 11.5px !important;
         margin-top: 4px !important;
         flex-shrink: 0;
       }
 
-      #startup-community-feed .carousel-nav-btn {
+      :is(#startup-community-feed, .startup-feed-wrapper) .carousel-nav-btn {
         width: 32px !important;
         height: 32px !important;
         font-size: 11px !important;
@@ -1799,67 +1858,64 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         z-index: 25 !important;
       }
 
-      #startup-community-feed .carousel-prev-btn {
+      :is(#startup-community-feed, .startup-feed-wrapper) .carousel-prev-btn {
         left: 5px !important;
       }
 
-      #startup-community-feed .carousel-next-btn {
+      :is(#startup-community-feed, .startup-feed-wrapper) .carousel-next-btn {
         right: 5px !important;
       }
 
       /* Navigation Bar Mobile Layout & Font Size */
-      #startup-community-feed .category-nav {
+      .category-nav {
         justify-content: center !important;
         gap: 8px !important;
         padding: 0 6px !important;
         border: none !important;
+        margin-bottom: 3px !important;
       }
-      #startup-community-feed .category-btn {
+      .category-btn {
         flex: 0 0 auto !important;
         width: auto !important;
         padding: 3px 8px !important;
       }
-      #startup-community-feed #filtersSection button span,
-      #startup-community-feed nav button span,
-      #startup-community-feed .category-btn .category-label {
+      .category-btn .category-label {
         font-size: 11px !important;
         font-weight: 700 !important;
         color: #334155 !important;
       }
-      #startup-community-feed #filtersSection button svg,
-      #startup-community-feed nav button svg,
-      #startup-community-feed .category-btn .category-icon {
+      .category-btn .category-icon {
         font-size: 17px !important;
         width: 17px !important;
         height: 17px !important;
       }
-      #startup-community-feed .post-copy {
-        margin-bottom: 5px !important;
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-copy {
+        margin-bottom: 2px !important;
       }
-      #startup-community-feed .source-row {
-        margin-top: 3px !important;
+      :is(#startup-community-feed, .startup-feed-wrapper) .source-row {
+        margin-top: 2px !important;
         padding-top: 3px !important;
       }
     }
 
     @media (max-width: 480px) {
       div#trendingCarousel,
-      #startup-community-feed .trending-carousel-container {
+      :is(#startup-community-feed, .startup-feed-wrapper) .trending-carousel-container {
         height: 218px !important;
       }
-      #startup-community-feed .slide-content-center {
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-content-center {
         padding: 8px 38px !important;
         gap: 4px !important;
       }
-      #startup-community-feed .slide-title,
-      #startup-community-feed .slide-content-center h2 {
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-title,
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-content-center h2 {
         font-size: 1.05rem !important;
       }
-      #startup-community-feed .slide-desc,
-      #startup-community-feed .slide-content-center p {
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-desc,
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-content-center p {
         font-size: 11.5px !important;
       }
-      #startup-community-feed .slide-cta-btn {
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-cta-btn {
         padding: 7px 16px !important;
         font-size: 11px !important;
         margin-top: 2px !important;
@@ -1868,13 +1924,13 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 
     /* --- DESKTOP REDESIGN (min-width: 761px) --- */
     @media (min-width: 761px) {
-      #startup-community-feed .topbar {
+      :is(#startup-community-feed, .startup-feed-wrapper) .topbar {
         padding: 4px 0;
         background: #060608;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       }
 
-      #startup-community-feed .topbar-inner {
+      :is(#startup-community-feed, .startup-feed-wrapper) .topbar-inner {
         max-width: 1100px;
         margin: 0 auto;
         padding: 0 0.5%;
@@ -1884,13 +1940,13 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         gap: 16px;
       }
 
-      #startup-community-feed .brand-title {
+      :is(#startup-community-feed, .startup-feed-wrapper) .brand-title {
         font-size: 18px;
         font-weight: 800;
         letter-spacing: -0.5px;
       }
 
-      #startup-community-feed .spread-bold {
+      :is(#startup-community-feed, .startup-feed-wrapper) .spread-bold {
         font-weight: 800;
         color: #ffffff;
         background: none;
@@ -1898,13 +1954,13 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         -webkit-text-fill-color: unset;
       }
 
-      #startup-community-feed .search-wrap {
+      :is(#startup-community-feed, .startup-feed-wrapper) .search-wrap {
         max-width: 540px;
         flex: 1;
         margin-left: auto;
       }
 
-      #startup-community-feed .search {
+      :is(#startup-community-feed, .startup-feed-wrapper) .search {
         background: #0d0d0f;
         border: 1px solid #1f2024;
         border-radius: 8px; /* Moderately rounded, match reference */
@@ -1913,52 +1969,52 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         padding-left: 44px;
       }
 
-      #startup-community-feed .search-wrap .icon {
+      :is(#startup-community-feed, .startup-feed-wrapper) .search-wrap .icon {
         left: 16px;
         width: 18px;
         height: 18px;
         color: #9ca3af;
       }
 
-      #startup-community-feed .search-key {
+      :is(#startup-community-feed, .startup-feed-wrapper) .search-key {
         display: none;
       }
 
-      #startup-community-feed .user-avatar-container-desktop {
+      :is(#startup-community-feed, .startup-feed-wrapper) .user-avatar-container-desktop {
         display: flex;
         align-items: center;
         gap: 8px;
         cursor: pointer;
       }
 
-      #startup-community-feed .user-avatar-container-desktop .avatar-chevron {
+      :is(#startup-community-feed, .startup-feed-wrapper) .user-avatar-container-desktop .avatar-chevron {
         display: inline-block;
         font-size: 11px;
         color: #9ca3af;
         transition: transform 0.2s ease, color 0.2s ease;
       }
 
-      #startup-community-feed .user-avatar-container-desktop:hover .avatar-chevron {
+      :is(#startup-community-feed, .startup-feed-wrapper) .user-avatar-container-desktop:hover .avatar-chevron {
         color: #ffffff;
         transform: translateY(1px);
       }
 
-      #startup-community-feed .page-shell {
+      :is(#startup-community-feed, .startup-feed-wrapper) .page-shell {
         max-width: 1100px;
         padding: 2px 0.5% 140px;
       }
 
       /* Category Navigation Updates */
-      #startup-community-feed .category-nav {
+      .category-nav {
         justify-content: center;
         gap: 12px; /* Brought sections closer together */
         padding: 4px 0;
         margin: 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        margin-bottom: 4px;
+        margin-bottom: 2px;
       }
 
-      #startup-community-feed .category-btn {
+      .category-btn {
         flex: 0 0 auto;
         width: auto;
         flex-direction: row;
@@ -1971,51 +2027,45 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         box-shadow: none !important;
       }
 
-      #startup-community-feed .category-btn .category-icon {
+      .category-btn .category-icon {
         font-size: 23px;
         color: #9ca3af;
       }
 
-      #startup-community-feed .category-btn .category-label {
+      .category-btn .category-label {
         font-size: 14.5px;
         font-weight: 500;
       }
 
-      #startup-community-feed .category-btn.active {
+      .category-btn.active {
         color: #ffffff;
       }
 
-      #startup-community-feed .category-btn.active .category-icon {
+      .category-btn.active .category-icon {
         color: #ffffff; /* Match active text color on desktop */
       }
 
-      #startup-community-feed .category-btn.active::after {
-        bottom: -13px; /* Align precisely with Category-Nav border */
-        width: 100%;
-        height: 2px;
-        background-color: #8b5cf6;
-        box-shadow: 0 0 12px rgba(139, 92, 246, 0.8);
-      }
+      
 
-      #startup-community-feed .category-btn:hover {
+      .category-btn:hover {
         color: #ffffff;
       }
 
-      #startup-community-feed .category-btn:hover .category-icon {
+      .category-btn:hover .category-icon {
         color: #ffffff;
       }
 
       /* Hero Carousel Card Responsive Updates */
-      #startup-community-feed .trending-carousel-container {
+      :is(#startup-community-feed, .startup-feed-wrapper) .trending-carousel-container {
         padding: 0 !important;
         background: #090814;
         border: 1px solid rgba(139, 92, 246, 0.3);
         border-radius: 18px;
-        margin-bottom: 20px;
+        margin-bottom: 2px;
         height: 440px;
       }
 
-      #startup-community-feed .trending-slide {
+      :is(#startup-community-feed, .startup-feed-wrapper) .trending-slide {
         display: none;
         position: absolute;
         inset: 0;
@@ -2026,17 +2076,17 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         text-align: center;
       }
 
-      #startup-community-feed .trending-slide.active {
+      :is(#startup-community-feed, .startup-feed-wrapper) .trending-slide.active {
         display: flex;
       }
 
-      #startup-community-feed .slide-content-center {
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-content-center {
         padding: 32px 36px;
         gap: 16px;
       }
 
-      #startup-community-feed .slide-title,
-      #startup-community-feed .slide-content-center h2 {
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-title,
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-content-center h2 {
         font-size: 1.7rem;
         font-weight: 800;
         line-height: 1.35;
@@ -2048,8 +2098,8 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         overflow-wrap: break-word;
       }
 
-      #startup-community-feed .slide-desc,
-      #startup-community-feed .slide-content-center p {
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-desc,
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-content-center p {
         font-size: 15px;
         line-height: 1.6;
         color: #ffffff !important;
@@ -2061,12 +2111,12 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         overflow-wrap: break-word;
       }
 
-      #startup-community-feed .slide-cta-btn:hover {
+      :is(#startup-community-feed, .startup-feed-wrapper) .slide-cta-btn:hover {
         background: #e2e8f0;
         transform: translateY(-1px);
       }
 
-      #startup-community-feed .chart-visual-container {
+      :is(#startup-community-feed, .startup-feed-wrapper) .chart-visual-container {
         width: 100%;
         max-width: 440px;
         height: 180px;
@@ -2076,13 +2126,13 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         padding: 16px;
       }
 
-      #startup-community-feed .chart-bar-pillar {
+      :is(#startup-community-feed, .startup-feed-wrapper) .chart-bar-pillar {
         width: 24px;
         border-radius: 6px 6px 0 0;
         opacity: 0.25;
       }
 
-      #startup-community-feed .graphic-stat-badge {
+      :is(#startup-community-feed, .startup-feed-wrapper) .graphic-stat-badge {
         top: -15px;
         right: -15px;
         padding: 10px 16px;
@@ -2091,22 +2141,22 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         border: 1px solid rgba(255, 255, 255, 0.08);
       }
 
-      #startup-community-feed .stat-badge-num {
+      :is(#startup-community-feed, .startup-feed-wrapper) .stat-badge-num {
         font-size: 17px;
         font-weight: 800;
       }
 
-      #startup-community-feed .stat-badge-label {
+      :is(#startup-community-feed, .startup-feed-wrapper) .stat-badge-label {
         font-size: 9px;
         margin-top: 3px;
       }
 
-      #startup-community-feed .carousel-dots-row {
+      :is(#startup-community-feed, .startup-feed-wrapper) .carousel-dots-row {
         margin-top: 24px;
       }
 
       /* Feed Tools Section */
-      #startup-community-feed .feed-tools {
+      :is(#startup-community-feed, .startup-feed-wrapper) .feed-tools {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -2114,18 +2164,18 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         gap: 16px;
       }
 
-      #startup-community-feed .feed-tools-left {
+      :is(#startup-community-feed, .startup-feed-wrapper) .feed-tools-left {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
       }
 
-      #startup-community-feed .latest-updates-title {
+      :is(#startup-community-feed, .startup-feed-wrapper) .latest-updates-title {
         font-size: 1.5rem;
         font-weight: 800;
       }
 
-      #startup-community-feed .feed-subtitle {
+      :is(#startup-community-feed, .startup-feed-wrapper) .feed-subtitle {
         display: block;
         font-size: 13.5px;
         color: #6b7280;
@@ -2133,14 +2183,14 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         font-weight: 400;
       }
 
-      #startup-community-feed .feed-tools-right {
+      :is(#startup-community-feed, .startup-feed-wrapper) .feed-tools-right {
         display: flex;
         align-items: center;
         gap: 12px;
       }
 
-      #startup-community-feed .sort-select option { background: #111113; color: #ffffff; }
-    #startup-community-feed .sort-select {
+      :is(#startup-community-feed, .startup-feed-wrapper) .sort-select option { background: #111113; color: #ffffff; }
+    :is(#startup-community-feed, .startup-feed-wrapper) .sort-select {
         padding: 10px 36px 10px 16px;
         border-radius: 8px;
         font-size: 13px;
@@ -2148,7 +2198,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         border: 1px solid #1f2024;
       }
 
-      #startup-community-feed .filter-desktop-btn {
+      :is(#startup-community-feed, .startup-feed-wrapper) .filter-desktop-btn {
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -2163,168 +2213,202 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         transition: all 0.2s ease;
       }
 
-      #startup-community-feed .filter-desktop-btn:hover {
+      :is(#startup-community-feed, .startup-feed-wrapper) .filter-desktop-btn:hover {
         background: rgba(255, 255, 255, 0.05);
         border-color: rgba(255, 255, 255, 0.15);
       }
 
       /* Post Card Updates */
-      #startup-community-feed .post-card {
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-card {
         border-radius: 0;
         border: 1.5px solid rgba(255, 255, 255, 0.04);
-        margin-bottom: 6px;
+        margin-bottom: 2px;
         background: #0c0c0e;
         transition: border-color 0.25s ease, transform 0.25s ease;
       }
 
-      #startup-community-feed .post-card:hover {
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-card:hover {
         border-color: rgba(139, 92, 246, 0.15);
         transform: translateY(-2px);
       }
 
-      #startup-community-feed .post-cover-img-wrap {
-        height: 380px;
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-cover-img-wrap {
+        height: auto;
       }
 
-      #startup-community-feed .post-cover-img-wrap::after {
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-cover-img-wrap::after {
         background: linear-gradient(to top, #0c0c0e, transparent);
         height: 80px;
       }
 
-      #startup-community-feed .post-main {
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-main {
         padding: 16px 20px 20px;
       }
 
-      #startup-community-feed .post-head {
-        margin-bottom: 18px;
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-head {
+        margin-bottom: 6px;
       }
 
-      #startup-community-feed .avatar {
+      :is(#startup-community-feed, .startup-feed-wrapper) .avatar {
         width: 44px;
         height: 44px;
-        border-radius: 10px;
+        border-radius: 50%;
         font-size: 13px;
       }
 
-      #startup-community-feed .author-name {
+      :is(#startup-community-feed, .startup-feed-wrapper) .author-name {
         font-size: 15px;
       }
 
-      #startup-community-feed .post-meta {
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-meta {
         font-size: 11.5px;
         margin-top: 3px;
         gap: 8px;
       }
 
-      #startup-community-feed .post-title {
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-title {
         font-size: 1.55rem;
         font-weight: 800;
-        margin: 18px 0 10px;
+        margin: 6px 0 4px;
       }
 
-      #startup-community-feed .post-copy { font-size: 14.5px; color: #9ca3af; line-height: 1.65; margin-bottom: 8px;
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-copy { font-size: 14.5px; color: #9ca3af; line-height: 1.65; margin-bottom: 4px;
       }
 
-      #startup-community-feed .source-row { padding-top: 4px; margin-top: 8px;
+      :is(#startup-community-feed, .startup-feed-wrapper) .source-row { padding-top: 4px; margin-top: 4px;
         font-size: 11.5px;
       }
 
-      #startup-community-feed .post-stats-row-container { padding-top: 10px; margin-top: 10px;
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-stats-row-container { padding-top: 10px; margin-top: 10px;
         border-top: 1.5px solid rgba(255, 255, 255, 0.04);
       }
 
-      #startup-community-feed .pile-avatar {
+      :is(#startup-community-feed, .startup-feed-wrapper) .pile-avatar {
         width: 24px;
         height: 24px;
       }
 
-      #startup-community-feed .appreciation-text-span {
+      :is(#startup-community-feed, .startup-feed-wrapper) .appreciation-text-span {
         font-size: 12.5px;
       }
 
-      #startup-community-feed .post-footer-right-actions {
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-footer-right-actions {
         gap: 22px;
       }
 
-      #startup-community-feed .post-action-icon-only {
+      :is(#startup-community-feed, .startup-feed-wrapper) .post-action-icon-only {
         font-size: 18.5px;
         gap: 8px;
       }
 
-      #startup-community-feed .btn-stat-count {
+      :is(#startup-community-feed, .startup-feed-wrapper) .btn-stat-count {
         font-size: 13px;
       }
     }
   
+    /* --- DARK MODE OVERRIDES FOR STARTUP SECTION (DESKTOP) --- */
+    html.dark :is(#startup-community-feed, .startup-feed-wrapper) {
+      background-color: #0d0d0d;
+      color: #ffffff;
+    }
+    html.dark .category-btn { color: #ffffff !important; }
+    html.dark .category-btn .category-icon { color: #ffffff !important; }
+    html.dark .category-btn .category-label { color: #ffffff !important; }
+    html.dark .category-btn:hover { color: #ffffff !important; }
+    html.dark .category-btn:hover .category-icon { color: #ffffff !important; }
+    html.dark .category-btn.active { color: #ffffff !important; }
+    html.dark .category-btn.active .category-icon { color: #ffffff !important; }
+
+    html.dark :is(#startup-community-feed, .startup-feed-wrapper) .post-title { color: #ffffff !important; }
+    html.dark :is(#startup-community-feed, .startup-feed-wrapper) .post-copy { color: #f8fafc !important; }
+    html.dark :is(#startup-community-feed, .startup-feed-wrapper) .author-name { color: #ffffff !important; }
+    html.dark :is(#startup-community-feed, .startup-feed-wrapper) .slide-title { color: #ffffff !important; }
+    html.dark :is(#startup-community-feed, .startup-feed-wrapper) .slide-desc { color: #e2e8f0 !important; }
+    html.dark :is(#startup-community-feed, .startup-feed-wrapper) .latest-updates-title { color: #ffffff !important; }
+    html.dark :is(#startup-community-feed, .startup-feed-wrapper) .feed-subtitle { color: #e2e8f0 !important; }
+    html.dark :is(#startup-community-feed, .startup-feed-wrapper) .source-link { color: #94a3b8 !important; }
+    html.dark .category-badge-meta { color: #ffffff !important; }
+    html.dark :is(#startup-community-feed, .startup-feed-wrapper) .sort-select { background: #121212 !important; color: #ffffff !important; border-color: #262626 !important; }
+    html.dark :is(#startup-community-feed, .startup-feed-wrapper) .filter-desktop-btn { background: #121212 !important; color: #ffffff !important; border-color: #262626 !important; }
+
     /* --- LIGHT MODE OVERRIDES FOR STARTUP SECTION --- */
-    html:not(.dark) #startup-community-feed {
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) {
       background-color: #f4f6fa;
       color: #111827;
     }
-    html:not(.dark) #startup-community-feed .topbar { background: rgba(255, 255, 255, 0.85); border-bottom-color: rgba(0, 0, 0, 0.05); }
-    html:not(.dark) #startup-community-feed .topbar-inner { background: transparent; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .topbar { background: rgba(255, 255, 255, 0.85); border-bottom-color: rgba(0, 0, 0, 0.05); }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .topbar-inner { background: transparent; }
     @media (min-width: 761px) {
-      html:not(.dark) #startup-community-feed .topbar { background: #ffffff; border-bottom-color: rgba(0, 0, 0, 0.05); }
+      html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .topbar { background: #ffffff; border-bottom-color: rgba(0, 0, 0, 0.05); }
     }
-    html:not(.dark) #startup-community-feed .search { background: #f8fafc; border-color: #e2e8f0; color: #111827; }
-    html:not(.dark) #startup-community-feed .search-wrap .icon { color: #64748b; }
-    html:not(.dark) #startup-community-feed .search-key { background: #e2e8f0; color: #475569; }
-    html:not(.dark) #startup-community-feed .user-avatar-container-desktop:hover .avatar-chevron { color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .search { background: #f8fafc; border-color: #e2e8f0; color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .search-wrap .icon { color: #64748b; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .search-key { background: #e2e8f0; color: #475569; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .user-avatar-container-desktop:hover .avatar-chevron { color: #111827; }
 
-    html:not(.dark) #startup-community-feed .category-btn { color: #64748b; }
-    html:not(.dark) #startup-community-feed .category-btn .category-icon { color: #64748b; }
-    html:not(.dark) #startup-community-feed .category-btn.active { color: #111827; }
-    html:not(.dark) #startup-community-feed .category-btn.active .category-icon { color: #111827; }
-    html:not(.dark) #startup-community-feed .category-btn:hover { color: #111827; }
-    html:not(.dark) #startup-community-feed .category-btn:hover .category-icon { color: #111827; }
+    html:not(.dark) .category-btn { color: #64748b; }
+    html:not(.dark) .category-btn .category-icon { color: #64748b; }
+    html:not(.dark) .category-btn.active { color: #111827; }
+    html:not(.dark) .category-btn.active .category-icon { color: #111827; }
+    html:not(.dark) .category-btn:hover { color: #111827; }
+    html:not(.dark) .category-btn:hover .category-icon { color: #111827; }
 
-    html:not(.dark) #startup-community-feed .trending-carousel-container { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-color: #e2e8f0; }
-    html:not(.dark) #startup-community-feed .slide-desc { color: #64748b; }
-    html:not(.dark) #startup-community-feed .slide-cta-btn { background: #111827; color: #ffffff; }
-    html:not(.dark) #startup-community-feed .slide-cta-btn:hover { background: #334155; }
-    html:not(.dark) #startup-community-feed .chart-visual-container { background: #f1f5f9; border-color: #e2e8f0; }
-    html:not(.dark) #startup-community-feed .graphic-stat-badge { background: rgba(255,255,255,0.9); border-color: #e2e8f0; color: #111827; }
-    html:not(.dark) #startup-community-feed .graphic-stat-badge .stat-badge-num { color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .trending-carousel-container { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-color: #e2e8f0; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .slide-desc { color: #64748b; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .slide-cta-btn { background: #111827; color: #ffffff; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .slide-cta-btn:hover { background: #334155; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .chart-visual-container { background: #f1f5f9; border-color: #e2e8f0; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .graphic-stat-badge { background: rgba(255,255,255,0.9); border-color: #e2e8f0; color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .graphic-stat-badge .stat-badge-num { color: #111827; }
 
-    html:not(.dark) #startup-community-feed .sort-select option { background: #111113; color: #ffffff; }
-    #startup-community-feed .sort-select { background: #f8fafc; border-color: #e2e8f0; color: #111827; }
-    html:not(.dark) #startup-community-feed .filter-desktop-btn { background: #ffffff; border-color: #e2e8f0; color: #111827; }
-    html:not(.dark) #startup-community-feed .filter-desktop-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .sort-select option { background: #111113; color: #ffffff; }
+    :is(#startup-community-feed, .startup-feed-wrapper) .sort-select { background: #f8fafc; border-color: #e2e8f0; color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .filter-desktop-btn { background: #ffffff; border-color: #e2e8f0; color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .filter-desktop-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
 
-    html:not(.dark) #startup-community-feed .post-card { background: #ffffff; border-color: #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
-    html:not(.dark) #startup-community-feed .post-card:hover { border-color: #cbd5e1; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
-    html:not(.dark) #startup-community-feed .post-cover-img-wrap::after { background: linear-gradient(to top, #ffffff, transparent); }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .post-card { background: #ffffff; border-color: #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .post-card:hover { border-color: #cbd5e1; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .post-cover-img-wrap::after { background: linear-gradient(to top, #ffffff, transparent); }
 
-    html:not(.dark) #startup-community-feed .post-copy { color: #475569; }
-    html:not(.dark) #startup-community-feed .source-row { color: #64748b; }
-    html:not(.dark) #startup-community-feed .post-stats-row-container { border-top-color: #f1f5f9; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .post-copy { color: #475569; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .source-row { color: #64748b; }
+    html:not(.dark) .category-badge-meta { color: #111827 !important; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .source-link { color: #111827 !important; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .btn-stat-count { color: #111827 !important; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .post-stats-row-container { border-top-color: #f1f5f9; }
 
-    html:not(.dark) #startup-community-feed .post-action-icon-only { color: #64748b; }
-    html:not(.dark) #startup-community-feed .post-action-icon-only:hover { color: #111827; }
-    html:not(.dark) #startup-community-feed .btn-stat-count { color: #64748b; }
-    html:not(.dark) #startup-community-feed .appreciation-text-span { color: #64748b; }
-    html:not(.dark) #startup-community-feed .appreciation-text-span strong { color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .post-action-icon-only { color: #64748b; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .post-action-icon-only:hover { color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .btn-stat-count { color: #64748b; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .appreciation-text-span { color: #64748b; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .appreciation-text-span strong { color: #111827; }
 
-    html:not(.dark) #startup-community-feed .comments-section { background: #f8fafc; border-top-color: #e2e8f0; }
-    html:not(.dark) #startup-community-feed .comment-item { border-bottom-color: #e2e8f0; }
-    html:not(.dark) #startup-community-feed .comment-name { color: #111827; }
-    html:not(.dark) #startup-community-feed .comment-text { color: #475569; }
-    html:not(.dark) #startup-community-feed .comment-input,
-    html:not(.dark) #startup-community-feed .name-input input { background: #ffffff; border-color: #cbd5e1; color: #111827; }
-    html:not(.dark) #startup-community-feed .post-comment-btn { color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .comments-section { background: #f8fafc; border-top-color: #e2e8f0; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .comment-item { border-bottom-color: #e2e8f0; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .comment-name { color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .comment-text { color: #475569; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .comment-input,
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .name-input input { background: #ffffff; border-color: #cbd5e1; color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .post-comment-btn { color: #111827; }
 
-    html:not(.dark) #startup-community-feed .feed-empty { background: #f8fafc; border-color: #cbd5e1; color: #475569; }
-    html:not(.dark) #startup-community-feed .feed-empty strong { color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .feed-empty { background: #f8fafc; border-color: #cbd5e1; color: #475569; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .feed-empty strong { color: #111827; }
 
-    html:not(.dark) #startup-community-feed .brand-title .spread-bold { color: #111827; }
-    html:not(.dark) #startup-community-feed .post-title { color: #111827; }
-    html:not(.dark) #startup-community-feed .author-name { color: #111827; }
-    html:not(.dark) #startup-community-feed .slide-title { color: #111827; }
-    html:not(.dark) #startup-community-feed .latest-updates-title { color: #111827; }
-    html:not(.dark) #startup-community-feed .feed-subtitle { color: #475569; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .brand-title .spread-bold { color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .post-title { color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .author-name { color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .slide-title { color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .latest-updates-title { color: #111827; }
+    html:not(.dark) :is(#startup-community-feed, .startup-feed-wrapper) .feed-subtitle { color: #475569; }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+div:nth-of-type(4) > div#feedContainer:nth-of-type(4) > article:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) {
+  width: 325px !important;
+}
 </style>
 </head>
-<body class="bg-[#f4f6fa] text-slate-800 font-sans antialiased overflow-x-hidden" style="font-family: 'Inter', -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Fira Sans', Ubuntu, Oxygen, 'Oxygen Sans', Cantarell, 'Droid Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Lucida Grande', Helvetica, Arial, sans-serif;">
+<body class="bg-[#f4f6fa] text-slate-800 font-sans antialiased" style="font-family: 'Inter', sans-serif;">
 
   <!-- Name Modal -->
   <div id="nameModal" class="fixed inset-0 z-[100] hidden flex-col items-center justify-center bg-slate-900/40 backdrop-blur-sm">
@@ -2423,7 +2507,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
   </div>
 
   <div class="w-full max-w-[1100px] mx-auto px-0 md:px-3 pt-0 pb-2 md:pt-0.5 md:pb-6">
-    <div class="header-container bg-white rounded-[14px] sm:rounded-[16px] shadow-[0_2px_16px_rgba(0,0,0,0.03)] border border-slate-100 py-1.5 px-2.5 sm:py-2 sm:px-3.5 mb-1.5 sm:mb-2 flex flex-wrap items-center justify-between gap-y-1.5 gap-x-2">
+    <div class="header-container bg-white rounded-[14px] sm:rounded-[16px] shadow-[0_2px_16px_rgba(0,0,0,0.03)] border border-slate-100 py-1.5 px-2.5 sm:py-2 sm:px-3.5 mb-[3px] sm:mb-[3px] flex flex-wrap items-center justify-between gap-y-1.5 gap-x-2">
       <!-- Logo and Subtitle -->
       <div class="flex-shrink-0">
         <h1 style="font-weight: 800; font-size: 1.05rem; letter-spacing: normal; display: flex; align-items: center; font-family: 'Inter', sans-serif;" class="text-[#111827]">
@@ -2467,13 +2551,13 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       </div>
     </div>
 
-  <div id="postCreationCard" class="bg-white rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-slate-100 p-1.5 sm:p-2 mb-1.5">
+  <div id="postCreationCard" class="bg-white rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-slate-100 p-1.5 sm:p-2 mb-[3px]">
     <div class="flex flex-col gap-1 sm:gap-1.5 creator-row">
       <div class="flex items-start justify-between gap-1.5">
         <div class="flex items-start gap-2 flex-1 min-w-0">
           <div id="creatorAvatar" class="user-avatar-dynamic w-8 h-8 rounded-full shadow-sm flex items-center justify-center font-bold text-white text-[14px]" style="background-color: #94a3b8;">?</div>
           <div class="flex flex-col flex-1 min-w-0">
-            <div class="font-bold text-[#111827] text-[12px] sm:text-[13px] flex items-center gap-0.5"><span id="postAuthorNameDisplay" class="font-bold" style="padding-right: 4px;">You</span></div>
+            <div class="font-bold text-[#111827] text-[12px] sm:text-[13px] flex items-center gap-0.5"><span id="postAuthorNameDisplay" class="font-bold" style="padding-right: 4px;">you</span></div>
             <div id="postContent" contenteditable="true" data-placeholder="What's on your mind today?" class="text-[12px] sm:text-[13px] text-slate-700 bg-transparent focus:outline-none min-h-[18px] mt-0 w-full leading-relaxed break-words whitespace-pre-wrap outline-none cursor-text max-h-[120px] overflow-y-auto"></div>
           </div>
         </div>
@@ -2494,36 +2578,36 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         </label>
         
         <button id="publishPostBtn" class="flex-1 bg-slate-50 hover:bg-slate-100 text-[#111827] text-[12px] font-bold py-1 rounded-[10px] shadow-sm transition-all flex items-center justify-center gap-1 border border-slate-100">
-          <i class="fas fa-pen text-[11px]"></i> Post
+          Post
         </button>
       </div>
     </div>
   </div>
 
-  <nav id="filtersSection" class="bg-white rounded-[14px] sm:rounded-[16px] shadow-[0_2px_12px_rgba(0,0,0,0.02)] border border-slate-100 py-1.5 sm:py-2 px-3 sm:px-8 mb-1.5 sm:mb-2 flex justify-center items-center gap-3 sm:gap-16 md:gap-20 lg:gap-24 overflow-x-auto">
-    <button onclick="window.location.hash='home'" class="flex flex-col items-center justify-center py-1 px-2.5 sm:px-6 min-w-0 text-center hover:bg-slate-50 rounded-[10px] transition-colors flex-initial">
-      <svg class="w-[18px] h-[18px] sm:w-[21px] sm:h-[21px] text-slate-800 mb-0.5" fill="none" stroke="currentColor" stroke-width="2.25" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
-      <span class="text-[10.5px] sm:text-[12.5px] font-bold text-slate-800 tracking-normal truncate w-full">For You</span>
-    </button>
-    <button onclick="gotoStartups('funding')" class="flex flex-col items-center justify-center py-1 px-2.5 sm:px-6 min-w-0 text-center hover:bg-slate-50 rounded-[10px] transition-colors flex-initial">
-      <svg class="w-[18px] h-[18px] sm:w-[21px] sm:h-[21px] text-slate-800 mb-0.5" fill="none" stroke="currentColor" stroke-width="2.25" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-      <span class="text-[10.5px] sm:text-[12.5px] font-bold text-slate-800 tracking-normal truncate w-full">Funding</span>
-    </button>
-    <button onclick="gotoStartups('stories')" class="flex flex-col items-center justify-center py-1 px-2.5 sm:px-6 min-w-0 text-center hover:bg-slate-50 rounded-[10px] transition-colors flex-initial">
-      <svg class="w-[18px] h-[18px] sm:w-[21px] sm:h-[21px] text-slate-800 mb-0.5" fill="none" stroke="currentColor" stroke-width="2.25" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-      <span class="text-[10.5px] sm:text-[12.5px] font-bold text-slate-800 tracking-normal truncate w-full">Stories</span>
-    </button>
-    <button onclick="gotoStartups('events')" class="flex flex-col items-center justify-center py-1 px-2.5 sm:px-6 min-w-0 text-center hover:bg-slate-50 rounded-[10px] transition-colors flex-initial">
-      <svg class="w-[18px] h-[18px] sm:w-[21px] sm:h-[21px] text-slate-800 mb-0.5" fill="none" stroke="currentColor" stroke-width="2.25" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-      <span class="text-[10.5px] sm:text-[12.5px] font-bold text-slate-800 tracking-normal truncate w-full">Events</span>
-    </button>
-    <button onclick="gotoStartups('accelerators')" class="flex flex-col items-center justify-center py-1 px-2.5 sm:px-6 min-w-0 text-center hover:bg-slate-50 rounded-[10px] transition-colors flex-initial">
-      <svg class="w-[18px] h-[18px] sm:w-[21px] sm:h-[21px] text-slate-800 mb-0.5" fill="none" stroke="currentColor" stroke-width="2.25" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-      <span class="text-[10.5px] sm:text-[12.5px] font-bold text-slate-800 tracking-normal truncate w-full">Accelerators</span>
-    </button>
-  </nav>
+  <nav id="filtersSection" class="category-nav" aria-label="Post categories" >
+  <button class="category-btn active" type="button" onclick="filterHomeFeed('all')" data-category="all">
+    <span class="category-icon"><i class="fa-solid fa-house"></i></span>
+    <span class="category-label">For you</span>
+  </button>
+  <button class="category-btn" type="button" onclick="filterHomeFeed('funding')" data-category="funding">
+    <span class="category-icon"><i class="fa-solid fa-circle-dollar-to-slot"></i></span>
+    <span class="category-label">Funding</span>
+  </button>
+  <button class="category-btn" type="button" onclick="filterHomeFeed('stories')" data-category="stories">
+    <span class="category-icon"><i class="fa-solid fa-file-lines"></i></span>
+    <span class="category-label">Stories</span>
+  </button>
+  <button class="category-btn" type="button" onclick="filterHomeFeed('events')" data-category="events">
+    <span class="category-icon"><i class="fa-solid fa-calendar-days"></i></span>
+    <span class="category-label">Events</span>
+  </button>
+  <button class="category-btn" type="button" onclick="filterHomeFeed('accelerators')" data-category="accelerators">
+    <span class="category-icon"><i class="fa-solid fa-rocket"></i></span>
+    <span class="category-label">Accelerators</span>
+  </button>
+</nav>
 
-  <div id="newPostBanner" class="bg-white rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-slate-100 py-2.5 px-3 mb-2 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+  <div id="newPostBanner" class="bg-white rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-slate-100 py-2.5 px-3 mb-[3px] flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
     <div class="flex items-center gap-2 w-max">
       <i class="fas fa-sparkles text-slate-800 text-[12px]"></i>
       <span class="text-[12px] font-bold text-[#111827] whitespace-nowrap">New Post</span>
@@ -2587,7 +2671,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     </div>
   </div>
   <div id="iframe-jobs" class="iframe-container" style="background: #06080f;">
-    <div class="jobs-page-wrapper" style="position:relative; width:100%; min-height:100%; overflow:visible;">
+    <div class="jobs-page-wrapper" style="position:relative; width:100%; min-height:100dvh; overflow:visible;">
 
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
@@ -2595,7 +2679,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 
 <div class="wrap">
   <div class="hero fi d1">
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 2px;">
         <div style="font-weight: 800; color: #ffffff; font-size: 1.12rem; letter-spacing: normal; font-family: 'Inter', sans-serif; display: flex; align-items: center;">
             Spred&nbsp;<span style="color: #7C3AED;">One</span>
         </div>
@@ -2846,7 +2930,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     </p>
 
     <!-- Visible Link Input Field with Copy Button -->
-    <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+    <div style="display: flex; gap: 8px; margin-bottom: 2px;">
       <input type="text" id="shareLinkInput" readonly style="flex: 1; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px 12px; font-size: 13px; font-weight: 600; color: #1e293b; outline: none; box-shadow: inset 0 1px 2px rgba(0,0,0,0.03);">
       <button id="copyShareLinkBtn" onclick="copyShareLinkAction()" style="background: #7c3aed; color: #ffffff; border: none; padding: 10px 18px; border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
         <i class="far fa-copy"></i> <span id="copyShareLinkText">Copy</span>
@@ -3094,7 +3178,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       if (post.comments && post.comments.length) {
         const recent = post.comments.slice(-3);
         commentsHtml = `<div class="comment-list text-sm space-y-1">
-          ${recent.map(c => `<div class="flex gap-2"><span class="font-bold text-black text-[14px]">${escapeHtml(c.name)}</span><span class="text-[14px] text-slate-600 whitespace-pre-wrap break-words flex-1">${escapeHtml(c.text)}</span></div>`).join('')}
+          ${recent.map(c => `<div class="flex gap-2"><span class="font-bold text-black text-[14px]">${escapeHtml(String(c.name || '').toLowerCase())}</span><span class="text-[14px] text-slate-600 whitespace-pre-wrap break-words flex-1">${escapeHtml(c.text)}</span></div>`).join('')}
           ${post.comments.length > 3 ? `<div class="text-[14px] text-blue-500 cursor-pointer font-medium mt-1 view-all-comments" data-post-id="${post.id}">View all comments</div>` : ''}
         </div>`;
       }
@@ -3150,12 +3234,12 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
   }
   const DEVICE_ID = getDeviceId();
 
-  function getStoredAuthorName() { return localStorage.getItem(STORAGE_GLOBAL_USERNAME) || ''; }
+  function getStoredAuthorName() { return (localStorage.getItem(STORAGE_GLOBAL_USERNAME) || '').toLowerCase(); }
   function setStoredAuthorName(name) { 
-    if (name && name.trim()) localStorage.setItem(STORAGE_GLOBAL_USERNAME, name.trim()); 
+    if (name && name.trim()) localStorage.setItem(STORAGE_GLOBAL_USERNAME, name.trim().toLowerCase()); 
   }
-  function getStoredCommenterName() { return localStorage.getItem(STORAGE_GLOBAL_USERNAME) || ''; }
-  function setStoredCommenterName(name) { if(name && name.trim()) localStorage.setItem(STORAGE_GLOBAL_USERNAME, name.trim()); }
+  function getStoredCommenterName() { return (localStorage.getItem(STORAGE_GLOBAL_USERNAME) || '').toLowerCase(); }
+  function setStoredCommenterName(name) { if(name && name.trim()) localStorage.setItem(STORAGE_GLOBAL_USERNAME, name.trim().toLowerCase()); }
 
   let resolveNamePrompt = null;
   function requestName(callback) {
@@ -3179,6 +3263,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       modal.classList.add('hidden');
       modal.classList.remove('flex');
       if (savedName) {
+        savedName = savedName.toLowerCase();
         setStoredAuthorName(savedName);
         setStoredCommenterName(savedName);
         updateUserAvatars(savedName);
@@ -3188,7 +3273,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
   }
 
   function updateUserAvatars(name) {
-    const initial = name ? name.charAt(0).toUpperCase() : '?';
+    const initial = name ? name.substring(0, 2).toLowerCase() : '?';
     const color = name ? getAvatarColor(name) : '#94a3b8';
     document.querySelectorAll('.user-avatar-dynamic').forEach(el => {
       el.innerHTML = initial;
@@ -3197,7 +3282,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     });
     const nameDisplay = document.getElementById('postAuthorNameDisplay');
     if (nameDisplay) {
-        nameDisplay.innerText = name || 'You';
+        nameDisplay.innerText = (name || 'you').toLowerCase();
     }
   }
 
@@ -3355,7 +3440,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         if (post.comments && post.comments.length) {
           const recent = post.comments.slice(-3);
           commentsHtml = `<div class="comment-list text-sm space-y-1">
-            ${recent.map(c => `<div class="flex gap-2"><span class="font-bold text-black text-[14px]">${escapeHtml(c.name)}</span><span class="text-[14px] text-slate-600 whitespace-pre-wrap break-words flex-1">${escapeHtml(c.text)}</span></div>`).join('')}
+            ${recent.map(c => `<div class="flex gap-2"><span class="font-bold text-black text-[14px]">${escapeHtml(String(c.name || '').toLowerCase())}</span><span class="text-[14px] text-slate-600 whitespace-pre-wrap break-words flex-1">${escapeHtml(c.text)}</span></div>`).join('')}
             ${post.comments.length > 3 ? `<div class="text-[14px] text-blue-500 cursor-pointer font-medium mt-1 view-all-comments" data-post-id="${post.id}">View all comments</div>` : ''}
           </div>`;
         }
@@ -3381,36 +3466,38 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
           `;
         }
         
-        return `<article class="post-card bg-white rounded-[16px] sm:rounded-[20px] mb-1.5 border border-slate-100 shadow-[0_4px_24px_rgba(0,0,0,0.03)] overflow-hidden" data-post-id="${post.id}">
+        return `<article class="post-card bg-white rounded-[16px] sm:rounded-[20px] mb-[3px] border border-slate-100 shadow-[0_4px_24px_rgba(0,0,0,0.03)] overflow-hidden" data-post-id="${post.id}">
           <!-- Recruiter Header -->
-          <div class="flex items-center justify-between px-2.5 pt-2 sm:px-4 sm:pt-3.5 pb-1 sm:pb-2">
-            <div class="flex items-center gap-2 min-w-0">
-              <div class="relative w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center">
-                ${profileLogo ? `<img src="${escapeHtml(profileLogo)}" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none';" referrerPolicy="no-referrer">` : ''}
-                <div class="w-full h-full rounded-full flex items-center justify-center text-white font-bold text-sm md:text-base leading-none" style="background-color: ${avatarBg};">${(recruiterName || '?').charAt(0).toUpperCase()}</div>
+          <header class="flex items-center gap-[8px] sm:gap-[12px] mb-[4px] sm:mb-[14px]">
+            <div class="relative w-[28px] h-[28px] sm:w-[44px] sm:h-[44px] rounded-full sm:rounded-full overflow-hidden shrink-0 flex items-center justify-center text-white font-black text-[14px] sm:text-[16px] tracking-wide bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9]">
+              ${profileLogo ? `<img src="${escapeHtml(profileLogo)}" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none';" referrerPolicy="no-referrer">` : ''}
+              ${(recruiterName || '?').substring(0, 2).toLowerCase()}
+            </div>
+            <div class="flex flex-col min-w-0 flex-1">
+              <div class="flex items-center gap-1">
+                <span class="font-extrabold text-[#111827] text-[13px] sm:text-[15px] truncate leading-tight">${escapeHtml(String(recruiterName || '').toLowerCase())}</span>
+                <i class="fas fa-check-circle text-blue-600 text-[10px] sm:text-[12px] shrink-0"></i>
               </div>
-              <div class="flex flex-col min-w-0 flex-1 pr-2">
-                <div class="font-bold text-[#111827] text-[13.5px] sm:text-[14.5px] flex items-center gap-1 leading-tight mb-0.5">
-                  <span class="break-words" style="display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden; padding-right: 4px;">${escapeHtml(recruiterName)}</span>
-                  <i class="fas fa-check-circle text-blue-600 text-[11px] sm:text-[12px] flex-shrink-0"></i>
-                </div>
-                <div class="text-[11px] sm:text-[11.5px] text-slate-500 font-medium leading-tight truncate">
-                  ${subtitleText}
-                </div>
+              <div class="flex items-center gap-[3px] sm:gap-[8px] text-[11px] sm:text-[11.5px] text-slate-500 font-medium mt-[1px] sm:mt-[3px]">
+                <span class="bg-transparent text-slate-500 px-0 py-0 rounded-none text-[11px] sm:text-[11px] font-medium sm:font-medium capitalize tracking-normal">${escapeHtml(subtitleText)}</span>
+                <span class="text-[9px] sm:text-[11.5px]">•</span>
+                <span class="text-[10px] sm:text-[11.5px]">${timeAgo}</span>
               </div>
             </div>
-            <button class="text-slate-400 hover:text-slate-600 p-1.5 transition-colors flex-shrink-0 -mt-1"><i class="fas fa-ellipsis-v text-sm"></i></button>
-          </div>
+            <button class="w-[26px] h-[26px] sm:w-[32px] sm:h-[32px] rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-[#111827] transition-colors shrink-0 text-[12px] sm:text-[14px]" type="button" aria-label="More options">
+              <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current"><use href="#i-more"></use></svg>
+            </button>
+          </header>
           
           <!-- Post Body / Content -->
-          <div class="post-content px-2.5 sm:px-4 pt-1 pb-3">
-            <div class="mb-3">
+          <div class="post-content px-0 pt-0 pb-0.5">
+            <div class="mb-1.5">
               <h3 class="text-[17px] sm:text-[18px] font-bold text-slate-800 leading-snug mb-0.5">${escapeHtml(job.title)}</h3>
               <div class="text-[14px] font-semibold text-slate-600 flex items-center gap-1.5 flex-wrap">
                 <span>${escapeHtml(job.company)}</span>
               </div>
             </div>
-            <div class="text-slate-700 text-[14.5px] sm:text-[15px] leading-relaxed mb-3">
+            <div class="text-slate-700 text-[14.5px] sm:text-[15px] leading-relaxed mb-2">
               ${(function(){
                 const msgs = [
                   "We're hiring! Join our growing team.",
@@ -3428,18 +3515,18 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
             </div>
             
             <!-- Metadata Row -->
-            <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] sm:text-[13px] text-slate-500 font-medium py-2 px-3 bg-slate-50 rounded-xl border border-slate-100/70 mb-3.5 w-max max-w-full">
+            <div class="flex items-center justify-start gap-3 sm:gap-3 flex-nowrap text-[12px] sm:text-[14.5px] text-slate-500 font-medium py-0.5 px-0 mb-1.5 w-full max-w-full overflow-x-auto whitespace-nowrap no-scrollbar" style="scrollbar-width: none; -ms-overflow-style: none;">
               <span class="flex items-center gap-1"><i class="fas fa-map-marker-alt text-slate-400"></i> ${escapeHtml(job.location)}</span>
               <span class="text-slate-300">&bull;</span>
               <span class="flex items-center gap-1"><i class="fas fa-briefcase text-slate-400"></i> ${escapeHtml(job.type)}</span>
               <span class="text-slate-300">&bull;</span>
               <span class="flex items-center gap-1"><i class="fas fa-graduation-cap text-slate-400"></i> ${escapeHtml(job.exp)}</span>
               <span class="text-slate-300">&bull;</span>
-              <span class="flex items-center gap-1 text-[#7C3AED] font-semibold"><i class="fas fa-wallet text-[#7C3AED]/70"></i> ${escapeHtml(job.salary)}</span>
+              <span class="flex items-center gap-1 text-slate-500"><i class="fas fa-wallet text-slate-400"></i> ${escapeHtml(job.salary)}</span>
             </div>
             
             <!-- Job Description -->
-            <div class="text-slate-700 text-[13.5px] sm:text-[14px] leading-relaxed mb-4">
+            <div class="text-slate-700 text-[13.5px] sm:text-[14px] leading-relaxed mb-2">
               <div class="font-semibold text-slate-800 mb-1">Job Description:</div>
               ${descHtml}
             </div>
@@ -3450,24 +3537,24 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
             </button>
           </div>
           
-          ${post.imageUrl ? `<img src="${post.imageUrl}" class="w-full h-auto block cursor-zoom-in post-image-zoomable hover:opacity-95 transition-all" loading="lazy">` : ''}
+          ${post.imageUrl ? `<div class="-mx-[12px] sm:-mx-[14px] mt-1 mb-0 sm:my-2 w-[calc(100%+24px)] sm:w-[calc(100%+28px)] max-w-none overflow-hidden cursor-pointer"><img src="${post.imageUrl}" class="w-full h-auto object-contain block cursor-zoom-in post-image-zoomable hover:opacity-95 transition-all" loading="lazy"></div>` : ''}
           
           <!-- Footer interactions (Appreciate, Comment, Share) -->
-          <div class="flex items-center justify-between px-2.5 sm:px-4 border-t border-slate-50/50 py-1 bg-slate-50/20">
-            <button class="appreciate-btn flex items-center gap-1.5 text-slate-500 font-medium text-[12.5px] sm:text-[13.5px] hover:bg-slate-50 px-2.5 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+          <div class="grid grid-cols-3 sm:flex sm:justify-start sm:gap-8 items-center px-0 border-t border-slate-50/50">
+            <button class="appreciate-btn justify-self-start flex items-center gap-[4px] text-slate-500 font-medium text-[12.5px] sm:text-[13.5px] hover:bg-slate-50 pl-0 pr-2 py-1 rounded-full transition-colors" data-post-id="${post.id}">
               <i class="${heartClass} text-[13px] sm:text-[14px]"></i> <span>Appreciate</span>
-              <span class="appreciate-count text-[12.5px] sm:text-[13.5px] font-bold text-center ${post.appreciations > 0 ? 'text-slate-500' : 'hidden'}">${post.appreciations > 0 ? post.appreciations : ''}</span>
+              <span class="appreciate-count text-[12.5px] sm:text-[13.5px] font-bold text-center ml-[1px] ${post.appreciations > 0 ? 'text-slate-500' : 'hidden'}">${post.appreciations > 0 ? post.appreciations : ''}</span>
             </button>
-            <button class="comment-trigger-btn flex items-center gap-1.5 text-slate-500 font-medium text-[12.5px] sm:text-[13.5px] hover:bg-slate-50 px-2.5 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+            <button class="comment-trigger-btn justify-self-center flex items-center gap-[4px] text-slate-500 font-medium text-[12.5px] sm:text-[13.5px] hover:bg-slate-50 px-2 py-1 rounded-full transition-colors" data-post-id="${post.id}">
               <i class="far fa-comment text-[13px] sm:text-[14px]"></i> <span>Comment</span>
-              <span class="comment-badge text-[12.5px] sm:text-[13.5px] font-bold text-center ${commentCount > 0 ? 'text-slate-500' : 'hidden'}">${commentCount > 0 ? commentCount : ''}</span>
+              <span class="comment-badge text-[12.5px] sm:text-[13.5px] font-bold text-center ml-[1px] ${commentCount > 0 ? 'text-slate-500' : 'hidden'}">${commentCount > 0 ? commentCount : ''}</span>
             </button>
-            <button class="share-btn flex items-center gap-1.5 text-slate-500 font-medium text-[12.5px] sm:text-[13.5px] hover:bg-slate-50 px-2.5 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+            <button class="share-btn justify-self-end flex items-center gap-[4px] text-slate-500 font-medium text-[12.5px] sm:text-[13.5px] hover:bg-slate-50 pr-0 pl-2 py-1 rounded-full transition-colors" data-post-id="${post.id}">
               <i class="far fa-share-square text-[13px] sm:text-[14px]"></i> <span>Share</span>
             </button>
           </div>
           
-          <div class="comments-section ${openCommentPostIds.has(post.id) ? '' : 'hidden'} mt-1 mb-1 px-2.5 sm:px-4" id="comments-${post.id}">
+          <div class="comments-section ${openCommentPostIds.has(post.id) ? '' : 'hidden'} mt-1 mb-1 px-0" id="comments-${post.id}">
             <div>
               <div class="comment-items-container">${commentsHtml}</div>
               <div class="mt-1.5 flex gap-2 pb-2">
@@ -3486,52 +3573,56 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     if (post.comments && post.comments.length) {
       const recent = post.comments.slice(-3);
       commentsHtml = `<div class="comment-list text-sm space-y-1">
-        ${recent.map(c => `<div class="flex gap-2"><span class="font-bold text-black text-[14px]">${escapeHtml(c.name)}</span><span class="text-[14px] text-slate-600 whitespace-pre-wrap break-words flex-1">${escapeHtml(c.text)}</span></div>`).join('')}
+        ${recent.map(c => `<div class="flex gap-2"><span class="font-bold text-black text-[14px]">${escapeHtml(String(c.name || '').toLowerCase())}</span><span class="text-[14px] text-slate-600 whitespace-pre-wrap break-words flex-1">${escapeHtml(c.text)}</span></div>`).join('')}
         ${post.comments.length > 3 ? `<div class="text-[14px] text-blue-500 cursor-pointer font-medium mt-1 view-all-comments" data-post-id="${post.id}">View all comments</div>` : ''}
       </div>`;
     }
 
-    let subtitle = post.authorTitle || 'Community Member';
+    let subtitle = post.authorTitle || 'Community User';
     if (!post.authorTitle) {
-      if (post.source === 'home' || !post.source) subtitle = 'Creator';
-      else if (post.source === 'community') subtitle = 'Community Creator';
+      if (post.source === 'home' || !post.source) subtitle = 'Community User';
+      else if (post.source === 'community') subtitle = 'Community User';
       else if (post.source === 'jobs') subtitle = 'Company';
       else if (post.source === 'startups') subtitle = 'Startup';
     }
 
-    return `<article class="post-card bg-white rounded-[16px] sm:rounded-[20px] mb-1.5 border border-slate-100 shadow-[0_4px_24px_rgba(0,0,0,0.03)] overflow-hidden" data-post-id="${post.id}">
-      <div class="flex items-center justify-between px-2.5 pt-1.5 sm:px-4 sm:pt-2 pb-0 sm:pb-0.5">
-        <div class="flex items-center gap-2 min-w-0">
-          <div class="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center text-white font-bold text-sm md:text-base flex-shrink-0 leading-none" style="background-color: ${avatarBg};">${(post.authorName || '?').charAt(0).toUpperCase()}</div>
-          <div class="flex flex-col min-w-0 flex-1 pr-2">
-            <div class="font-bold text-[#111827] text-[12px] sm:text-[13.5px] flex items-center gap-1 leading-tight mb-0.5">
-              <span class="break-words" style="display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden; padding-right: 4px;">${escapeHtml(post.authorName)}</span>
-              <i class="fas fa-check-circle text-blue-600 text-[11px] sm:text-[12px] flex-shrink-0"></i>
-            </div>
-            <div class="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight truncate">
-              ${escapeHtml(subtitle)} &bull; <span class="text-slate-400 font-normal whitespace-nowrap">${timeAgo}</span>
-            </div>
+    return `<article class="post-card bg-white rounded-[16px] sm:rounded-[20px] mb-[3px] border border-slate-100 shadow-[0_4px_24px_rgba(0,0,0,0.03)] overflow-hidden" data-post-id="${post.id}">
+      <header class="flex items-center gap-[8px] sm:gap-[12px] mb-[4px] sm:mb-[14px]">
+        <div class="w-[28px] h-[28px] sm:w-[44px] sm:h-[44px] rounded-full sm:rounded-full text-white flex items-center justify-center font-black text-[14px] sm:text-[16px] tracking-wide shrink-0 bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9]">
+          ${(post.authorName || '?').substring(0, 2).toLowerCase()}
+        </div>
+        <div class="flex flex-col min-w-0 flex-1">
+          <div class="flex items-center gap-1">
+            <span class="font-extrabold text-[#111827] text-[13px] sm:text-[15px] truncate leading-tight">${escapeHtml(String(post.authorName || '').toLowerCase())}</span>
+            <i class="fas fa-check-circle text-blue-600 text-[10px] sm:text-[12px] shrink-0"></i>
+          </div>
+          <div class="flex items-center gap-[3px] sm:gap-[8px] text-[11px] sm:text-[11.5px] text-slate-500 font-medium mt-[1px] sm:mt-[3px]">
+            <span class="bg-transparent text-slate-500 px-0 py-0 rounded-none text-[11px] sm:text-[11px] font-medium sm:font-medium capitalize tracking-normal">${escapeHtml(subtitle)}</span>
+            <span class="text-[9px] sm:text-[11.5px]">•</span>
+            <span class="text-[10px] sm:text-[11.5px]">${timeAgo}</span>
           </div>
         </div>
-        <button class="text-slate-500 hover:text-slate-800 p-2 transition-colors flex-shrink-0 -mt-2"><i class="fas fa-ellipsis-v text-lg"></i></button>
-      </div>
+        <button class="w-[26px] h-[26px] sm:w-[32px] sm:h-[32px] rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-[#111827] transition-colors shrink-0 text-[12px] sm:text-[14px]" type="button" aria-label="More options">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current"><use href="#i-more"></use></svg>
+        </button>
+      </header>
 
-      <div class="post-content px-2.5 sm:px-4 pt-0.5 pb-1">
+      <div class="post-content px-0 pt-0 pb-0.5">
         ${formatContent(post.content, post.id, post.jobId)}
       </div>
 
-      ${post.imageUrl ? `<img src="${post.imageUrl}" class="w-full h-auto block cursor-zoom-in post-image-zoomable hover:opacity-95 transition-all" loading="lazy">` : ''}
+      ${post.imageUrl ? `<div class="-mx-[12px] sm:-mx-[14px] mt-1 mb-0 sm:my-2 w-[calc(100%+24px)] sm:w-[calc(100%+28px)] max-w-none overflow-hidden cursor-pointer"><img src="${post.imageUrl}" class="w-full h-auto object-contain block cursor-zoom-in post-image-zoomable hover:opacity-95 transition-all" loading="lazy"></div>` : ''}
 
-      <div class="flex items-center justify-between px-2.5 sm:px-4 border-t border-slate-50/50">
-        <button class="appreciate-btn flex items-center gap-1.5 text-slate-600 font-normal text-[13px] sm:text-[14.5px] hover:bg-slate-50 px-1 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+      <div class="grid grid-cols-3 sm:flex sm:justify-start sm:gap-8 items-center px-0 border-t border-slate-50/50">
+        <button class="appreciate-btn justify-self-start flex items-center gap-[4px] text-slate-600 font-normal text-[13px] sm:text-[14.5px] hover:bg-slate-50 pl-0 pr-2 py-1 rounded-full transition-colors" data-post-id="${post.id}">
           <i class="${heartClass} text-[13px] sm:text-[14px]"></i> <span>Appreciate</span>
-          <span class="appreciate-count text-[13px] sm:text-[14px] font-bold text-center ${post.appreciations > 0 ? 'text-slate-600' : 'hidden'}">${post.appreciations > 0 ? post.appreciations : ''}</span>
+          <span class="appreciate-count text-[13px] sm:text-[14px] font-bold text-center ml-[1px] ${post.appreciations > 0 ? 'text-slate-600' : 'hidden'}">${post.appreciations > 0 ? post.appreciations : ''}</span>
         </button>
-        <button class="comment-trigger-btn flex items-center gap-1.5 text-slate-600 font-normal text-[13px] sm:text-[14.5px] hover:bg-slate-50 px-1 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+        <button class="comment-trigger-btn justify-self-center flex items-center gap-[4px] text-slate-600 font-normal text-[13px] sm:text-[14.5px] hover:bg-slate-50 px-2 py-1 rounded-full transition-colors" data-post-id="${post.id}">
           <i class="far fa-comment text-[13px] sm:text-[14px]"></i> <span>Comment</span>
-          <span class="comment-badge text-[13px] sm:text-[14px] font-bold text-center ${commentCount > 0 ? 'text-slate-600' : 'hidden'}">${commentCount > 0 ? commentCount : ''}</span>
+          <span class="comment-badge text-[13px] sm:text-[14px] font-bold text-center ml-[1px] ${commentCount > 0 ? 'text-slate-600' : 'hidden'}">${commentCount > 0 ? commentCount : ''}</span>
         </button>
-        <button class="share-btn flex items-center gap-1.5 text-slate-600 font-normal text-[13px] sm:text-[14.5px] hover:bg-slate-50 px-1 py-1 rounded-full transition-colors" data-post-id="${post.id}">
+        <button class="share-btn justify-self-end flex items-center gap-[4px] text-slate-600 font-normal text-[13px] sm:text-[14.5px] hover:bg-slate-50 pr-0 pl-2 py-1 rounded-full transition-colors" data-post-id="${post.id}">
           <i class="far fa-share-square text-[13px] sm:text-[14px]"></i> <span>Share</span>
         </button>
       </div>
@@ -3549,22 +3640,62 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
   }
 
   function renderAlerts() {
-    if(!allAlerts.length) return `<div class="bg-white rounded-[14px] sm:rounded-[16px] p-5 text-center text-slate-500 border border-slate-100 shadow-[0_2px_16px_rgba(0,0,0,0.03)]">No recent activity.</div>`;
+    if(!allAlerts.length) return `<div class="p-4 text-center text-slate-500 text-sm font-medium">No recent activity.</div>`;
     return allAlerts.map(p => `
-      <div class="alert-item bg-white rounded-[14px] sm:rounded-[16px] shadow-[0_2px_16px_rgba(0,0,0,0.03)] border border-slate-100 p-3 sm:p-3.5 mb-2 flex items-start flex-col cursor-pointer hover:bg-slate-50/80 transition-all" data-alert-source="${p.source}" data-alert-id="${p.id}">
+      <div class="alert-item py-2.5 px-2 mb-1 border-b border-slate-100 flex items-start flex-col cursor-pointer hover:bg-slate-50/80 transition-all" data-alert-source="${p.source}" data-alert-id="${p.id}">
         <div class="w-full flex justify-between items-center mb-1">
           <div>
-            <span class="font-bold text-slate-800 text-[13.5px] sm:text-[14px] mr-1.5">${escapeHtml(p.alertName || 'Unknown')}</span>
-            <span class="text-[0.65rem] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${escapeHtml(p.source)}</span>
+            <span class="font-bold text-slate-800 text-[13.5px] mr-1.5">${escapeHtml(p.alertName || 'Unknown')}</span>
+            <span class="text-[0.65rem] font-bold tracking-wide uppercase px-1 py-0.5 rounded bg-slate-100 text-slate-600">${escapeHtml(p.source)}</span>
           </div>
           <span class="text-[0.7rem] font-medium text-slate-400">${getTimeAgo(new Date(p.timestamp))}</span>
         </div>
-        <p class="text-[13px] sm:text-[13.5px] text-slate-600 leading-snug">${escapeHtml((p.alertContent || '').substring(0,90))}${p.alertContent?.length>90?'…':''}</p>
+        <p class="text-[13px] text-slate-600 leading-snug">${escapeHtml((p.alertContent || '').substring(0,90))}${p.alertContent?.length>90?'…':''}</p>
       </div>
     `).join('');
   }
 
-  function showHomeOrAlerts(hash, isPostRoute = false, targetPostId = null) {
+  
+  window.currentHomeFilter = 'all';
+  window.filterHomeFeed = function(category) {
+    window.currentHomeFilter = category;
+    
+    // Update active button styling
+    document.querySelectorAll('#filtersSection .category-btn').forEach(btn => {
+      if (btn.getAttribute('data-category') === category) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+    
+    // If it's 'all', we render the regular home feed
+    if (category === 'all') {
+      showHomeOrAlerts('home');
+      return;
+    }
+    
+    // Otherwise, we render the filtered startup posts inside the home feed container
+    const feedContainer = document.getElementById('feedContainer');
+    const postCreator = document.getElementById('postCreationCard');
+    const filtersSection = document.getElementById('filtersSection');
+    const newPostBanner = document.getElementById('newPostBanner');
+    
+    feedContainer.style.display = 'block';
+    postCreator.classList.remove('hidden-creator');
+    if (filtersSection) filtersSection.style.display = 'flex';
+    if (newPostBanner) newPostBanner.style.display = 'flex';
+    
+    if (window.renderHomeFilterContent) {
+      window.renderHomeFilterContent(category);
+    } else {
+      feedContainer.innerHTML = `<div class="bg-white rounded-xl p-5 text-center text-slate-500">Loading...</div>`;
+      setTimeout(() => {
+        if (window.renderHomeFilterContent) window.renderHomeFilterContent(category);
+      }, 500);
+    }
+  };
+function showHomeOrAlerts(hash, isPostRoute = false, targetPostId = null) {
     const feedContainer = document.getElementById('feedContainer');
     const postCreator = document.getElementById('postCreationCard');
     const filtersSection = document.getElementById('filtersSection');
@@ -3617,12 +3748,12 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     if (isPostRoute && targetPostId) {
       filtered = posts.filter(p => p.id === targetPostId);
       if (filtered.length) {
-        feedContainer.innerHTML = `<div class="mb-3 px-1"><button onclick="window.location.hash='home'" class="text-slate-600 font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 px-3 py-1.5 rounded-full transition-colors"><i class="fas fa-arrow-left"></i> Back to feed</button></div>` + filtered.map(p => generatePostHTML(p)).join('');
+        feedContainer.innerHTML = `<div class="mb-3 px-1"><button onclick="filterHomeFeed('all')" data-category="all" class="text-slate-600 font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 px-3 py-1.5 rounded-full transition-colors"><i class="fas fa-arrow-left"></i> Back to feed</button></div>` + filtered.map(p => generatePostHTML(p)).join('');
         attachEventListeners();
         window.scrollTo(0, 0);
         return;
       } else {
-        feedContainer.innerHTML = `<div class="mb-3 px-1"><button onclick="window.location.hash='home'" class="text-slate-600 font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 px-3 py-1.5 rounded-full transition-colors"><i class="fas fa-arrow-left"></i> Back to feed</button></div><div class="bg-white rounded-xl p-5 text-center text-slate-500">Post not found.</div>`;
+        feedContainer.innerHTML = `<div class="mb-3 px-1"><button onclick="filterHomeFeed('all')" data-category="all" class="text-slate-600 font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 px-3 py-1.5 rounded-full transition-colors"><i class="fas fa-arrow-left"></i> Back to feed</button></div><div class="bg-white rounded-xl p-5 text-center text-slate-500">Post not found.</div>`;
         return;
       }
     }
@@ -3674,6 +3805,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
       b.classList.toggle('active', b.getAttribute('data-nav') === hash);
     });
 
+    setTimeout(() => {
     const feedContainer = document.getElementById('feedContainer');
     const iframeCommunity = document.getElementById('iframe-community');
     const iframeJobs = document.getElementById('iframe-jobs');
@@ -3739,6 +3871,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
         }
       }
     }
+    }, 0);
 
     const nav = document.querySelector('.bottom-nav');
     if (nav) nav.classList.remove('shrunk');
@@ -4002,7 +4135,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
 
         const newPost = {
           authorName: name,
-          authorTitle: 'Community Creator',
+          authorTitle: 'Community User',
           content: content, // Save raw HTML content from contenteditable
           imageUrl: imageData,
           timestamp: new Date().toISOString(),
@@ -4124,15 +4257,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
     window.addEventListener('hashchange', handleRouting);
     
     function handleScroll(event) {
-      const nav = document.querySelector('.bottom-nav');
-      if (!nav) return;
-      
       const currentScrollY = getActiveScrollY();
-      if (currentScrollY > lastActiveScrollY && currentScrollY > 50) {
-        nav.classList.add('shrunk');
-      } else {
-        nav.classList.remove('shrunk');
-      }
       lastActiveScrollY = currentScrollY;
     }
 
@@ -4558,7 +4683,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
             const marginLeft = visualDepth * 16;
             html += `
                 <div class="comment-item" style="margin-left: ${marginLeft}px; width: calc(100% - ${marginLeft}px);">
-                    <div class="comment-name">${escapeHtml(c.name)}</div>
+                    <div class="comment-name">${escapeHtml(String(c.name || '').toLowerCase())}</div>
                     <div class="comment-text">${escapeHtml(c.text)}</div>
                     <div class="comment-actions">
                         <button class="comment-reply-btn" onclick="toggleReplyForm('comment-${c.id}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline; vertical-align:-1px; margin-right:3px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Reply</button>
@@ -4603,7 +4728,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
             feed.innerHTML += `
                 <div class="community-card" data-id="${d.id}">
                     <div class="community-header">
-                        <div class="community-name">${escapeHtml(d.name)}</div>
+                        <div class="community-name">${escapeHtml(String(d.name || '').toLowerCase())}</div>
                         <div class="community-dot"></div>
                         <div class="community-time">${formatTime(d.createdAt)}</div>
                         <div class="community-dot"></div>
@@ -4932,7 +5057,7 @@ input, textarea, select, [contenteditable] { -webkit-user-select: text; user-sel
           name = "Siddharth Khan";
           designation = designation || "Talent Partner";
         } else {
-          name = username.charAt(0).toUpperCase() + username.slice(1);
+          name = username.substring(0, 2).toLowerCase() + username.slice(1);
           designation = designation || "Recruiter";
         }
       } else {
@@ -5088,11 +5213,11 @@ window.openViewModal = function(job){
     <!-- Recruiter profile in touch view modal -->
     <div class="flex items-center gap-3 bg-white/5 border border-white/10 p-3 sm:p-3.5 rounded-xl mb-4">
       <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base leading-none flex-shrink-0" style="background-color: ${avatarBg};">
-        ${(recruiterName || '?').charAt(0).toUpperCase()}
+        ${(recruiterName || '?').substring(0, 2).toLowerCase()}
       </div>
       <div class="flex flex-col min-w-0 flex-1">
         <div class="font-bold text-white text-[13.5px] sm:text-[14px] flex items-center gap-1 leading-tight mb-0.5">
-          <span>${escapeHtml(recruiterName)}</span>
+          <span>${escapeHtml(String(recruiterName || '').toLowerCase())}</span>
           <i class="fas fa-check-circle text-blue-400 text-[11px] flex-shrink-0"></i>
         </div>
         <div class="text-[11px] sm:text-[11.5px] text-white font-medium leading-tight truncate">
@@ -5300,7 +5425,7 @@ function renderJobs(jobs){
           <!-- Recruiter Info Header (Avatar/Logo removed as requested) -->
           <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-2.5">
             <div class="flex flex-col min-w-0 flex-1">
-              <span class="font-semibold text-white text-[13.5px] truncate leading-tight">${escapeHtml(recruiterName)}</span>
+              <span class="font-semibold text-white text-[13.5px] truncate leading-tight">${escapeHtml(String(recruiterName || '').toLowerCase())}</span>
               <span class="text-[11.5px] text-white/90 font-medium truncate leading-normal mt-0.5">
                 ${escapeHtml(j.company)} &bull; ${designation ? escapeHtml(designation) : 'Recruiter'}
               </span>
@@ -5598,10 +5723,6 @@ if (document.readyState === 'loading') {
     const coverUrl = getPostImageUrl(post);
     
     return `<article class="post-card" data-id="${escapeHtml(id)}" data-category="${escapeHtml(category)}" data-search="${escapeHtml(`${post.title} ${post.article} ${post.sourceName}`.toLowerCase())}">
-      ${coverUrl ? `<div class="post-cover-img-wrap cursor-pointer">
-        <img class="post-cover-img post-image-zoomable" src="${escapeHtml(coverUrl)}" alt="${escapeHtml(categoryLabel)} Graphic" loading="lazy" onerror="this.onerror=null;this.parentElement.remove();">
-      </div>` : ''}
-
       <div class="post-main">
         <header class="post-head">
           <span class="avatar" style="--avatar:#8b5cf6">SP</span>
@@ -5610,9 +5731,9 @@ if (document.readyState === 'loading') {
               <span class="author-name">Spred One</span>
             </div>
             <div class="post-meta">
-              <span>${formatTime(post.createdAt)}</span>
-              <span>•</span>
               <span class="category-badge-meta">${escapeHtml(categoryLabel)}</span>
+              <span>•</span>
+              <span>${formatTime(post.createdAt)}</span>
             </div>
           </div>
           <button class="more-btn" type="button" aria-label="More post options" data-toast="More options will be available soon.">
@@ -5629,7 +5750,13 @@ if (document.readyState === 'loading') {
             Source: ${escapeHtml(post.sourceName)} <i class="fas fa-external-link-alt"></i>
           </a>
         </div>
+      </div>
 
+      ${coverUrl ? `<div class="post-cover-img-wrap cursor-pointer my-2 -mx-[12px] sm:-mx-[14px] w-[calc(100%+24px)] sm:w-[calc(100%+28px)]">
+        <img class="post-cover-img post-image-zoomable" src="${escapeHtml(coverUrl)}" alt="${escapeHtml(categoryLabel)} Graphic" loading="lazy" onerror="this.onerror=null;this.parentElement.remove();">
+      </div>` : ''}
+
+      <div class="post-main" style="padding-top: 0;">
         <div class="post-stats-row-container">
             <!-- Appreciate -->
             <button class="post-action-icon-only like-btn-${id} like-btn" data-id="${id}" type="button" aria-label="Appreciate post">
@@ -5677,26 +5804,26 @@ if (document.readyState === 'loading') {
     let nameHtml = '';
     if (!savedName) {
       nameHtml = `
-        <div style="margin-bottom: 4px;">
-          <input type="text" id="name-${postId}" placeholder="Your name" style="width: 100%; padding: 6px 10px; border: 1px solid rgba(125,125,125,0.2); border-radius: 6px; background: transparent; font-size: 12px; outline: none; color: inherit;">
+        <div style="margin-bottom: 2px;">
+          <input type="text" id="name-${postId}" placeholder="Your name" style="width: 100%; padding: 4px 8px; border: 1px solid rgba(125,125,125,0.2); border-radius: 6px; background: transparent; font-size: 12px; outline: none; color: inherit;">
         </div>
       `;
     }
     const commentsHtml = comments.length ? comments.map(c => `
-      <div style="padding: 6px 10px; border-bottom: 1px solid rgba(125,125,125,0.1); display: flex; align-items: baseline; gap: 8px; font-size: 13px;">
-        <span style="font-weight: 700; opacity: 0.9; white-space: nowrap;">${escapeHtml(c.name)}:</span>
+      <div style="padding: 4px 6px; border-bottom: 1px solid rgba(125,125,125,0.08); display: flex; align-items: baseline; gap: 6px; font-size: 13px;">
+        <span style="font-weight: 600; opacity: 0.9; white-space: nowrap;">${escapeHtml(String(c.name || '').toLowerCase())}:</span>
         <span style="opacity: 0.85; word-break: break-word; flex: 1;">${escapeHtml(c.text)}</span>
       </div>
-    `).join('') : '<div style="padding: 8px 10px; font-size: 12px; opacity: 0.5; text-align: center;">No comments yet.</div>';
+    `).join('') : '<div style="padding: 4px 6px; font-size: 12px; opacity: 0.5; text-align: center;">No comments yet.</div>';
     
     section.innerHTML = `
-      <div style="border-top: 1px solid rgba(125,125,125,0.15); padding: 4px 8px 8px 8px; margin-top: 4px;">
-        <div style="display: flex; flex-direction: column; max-height: 220px; overflow-y: auto;">${commentsHtml}</div>
-        <div style="margin-top: 6px; display: flex; flex-direction: column; gap: 4px;">
+      <div style="border-top: 1px solid rgba(125,125,125,0.1); padding: 2px 4px 4px 4px; margin-top: 2px;">
+        <div style="display: flex; flex-direction: column; max-height: 200px; overflow-y: auto;">${commentsHtml}</div>
+        <div style="margin-top: 4px; display: flex; flex-direction: column; gap: 2px;">
           ${nameHtml}
-          <div style="display: flex; gap: 6px; align-items: center;">
-            <input type="text" id="comment-text-${postId}" placeholder="Write a comment..." style="flex: 1; padding: 7px 10px; border: 1px solid rgba(125,125,125,0.25); border-radius: 6px; background: transparent; font-size: 12px; outline: none; color: inherit;">
-            <button data-submit="${postId}" style="border: none; padding: 7px 14px; border-radius: 6px; background: #7c3aed; color: white; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;">Post</button>
+          <div style="display: flex; gap: 4px; align-items: center;">
+            <input type="text" id="comment-text-${postId}" placeholder="Write a comment..." style="flex: 1; padding: 5px 8px; border: 1px solid rgba(125,125,125,0.2); border-radius: 6px; background: transparent; font-size: 12px; outline: none; color: inherit;">
+            <button data-submit="${postId}" style="border: none; padding: 5px 10px; border-radius: 6px; background: #111827; color: white; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;">Post</button>
           </div>
         </div>
       </div>
@@ -5979,7 +6106,7 @@ if (document.readyState === 'loading') {
   }
 
   async function attachInteractions() {
-    document.querySelectorAll("#adminPosts .like-btn").forEach(btn => {
+    document.querySelectorAll(".like-btn").forEach(btn => {
       if (btn.dataset.bound) return;
       btn.dataset.bound = "true";
       btn.addEventListener("click", async (e) => {
@@ -6000,13 +6127,13 @@ if (document.readyState === 'loading') {
       });
     });
 
-    document.querySelectorAll("#adminPosts .toggle-comments-btn").forEach(btn => {
+    document.querySelectorAll(".toggle-comments-btn").forEach(btn => {
       if (btn.dataset.boundComments) return;
       btn.dataset.boundComments = "true";
       btn.addEventListener("click", () => toggleComments(btn.dataset.id));
     });
 
-    document.querySelectorAll("#adminPosts .share-btn").forEach(btn => {
+    document.querySelectorAll(".startup-share-btn, .share-btn[data-title]").forEach(btn => {
       if (btn.dataset.boundShare) return;
       btn.dataset.boundShare = "true";
       btn.addEventListener("click", () => {
@@ -6016,14 +6143,43 @@ if (document.readyState === 'loading') {
       });
     });
 
-    document.querySelectorAll("#adminPosts [data-toast]").forEach(btn => {
+    document.querySelectorAll(".post-card [data-toast]").forEach(btn => {
       if (btn.dataset.toastBound) return;
       btn.dataset.toastBound = "true";
       btn.addEventListener("click", () => showToast(btn.dataset.toast));
     });
   }
 
-  function applyFilters() {
+  
+  window.renderHomeFilterContent = function(filterCategory) {
+    let filtered = allPosts;
+    if (filterCategory !== 'all') {
+       filtered = allPosts.filter(p => {
+           const cat = p.category || 'general';
+           return cat.split(' ').includes(filterCategory);
+       });
+    }
+    const container = document.getElementById('feedContainer');
+    if (!container) return;
+    
+    if (filtered.length === 0) {
+       
+if (allPosts.length === 0) {
+    container.innerHTML = `<div class="bg-white rounded-xl p-5 text-center text-slate-500">Loading...</div>`;
+    setTimeout(() => { window.renderHomeFilterContent(filterCategory); }, 500);
+} else {
+    container.innerHTML = `<div class="bg-white rounded-xl p-5 text-center text-slate-500">No posts available.</div>`;
+}
+
+       return;
+    }
+    
+    container.innerHTML = '<div class="startup-feed-wrapper">' + filtered.map(p => postMarkup(p, p.id)).join('') + '</div>';
+    attachInteractions();
+    loadLikeStates();
+    updateCommentCounts();
+  };
+function applyFilters() {
     const query = searchInput.value.trim().toLowerCase();
     let visible = 0;
     document.querySelectorAll("#adminPosts .post-card").forEach(card => {
@@ -6042,7 +6198,7 @@ if (document.readyState === 'loading') {
 
   window.setStartupFilter = function(filter) {
     activeFilter = filter;
-    document.querySelectorAll(".category-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.filter === filter));
+    document.querySelectorAll("#iframe-startups .category-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.filter === filter));
     applyFilters();
   }
 
@@ -6089,7 +6245,7 @@ if (document.readyState === 'loading') {
     showToast("Notifications marked as read");
   }
 
-  document.querySelectorAll(".category-btn").forEach(btn => btn.addEventListener("click", () => window.setStartupFilter(btn.dataset.filter)));
+  document.querySelectorAll("#iframe-startups .category-btn").forEach(btn => btn.addEventListener("click", () => { if(btn.dataset.filter) window.setStartupFilter(btn.dataset.filter); }));
   searchInput.addEventListener("input", applyFilters);
   
   window.addEventListener('message', (event) => {
