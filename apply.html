@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apply for Job - Spread One</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .capitalize { text-transform: capitalize; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between p-4 sm:p-6">
+  <div class="max-w-2xl w-full mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl my-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-800">
+      <div>
+        <a href="/#jobs" class="text-xs font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1.5 mb-2 transition-colors">
+          <i class="fas fa-arrow-left"></i> Back to Spread One Jobs
+        </a>
+        <h1 id="jobTitleHeader" class="text-xl sm:text-2xl font-black text-white capitalize">Job Application</h1>
+        <div id="jobSubHeader" class="text-xs text-slate-400 mt-1 flex items-center gap-2 flex-wrap">
+          <span id="jobCompany" class="font-semibold text-slate-300 capitalize">Loading job details...</span>
+          <span>&bull;</span>
+          <span id="jobLocation" class="capitalize"><i class="fas fa-map-marker-alt text-[10px]"></i> Remote / India</span>
+          <span id="jobSalary" class="text-blue-400 font-semibold"></span>
+        </div>
+      </div>
+      <a href="/#jobs" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center font-bold text-sm transition-all shrink-0">
+        ✕
+      </a>
+    </div>
+
+    <!-- Application Form Container -->
+    <div id="applyFormContainer">
+      <form id="candidateApplyForm" onsubmit="handleCandidateSubmit(event)" class="space-y-4">
+        <!-- Full Name & Email -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1.5">Full Name <span class="text-red-400">*</span></label>
+            <input type="text" id="c_name" required placeholder="e.g. Siddharth Khan" class="w-full px-3.5 py-2.5 text-sm bg-slate-950 border border-slate-700 rounded-xl outline-none text-white focus:border-blue-500 transition-colors">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1.5">Email Address <span class="text-red-400">*</span></label>
+            <input type="email" id="c_email" required placeholder="candidate@example.com" class="w-full px-3.5 py-2.5 text-sm bg-slate-950 border border-slate-700 rounded-xl outline-none text-white focus:border-blue-500 transition-colors">
+          </div>
+        </div>
+
+        <!-- Phone & Location -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1.5">Phone Number <span class="text-red-400">*</span></label>
+            <input type="tel" id="c_phone" required placeholder="+91 98765 43210" class="w-full px-3.5 py-2.5 text-sm bg-slate-950 border border-slate-700 rounded-xl outline-none text-white focus:border-blue-500 transition-colors">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1.5">Current City / Location <span class="text-red-400">*</span></label>
+            <input type="text" id="c_location" required placeholder="e.g. Hyderabad, India" class="w-full px-3.5 py-2.5 text-sm bg-slate-950 border border-slate-700 rounded-xl outline-none text-white focus:border-blue-500 transition-colors">
+          </div>
+        </div>
+
+        <!-- Experience & Portfolio -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1.5">Total Experience</label>
+            <select id="c_exp" class="w-full px-3.5 py-2.5 text-sm bg-slate-950 border border-slate-700 rounded-xl outline-none text-white focus:border-blue-500 transition-colors">
+              <option>Fresher / 0-1 years</option>
+              <option selected>1-3 years</option>
+              <option>3-5 years</option>
+              <option>5-8 years</option>
+              <option>8+ years</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1.5">Portfolio / LinkedIn URL</label>
+            <input type="url" id="c_portfolio" placeholder="https://linkedin.com/in/..." class="w-full px-3.5 py-2.5 text-sm bg-slate-950 border border-slate-700 rounded-xl outline-none text-white focus:border-blue-500 transition-colors">
+          </div>
+        </div>
+
+        <!-- Resume Attachment -->
+        <div class="p-4 rounded-xl border border-dashed border-slate-700 bg-slate-950/60">
+          <label class="block text-xs font-bold text-slate-200 mb-1.5 flex items-center gap-1.5">
+            <i class="fas fa-file-pdf text-red-400"></i> Upload Resume / CV (.pdf, .doc, .docx)
+          </label>
+          <input type="file" id="c_resume" accept=".pdf,.doc,.docx,.txt" class="w-full text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer">
+        </div>
+
+        <!-- Cover Note -->
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1.5">Why are you a great fit? (Optional)</label>
+          <textarea id="c_cover" rows="3" placeholder="Highlight key skills, experience, or relevant projects..." class="w-full px-3.5 py-2.5 text-sm bg-slate-950 border border-slate-700 rounded-xl outline-none text-white focus:border-blue-500 transition-colors"></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-2">
+          <button type="submit" id="cSubmitBtn" class="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold rounded-xl text-sm transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer">
+            <i class="fas fa-paper-plane"></i>
+            <span id="submitBtnText">Submit Application to Recruiter</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="text-center text-xs text-slate-500 py-4">
+    &copy; 2026 Spread One. All rights reserved.
+  </footer>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDZt0dJQCu0tW9OR9kyyliRPbP47R_z2kw",
+      authDomain: "jobs-1015c.firebaseapp.com",
+      projectId: "jobs-1015c"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const params = new URLSearchParams(window.location.search);
+    const jobId = params.get('jobId') || params.get('id') || '';
+    const recruiterId = params.get('recruiterId') || '';
+
+    let currentJob = {
+      id: jobId,
+      title: 'Role',
+      company: 'Hiring Company',
+      location: 'Remote / India',
+      salary: ''
+    };
+
+    function capitalize(str) {
+      if (!str) return '';
+      return String(str).charAt(0).toUpperCase() + String(str).slice(1);
+    }
+
+    async function loadJobDetails() {
+      if (!jobId) return;
+      try {
+        const doc = await db.collection('founder_job_portal_jobs_v1').doc(jobId).get();
+        if (doc.exists) {
+          const d = doc.data();
+          currentJob.title = d.title || 'Role';
+          currentJob.company = d.company || 'Hiring Company';
+          currentJob.location = d.location || 'Remote / India';
+          currentJob.salary = d.salary || '';
+
+          document.getElementById('jobTitleHeader').textContent = 'Apply for ' + capitalize(currentJob.title);
+          document.getElementById('jobCompany').textContent = capitalize(currentJob.company);
+          document.getElementById('jobLocation').innerHTML = '<i class="fas fa-map-marker-alt text-[10px]"></i> ' + capitalize(currentJob.location);
+          if (currentJob.salary) {
+            document.getElementById('jobSalary').textContent = '• ' + currentJob.salary;
+          }
+          document.getElementById('submitBtnText').textContent = 'Submit Application to ' + capitalize(currentJob.company);
+        }
+      } catch (err) {
+        console.warn('Job fetch fallback:', err);
+      }
+    }
+    loadJobDetails();
+
+    async function handleCandidateSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('cSubmitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting Application...';
+
+      const name = (document.getElementById('c_name')?.value || '').trim();
+      const email = (document.getElementById('c_email')?.value || '').trim();
+      const phone = (document.getElementById('c_phone')?.value || '').trim();
+      const location = (document.getElementById('c_location')?.value || '').trim();
+      const exp = (document.getElementById('c_exp')?.value || '').trim();
+      const portfolio = (document.getElementById('c_portfolio')?.value || '').trim();
+      const cover = (document.getElementById('c_cover')?.value || '').trim();
+      const resumeInput = document.getElementById('c_resume');
+      const resumeName = resumeInput?.files?.[0]?.name || 'resume.pdf';
+
+      const candidateData = {
+        jobId: String(jobId || currentJob.id),
+        jobTitle: currentJob.title,
+        company: currentJob.company,
+        recruiterId: recruiterId,
+        name: name,
+        email: email,
+        phone: phone,
+        location: location,
+        experienceYears: exp,
+        portfolioUrl: portfolio,
+        resumeFileName: resumeName,
+        coverNote: cover,
+        status: 'applied',
+        appliedAt: new Date().toISOString()
+      };
+
+      try {
+        await db.collection('job_applications').add(candidateData);
+        await db.collection('founder_job_applications').add(candidateData);
+      } catch (err) {
+        console.warn('Firestore write warning:', err);
+      }
+
+      document.getElementById('applyFormContainer').innerHTML = `
+        <div class="text-center py-8 px-2">
+          <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+            <i class="fas fa-check"></i>
+          </div>
+          <h2 class="text-2xl font-black text-white mb-2">Application Submitted! 🎉</h2>
+          <p class="text-sm text-slate-300 mb-6 max-w-md mx-auto">
+            Your application for <strong class="text-white">${capitalize(currentJob.title)}</strong> at <strong class="text-white">${capitalize(currentJob.company)}</strong> has been successfully delivered to the recruiter CRM.
+          </p>
+          <a href="/#jobs" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-sm transition-all shadow-lg">
+            <i class="fas fa-briefcase"></i> Explore More Jobs on Spread One
+          </a>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

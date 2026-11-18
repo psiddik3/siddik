@@ -1,6 +1,1 @@
-{
-  "name": "SpreadOne",
-  "description": "A comprehensive startup, community, and jobs platform.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
+{"name":"Spread One","description":"A comprehensive startup, community, and jobs platform.","requestFramePermissions":[],"majorCapabilities":["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]}
